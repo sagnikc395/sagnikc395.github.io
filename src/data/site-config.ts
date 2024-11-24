@@ -38,12 +38,12 @@ export type SiteConfig = {
 };
 
 const siteConfig: SiteConfig = {
-    title: 'Dante',
-    subtitle: 'Minimal Astro.js theme',
-    description: 'Astro.js and Tailwind CSS theme for blog and portfolio by justgoodui.com',
+    title: 'sagnikc395.github.io',
+    subtitle: 'my personal garden on internet',
+    description: '',
     image: {
-        src: '/dante-preview.jpg',
-        alt: 'Dante - Astro.js and Tailwind CSS theme'
+        src: '',
+        alt: ''
     },
     headerNavLinks: [
         {
@@ -73,34 +73,30 @@ const siteConfig: SiteConfig = {
             href: '/contact'
         },
         {
-            text: 'Terms',
-            href: '/terms'
-        },
-        {
-            text: 'Download theme',
-            href: 'https://github.com/JustGoodUI/dante-astro-theme'
+            text: 'Source',
+            href: 'https://github.com/sagnikc395/sagnikc395.xyz.git'
         }
     ],
     socialLinks: [
         {
-            text: 'Dribbble',
-            href: 'https://dribbble.com/'
+            text: 'Github',
+            href: 'https://github.com/sagnikc395'
         },
         {
-            text: 'Instagram',
-            href: 'https://instagram.com/'
-        },
-        {
-            text: 'X/Twitter',
-            href: 'https://twitter.com/'
+            text: 'X',
+            href: 'https://twitter.com/sagnikcw'
         }
     ],
     hero: {
-        title: 'Hi There & Welcome to My Corner of the Web!',
-        text: "I'm **Ethan Donovan**, a web developer at Amazing Studio, dedicated to the realms of collaboration and artificial intelligence. My approach involves embracing intuition, conducting just enough research, and leveraging aesthetics as a catalyst for exceptional products. I have a profound appreciation for top-notch software, visual design, and the principles of product-led growth. Feel free to explore some of my coding endeavors on <a href='https://github.com/JustGoodUI/dante-astro-theme'>GitHub</a> or follow me on <a href='https://twitter.com/justgoodui'>Twitter/X</a>.",
+        title: `thoughts on programming, mathematical logic and abstractions! it's gonna be a fun ride 🫶`,
+        text: `I'm **Sagnik Chatterjee**, a Software Developer at IBM India, working in Backend Engineering (Java, SpringBoot) and Distributed Systems (HBase, Apache Kafka).
+        I am interested in the domain of Programming Languages (especially the Functional Programming Paradigm) and Type Theory, and I like how gradual typing lets us create amazing software with both the sanity 
+        of typing and the flexibility of dynamically typed languages like Racket and Typed Racket.
+        I have also recently become interested in mathematical logic and proof-oriented programming languages like Lean and how they help to formally verify software.
+        \nFeel free to explore some of my coding endeavors on [GitHub](https://github.com/sagnikc395/) or follow me on [X](https://x.com/sagnikcw).`,
         image: {
-            src: '/hero.jpeg',
-            alt: 'A person sitting at a desk in front of a computer'
+            src: '/hero.jpg',
+            alt: 'a oil painting of countryside'
         },
         actions: [
             {
@@ -109,11 +105,7 @@ const siteConfig: SiteConfig = {
             }
         ]
     },
-    subscribe: {
-        title: 'Subscribe to Dante Newsletter',
-        text: 'One update per week. All the latest posts directly in your inbox.',
-        formUrl: '#'
-    },
+
     postsPerPage: 8,
     projectsPerPage: 8
 };
