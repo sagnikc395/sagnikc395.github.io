@@ -74,7 +74,7 @@ const siteConfig: SiteConfig = {
         },
         {
             text: 'Source',
-            href: 'https://github.com/sagnikc395/sagnikc395.xyz.git'
+            href: 'https://github.com/sagnikc395/sagnikc395.github.io.git'
         }
     ],
     socialLinks: [
@@ -88,12 +88,11 @@ const siteConfig: SiteConfig = {
         }
     ],
     hero: {
-        title: `thoughts on programming, mathematical logic and abstractions! it's gonna be a fun ride 🫶`,
-        text: `I'm **Sagnik Chatterjee**, a Software Developer at IBM India, working in Backend Engineering (Java, SpringBoot) and Distributed Systems (HBase, Apache Kafka).
-        I am interested in the domain of Programming Languages (especially the Functional Programming Paradigm) and Type Theory, and I like how gradual typing lets us create amazing software with both the sanity 
-        of typing and the flexibility of dynamically typed languages like Racket and Typed Racket.
-        I have also recently become interested in mathematical logic and proof-oriented programming languages like Lean and how they help to formally verify software.
-        \nFeel free to explore some of my coding endeavors on [GitHub](https://github.com/sagnikc395/) or follow me on [X](https://x.com/sagnikcw).`,
+        title: `thoughts on abstractions, logic and philosophy! it's gonna be a fun ride 🫶`,
+        text: `I'm Sagnik Chatterjee, a Software Developer at IBM India, working in Backend Engineering (Java, SpringBoot) and Distributed Systems (HBase, Apache Kafka).
+I am interested in Programming Languages (especially the Functional Programming paradigm) and Type Theory. I particularly appreciate how gradual typing enables us to create amazing software with both the safety of static typing and the flexibility of dynamically typed languages like Racket and Typed Racket.
+I have recently developed an interest in mathematical logic and proof-oriented programming languages like Lean, exploring how they help formally verify software.
+Feel free to explore my coding endeavors on GitHub or follow me on X.`,
         image: {
             src: '/hero.jpg',
             alt: 'a oil painting of countryside'
