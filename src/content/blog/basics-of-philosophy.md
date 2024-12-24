@@ -8,7 +8,7 @@ tags:
   - western-philosophy
 ---
 
-<img src="../../../public/classical-western-philosophy/athens1.jpeg" height="400px" width="500px" />
+![Athens in its glory](/public/classical-western-philosophy/athens1.jpg)
 
 <br />
 <br />
