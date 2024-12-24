@@ -8,11 +8,8 @@ tags:
   - western-philosophy
 ---
 
-![Athens in its glory](/public/classical-western-philosophy/athens1.jpg)
-
+![Athens in its glory](/classical-western-philosophy/athens1.jpg)
 <br />
-<br />
-
 For the longest time that I could remember , I have had serious concerns. Concerns that my simple mother who has fasted during special occasions for the Gods for our family's health, concerns that the trip to the temple that we took for 8+ hours was not just another family outing but had something much more sinister behind it's meaning - **_we were subservient to God_** and we are making this trip to ask for his blessings/grace for our greedy(okay i am being harsh somewhat, ig) selves.
 
 I think you (yes reader you, now please read with attention) might have understood that this is not a simple thing for me. While people might have accepted [theism](https://en.wikipedia.org/wiki/Theism) as a default "mode" of this puzzle which is this world, I have been not so sure. I don't know whether it is my inbuilt rebellious nature (maybe it is ), or my [hubris](https://en.wikipedia.org/wiki/Hubris) that is talking, but I feel that folks are seldom curious about the nature of reality around them i.e to say and I quote directly from Buddha "What is the meaning of life , if not just suffering?". Okay , well hold your horses Buddha, cause I am not so sure that my [hedonistic](https://en.wikipedia.org/wiki/Hedonism) self would want that.
@@ -70,7 +67,7 @@ Before starting , like any good scientist, it's necessary to define to the axiom
 - Ethics asks what does it means to be a human being and take actions appropriate that of a human being and how can make adequate or certain judgements of the behaviour of other people.
 - Ethics investigates the part of human which is free, has soul, of the sort of actions that we take, of the sort of people that we may become.
 
-**_ Politics_**:
+**_Politics_**:
 
 - This is connected to ethics , as in Ancient Greece , the society was seen as connected to the human soul but just bigger in size.
 - If it is true that the society is based on the ethics of the humans comprising the society, then politics is like the extension of human will on a large scale, theory of how society and governments must be organised , how justice is to be authorized and dispensed and how proper human behaviour should be as a whole.
