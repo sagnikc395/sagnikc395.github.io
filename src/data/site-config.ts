@@ -16,15 +16,10 @@ export type Hero = {
     actions?: Link[];
 };
 
-export type Subscribe = {
-    title?: string;
-    text?: string;
-    formUrl: string;
-};
-
 export type SiteConfig = {
     logo?: Image;
-    title: string;
+    title?: string;
+    sitename: string;
     subtitle?: string;
     description: string;
     image?: Image;
@@ -32,14 +27,12 @@ export type SiteConfig = {
     footerNavLinks?: Link[];
     socialLinks?: Link[];
     hero?: Hero;
-    subscribe?: Subscribe;
     postsPerPage?: number;
     projectsPerPage?: number;
 };
 
 const siteConfig: SiteConfig = {
-    title: 'sagnikc395.github.io',
-    subtitle: 'my personal garden on internet',
+    sitename: `sagnik's little corner on the internet`,
     description: '',
     image: {
         src: '',
@@ -47,20 +40,24 @@ const siteConfig: SiteConfig = {
     },
     headerNavLinks: [
         {
-            text: 'Home',
+            text: '~',
             href: '/'
         },
         {
-            text: 'Projects',
+            text: 'projects',
             href: '/projects'
         },
         {
-            text: 'Blog',
+            text: 'blog',
             href: '/blog'
         },
         {
-            text: 'Tags',
+            text: 'tags',
             href: '/tags'
+        },
+        {
+            text: 'curr',
+            href: '/curr'
         }
     ],
     footerNavLinks: [
@@ -105,8 +102,8 @@ Feel free to explore my coding endeavors on GitHub or follow me on X.`,
         ]
     },
 
-    postsPerPage: 8,
-    projectsPerPage: 8
+    postsPerPage: 6,
+    projectsPerPage: 4
 };
 
 export default siteConfig;
