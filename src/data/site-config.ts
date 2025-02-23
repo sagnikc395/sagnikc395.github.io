@@ -16,15 +16,10 @@ export type Hero = {
     actions?: Link[];
 };
 
-export type Subscribe = {
-    title?: string;
-    text?: string;
-    formUrl: string;
-};
-
 export type SiteConfig = {
     logo?: Image;
-    title: string;
+    title?: string;
+    sitename: string;
     subtitle?: string;
     description: string;
     image?: Image;
@@ -32,34 +27,32 @@ export type SiteConfig = {
     footerNavLinks?: Link[];
     socialLinks?: Link[];
     hero?: Hero;
-    subscribe?: Subscribe;
     postsPerPage?: number;
     projectsPerPage?: number;
 };
 
 const siteConfig: SiteConfig = {
-    title: 'sagnikc395.github.io',
-    subtitle: 'my personal garden on internet',
-    description: '',
+    sitename: `sagnik's little corner on the internet`,
+    description: 'thoughts and stuff',
     image: {
-        src: '',
-        alt: ''
+        src: '/sagnikc.jpeg',
+        alt: 'me trying to smile'
     },
     headerNavLinks: [
         {
-            text: 'Home',
+            text: '~',
             href: '/'
         },
         {
-            text: 'Projects',
+            text: 'projects',
             href: '/projects'
         },
         {
-            text: 'Blog',
+            text: 'blog',
             href: '/blog'
         },
         {
-            text: 'Tags',
+            text: 'tags',
             href: '/tags'
         }
     ],
@@ -88,11 +81,9 @@ const siteConfig: SiteConfig = {
         }
     ],
     hero: {
-        title: `thoughts on abstractions, logic and philosophy! it's gonna be a fun ride 🫶`,
-        text: `I'm Sagnik Chatterjee, a Software Developer at IBM India, working in Backend Engineering (Java, SpringBoot) and Distributed Systems (HBase, Apache Kafka).
-I am interested in Programming Languages (especially the Functional Programming paradigm) and Type Theory. I particularly appreciate how gradual typing enables us to create amazing software with both the safety of static typing and the flexibility of dynamically typed languages like Racket and Typed Racket.
-I have recently developed an interest in mathematical logic and proof-oriented programming languages like Lean, exploring how they help formally verify software.
-Feel free to explore my coding endeavors on GitHub or follow me on X.`,
+        title: `thoughts on programming, abstractions and logic!it's gonna be a fun ride 🫶`,
+        text: `hey I'm Sagnik. While I work in Backend Development in IBM as my job, i'm interested in the domain of Functional Programming and Type Theory.
+        I have been currently obsessing over how modern software stack can be built using LLMs and Proof Oriented Design.`,
         image: {
             src: '/hero.jpg',
             alt: 'a oil painting of countryside'
@@ -105,8 +96,8 @@ Feel free to explore my coding endeavors on GitHub or follow me on X.`,
         ]
     },
 
-    postsPerPage: 8,
-    projectsPerPage: 8
+    postsPerPage: 6,
+    projectsPerPage: 4
 };
 
 export default siteConfig;
