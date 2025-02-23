@@ -3,9 +3,9 @@ title: Vector Spaces serving as Simply Typed Lambda Calculi
 excerpt: My notes on finite state vector spaces for simply typed lambda calculi
 publishDate: 'Feb 24 2025'
 tags:
-  - programming-languages
+  - pl
   - lambda-calculas
-  - paper-review
+  - type-theory
   - finite-vector-spaces
 ---
 

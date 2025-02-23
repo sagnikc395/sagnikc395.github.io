@@ -6,7 +6,7 @@ tags:
   - esperanto
   - language
   - maths
-  - types
+  - type-theory
   - pl
 ---
 
