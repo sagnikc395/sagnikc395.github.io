@@ -13,7 +13,10 @@ tags:
 
 To equip myself more in the field of field of type theory and programming languages , I have decided to start reading research papers in the field of programming languages and type theory in particular.
 
-This weekend, I read the paper [Finites Vector Spaces as Model of Simply Typed Lambda Calculi](https://www.cis.upenn.edu/~stevez/papers/VZ14.pdf) , and here is a writeup of the basic understanding of the paper that I could understand.
+This weekend, I read the paper [Finites Vector Spaces as Model of Simply Typed Lambda Calculi](https://www.cis.upenn.edu/~stevez/papers/VZ14.pdf), by authors: [Benoit Valiron](https://www.monoidal.net/), whose blog I would suggest you to check by he way, 
+and [Steve Zdancewic](https://www.cis.upenn.edu/~stevez) and here is a writeup of what I could understand from the paper,especially from a beginner's perspetive in PL.
+
+
 
 ### Introduction :
 
