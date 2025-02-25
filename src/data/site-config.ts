@@ -81,9 +81,9 @@ const siteConfig: SiteConfig = {
         }
     ],
     hero: {
-        title: `thoughts on programming, abstractions and logic!it's gonna be a fun ride 🫶`,
-        text: `hey I'm Sagnik. While I work in Backend Development in IBM as my job, i'm interested in the domain of Functional Programming and Type Theory.
-        I have been currently obsessing over how modern software stack can be built using LLMs and Proof Oriented Design.`,
+        title: `thoughts on programming, abstractions and logic! it's gonna be a fun ride 🫶`,
+        text: `hey I'm Sagnik. While I work in Backend Development in IBM as my job, I'm highly interested in the domain of Functional Programming and Type Theory and their implications for Mathematics via Category Theory.
+        To that effect I have been currently been learning Haskell(to write code in pure functional style) and Agda(to write proof oriented software).`,
         image: {
             src: '/hero.jpg',
             alt: 'a oil painting of countryside'

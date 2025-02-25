@@ -12,23 +12,26 @@ seo:
 
 # Sagnik Chatterjee
 
-👋👋, hi beautiful people of the Internet. I'm Sagnik and a software developer by profession; I'm also a self-confessed fan of mathematical logic, proof-oriented, and functional programming.
+Hi, this is Sagnik - the owner and "gardener" of this site - maintaining the knowledge of this corner of the internet; I'm also a self-confessed fan of mathematical logic, proof-oriented, and functional programming.
 
 ## Skills and Expertise
 
 I am very skilled in building **fullstack** software using the following stack:
 
-- React(Nextjs)
-- Typescript
-- PostgreSQL
-- Prisma
-- tRPC
-- Node/Bun
+- Svelte / Sveltekit (for performance oriented websites)
+- Astro (for content driven websites) (website like this !)
+- Python (for general scripting and backend web development)
+- Rust (for writing performance sensitive code)
 
 Additionally I have been exploring other programming languages, during nights and weekends:
 
-- Go -> to learn more about concurrency and going multi-threaded
-- OCaml -> to learn about concrete type systems and what lies beyond gradual typing in Typescript
-- Coq -> exploring how can we write secure systems with formal verification and deductive reasoning.
+- Haskell -> to learn about concrete type system programming languages and to write purely functional programming languages.
+- Agda -> for writing proof oriented programming languages.
 
-Apart from work, I also talk tech with folks in the [Reason/OCaml India Group](https://discord.gg/4UvnqV3h) and the [Effect.ts Group](https://discord.com/invite/effect-ts). Feel free to say hi to me in you join up : sagnikcw#5614.
+Apart from work, I also talk tech with friends at:
+
+- [Reason/OCaml India Group](https://discord.gg/4UvnqV3h)
+- [Effect.ts Group](https://discord.com/invite/effect-ts).
+- [PLTea](https://discord.com/invite/d7xK5yuNYk)
+
+Feel free to say hi to me in you join up : sagnikcw#5614.
