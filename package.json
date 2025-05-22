@@ -36,6 +36,7 @@
 	"dependencies": {
 		"@tailwindcss/vite": "^4.1.7",
 		"@types/strftime": "^0.9.8",
+		"lucide-svelte": "^0.511.0",
 		"strftime": "^0.10.3",
 		"tailwindcss": "^4.1.7"
 	}
