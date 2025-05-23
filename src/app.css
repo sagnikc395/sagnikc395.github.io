@@ -1,1 +1,34 @@
 @import 'tailwindcss';
+
+/* Global Tailwind-enhanced styles */
+html {
+	@apply motion-safe:scroll-smooth;
+	background-color: theme('colors.zinc.900');
+	font-family: theme('fontFamily.sans');
+}
+
+body {
+	@apply py-12 sm:py-24 md:py-32 text-zinc-100;
+}
+
+hr {
+	@apply border-neutral-200;
+}
+
+.link {
+	@apply underline underline-offset-[3px] decoration-neutral-400 dark:decoration-neutral-500;
+	@apply hover:text-white hover:decoration-white transition-colors;
+	@apply dark:hover:text-white dark:hover:decoration-white;
+}
+
+.layout-md {
+	@apply max-w-screen-md mx-auto px-4 sm:px-6;
+}
+
+.heading2 {
+	@apply text-black text-xl font-semibold mb-4;
+}
+
+::selection {
+	@apply bg-neutral-200;
+}

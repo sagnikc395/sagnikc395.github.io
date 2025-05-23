@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { marked, type Token, type Renderer } from 'marked';
+	import { markedSmartypants } from 'marked-smartypants';
 
 	export let source: string;
 	let html: string = '';
@@ -14,11 +15,11 @@
 	};
 
 	marked.use({ renderer });
+	marked.use(markedSmartypants());
 
 	$: html = marked.parse(source, {
-		//smartLists: true,
-		smartypants: true
-	});
+		gfm: true
+	}) as string;
 </script>
 
 <div class="md-output">
