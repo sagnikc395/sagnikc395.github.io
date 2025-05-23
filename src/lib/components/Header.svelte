@@ -3,7 +3,7 @@
 
 	const links = [
 		{ name: 'projects', href: '/projects' },
-		{ name: 'blog', href: '/blog' },
+		{ name: 'writings', href: '/writings' },
 		{ name: 'resume', href: '/resume' }
 	];
 	let pageTitle: string | null = null;

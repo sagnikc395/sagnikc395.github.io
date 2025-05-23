@@ -23,7 +23,7 @@
 	}
 
 	.row span {
-		@apply text-neutral-500;
+		@apply text-neutral-900;
 	}
 
 	.row hr {

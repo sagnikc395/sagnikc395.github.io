@@ -39,7 +39,7 @@
 
 	let stars: Record<string, number> | null = null;
 	onMount(async () => {
-		const resp = await fetch('https://api.github.com/users/ekzhang/repos?per_page=100');
+		const resp = await fetch('https://api.github.com/users/sagnikc395/repos?per_page=100');
 		const repos = await resp.json();
 		stars = {};
 		for (const obj of repos) {
@@ -56,10 +56,7 @@
 	let sortOrder: 'date' | 'stars' = 'date';
 </script>
 
-<Seo
-	title="Eric Zhang – Projects"
-	description="Open-source software projects in systems, web development, computer graphics, music, programming languages, machine learning, and more."
-/>
+<Seo title="Sagnik Chatterjee – Projects" description="Sagnik's various Projects" />
 
 <section class="layout-md py-12">
 	<h2 class="heading2">Open Source</h2>

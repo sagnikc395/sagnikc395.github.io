@@ -16,3 +16,11 @@ export type Project = {
 	image_border?: boolean;
 	subimages?: string[];
 };
+
+export type Post = {
+	title: string;
+	date: string;
+	content: string;
+	image?: string;
+	subimages?: string[];
+};

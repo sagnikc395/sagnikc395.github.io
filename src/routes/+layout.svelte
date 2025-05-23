@@ -15,7 +15,6 @@
 	const reducedMotion = browser && matchMedia('(prefers-reduced-motion: reduce)').matches;
 </script>
 
-
 <Header />
 {#if isMobile || reducedMotion}
 	<!--

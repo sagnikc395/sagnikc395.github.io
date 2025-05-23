@@ -67,11 +67,11 @@
 		class="flex flex-col md:flex-row items-center md:items-start space-y-10 md:space-y-0 md:space-x-10"
 	>
 		<!-- Profile Image -->
-		<div class="w-full md:w-1/3 h-full">
+		<div class="w-full md:w-1/3 flex justify-center items-center md:justify-start">
 			<img
 				alt="sagnik chilling in his natural place"
 				src="/assets/images/profile.jpeg"
-				class="rounded-xl w-full object-cover"
+				class="rounded-xl w-64 object-cover"
 			/>
 		</div>
 

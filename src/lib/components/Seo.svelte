@@ -9,6 +9,6 @@
 	<meta name="description" content={description} />
 	<meta property="og:title" content={ogTitle ?? title} />
 	<meta property="og:description" content={description} />
-	<meta property="og:image" content="https://sagnikc395.github.io/assets/images/catush.jpeg" />
+	<meta property="og:image" content="https://sagnikc395.github.io/assets/images/profile.jpeg" />
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>

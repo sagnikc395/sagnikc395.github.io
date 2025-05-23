@@ -11,7 +11,7 @@
 </script>
 
 <!-- Title -->
-<h3 class="text-black text-xl font-semibold mb-2">
+<h3 class="text-neutral-800 text-xl font-semibold mb-2">
 	<span class="mr-1">{data.title}</span>
 	<small class="whitespace-nowrap text-neutral-500 text-base font-normal">
 		{formatTime('%B %Y', data.date)}
