@@ -12,11 +12,12 @@
 	<div class="row">
 		<span>Email</span>
 		<hr />
-		<a class="link" href="mailto:sagnikchatterjee395@gmail.com">Email</a>
+		<a class="link" href="mailto:sagnikchatterjee395@gmail.com">sagnikchatterjee395@gmail.com</a>
 	</div>
 </footer>
 
 <style lang="postcss">
+	@reference "tailwindcss";
 	.row {
 		@apply flex items-center space-x-4;
 	}

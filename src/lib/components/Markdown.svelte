@@ -27,6 +27,7 @@
 </div>
 
 <style lang="postcss">
+	@reference "tailwindcss";
 	.md-output :global(p) {
 		@apply mb-4;
 	}

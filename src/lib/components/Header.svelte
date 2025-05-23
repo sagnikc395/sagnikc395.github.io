@@ -17,7 +17,11 @@
 	}
 </script>
 
-<header>
+<header
+	class="layout-md flex justify-between items-start"
+	data-sveltekit-noscroll
+	data-sveltekit-preload-code="eager"
+>
 	<h1 class="font-bold text-block text-2xl mb-6">
 		<a href="/">Sagnik Chatterjee</a>
 		{#if pageTitle}
@@ -39,6 +43,7 @@
 </header>
 
 <style lang="postcss">
+	@reference "tailwindcss";
 	nav {
 		@apply flex items-start text-neutral-500 justify-end space-x-6 text-lg py-0.5;
 	}
