@@ -1,48 +1,5 @@
 <script>
 	import Seo from '$lib/components/Seo.svelte';
-	import { ArrowUpRight } from 'lucide-svelte';
-	// let featuredProjects = [
-	// 	{
-	// 		name: 'sshx',
-	// 		href: '/projects#sshx',
-	// 		desc: 'secure web-based, collaborative terminal'
-	// 	},
-	// 	{
-	// 		name: 'Bore',
-	// 		href: '/projects#bore',
-	// 		desc: 'bypass your NAT in just 400 lines of code',
-	// 		aside: '9500+ stars on GitHub'
-	// 	},
-	// 	{
-	// 		name: 'Percival',
-	// 		href: '/projects#percival',
-	// 		desc: 'reactive notebooks for exploratory data analysis'
-	// 	},
-	// 	{
-	// 		name: 'Rustpad',
-	// 		href: '/projects#rustpad',
-	// 		desc: 'self-hosted collaborative text editor',
-	// 		aside: '6M+ downloads'
-	// 	},
-	// 	{
-	// 		name: 'Crepe',
-	// 		href: '/projects#crepe',
-	// 		desc: 'compiled Datalog language in Rust',
-	// 		aside: 'used by distributed databases & security systems'
-	// 	},
-	// 	{
-	// 		name: 'FastSeg',
-	// 		href: '/projects#fastseg',
-	// 		desc: 'real-time semantic segmentation for self-driving cars'
-	// 	},
-	// 	{
-	// 		name: 'Set with Friends',
-	// 		href: '/projects#setwithfriends',
-	// 		desc: 'online multiplayer card game',
-	// 		aside: '30M+ page views, 900K+ users'
-	// 	}
-	// ];
-	// featuredProjects.length = 0;
 </script>
 
 <Seo
@@ -51,11 +8,11 @@
 />
 
 <p
-	class="layout-md text-neutral-700 text-lg md:text-xl leading-tight font-light mb-16"
+	class="layout-md text-neutral-700 text-xl md:text-lg leading-tight font-light mb-16 p-2"
 	id="sagnik-is"
 >
 	<span class="neutral">is a</span>
-	software engineer<span class="neutral">,ai fanboy </span>
+	software engineer<span class="neutral">, ai fanboy </span>
 	<br />
 	and researcher<span class="neutral"></span>
 	<br />
@@ -67,7 +24,10 @@
 		class="flex flex-col md:flex-row items-center md:items-start space-y-10 md:space-y-0 md:space-x-10"
 	>
 		<!-- Profile Image -->
-		<div class="w-full md:w-1/3 flex justify-center items-center md:justify-start">
+		<div
+			class="w-full md:w-1/3 flex justify-center items-center md:justify-start"
+			style="align-self: stretch"
+		>
 			<img
 				alt="sagnik chilling in his natural place"
 				src="/assets/images/profile.jpeg"
@@ -111,32 +71,14 @@
 		</ul>
 	</div>
 
-	<!-- rn dont render the projects yet
-	{#if featuredProjects.length > 0}
-		<div class="leading-snug space-y-4">
-			<p class="pb-2">Notable open-source work:</p>
-
-			{#each featuredProjects as project}
-				<a class="project-pair" href={project.href}>
-					<div class="text-black font-medium">
-						{project.name}
-						<ArrowUpRight size={18} class="inline text-neutral-400" />
-					</div>
-					<div>
-						<p>{project.desc}</p>
-						{#if project.aside}
-							<aside>{project.aside}</aside>
-						{/if}
-					</div>
-				</a>
-			{/each}
-		</div>
-	{/if} -->
 	<div class="items-center">
 		<p class="text-center text-lg md:text-xl">
 			I'm also building a digital garden of my knowledge and notes on AI and PL. <br />Follow here :
-			<a href="https://sagnikc395.github.io/notes" class="underline italic" rel="_noreferrer"
-				>sagnik`s digital garden</a
+			<a
+				href="https://sagnikc395.github.io/notes"
+				class="underline italic"
+				rel="_noreferrer"
+				target="_blank">sagnik`s digital garden</a
 			>
 		</p>
 	</div>

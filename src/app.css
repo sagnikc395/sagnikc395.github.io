@@ -9,7 +9,16 @@ html {
 	background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
 	background-size: 4px 4px;
 }
+::selection {
+	background-color: #00bcd4; /* or any accent color */
+	color: #ffffff; /* usually white for contrast */
+}
 
+/* For Firefox */
+::-moz-selection {
+	background-color: #00bcd4;
+	color: #ffffff;
+}
 body {
 	@apply py-12 sm:py-24 md:py-32 text-neutral-700;
 }
