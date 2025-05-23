@@ -67,7 +67,7 @@
 		class="flex flex-col md:flex-row items-center md:items-start space-y-10 md:space-y-0 md:space-x-10"
 	>
 		<!-- Profile Image -->
-		<div class="w-full md:w-1/3">
+		<div class="w-full md:w-1/3 h-full">
 			<img
 				alt="sagnik chilling in his natural place"
 				src="/assets/images/profile.jpeg"
@@ -93,6 +93,7 @@
 		</div>
 	</div>
 	<!-- beliefs !~!! -->
+	<hr />
 	<div class="text-center space-y-4">
 		<h2 class="text-xl md:text-2xl font-semibold underline">Some things I believe in:</h2>
 		<ul class=" list-inside space-y-1 text-neutral-500">
@@ -131,6 +132,15 @@
 			{/each}
 		</div>
 	{/if} -->
+	<div class="items-center">
+		<p class="text-center text-lg md:text-xl">
+			I'm also building a digital garden of my knowledge and notes on AI and PL. <br />Follow here :
+			<a href="https://sagnikc395.github.io/notes" class="underline italic" rel="_noreferrer"
+				>sagnik`s digital garden</a
+			>
+		</p>
+	</div>
+	<hr />
 	<!-- other stuff that interests me -->
 	<div class="text-center text-zinc-800">
 		<p>Other interests: endurance running, F1, maths and J-Pop.</p>

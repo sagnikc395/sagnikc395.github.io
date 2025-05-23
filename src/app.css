@@ -5,6 +5,9 @@ html {
 	@apply motion-safe:scroll-smooth;
 	/* background-color: theme('colors.zinc.900'); */
 	font-family: theme('fontFamily.sans');
+	background-color: #fdfcf8;
+	background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+	background-size: 4px 4px;
 }
 
 body {

@@ -4,8 +4,8 @@
 </script>
 
 <Seo
-	title="Eric Zhang – Resume"
-	description="Software engineer, researcher, and designer. Making meaningful systems and interfaces for people."
+	title="Sagnik Chatterjee – Resume"
+	description="software engineer and research , exploring the depths of RL and program synthesis"
 />
 
 <section class="layout-md py-12">
@@ -13,21 +13,19 @@
 
 	<div class="mb-4">
 		<div class="flex justify-between items-end">
-			<h3 class="text-black text-lg">Harvard University</h3>
-			<div class="text-neutral-500 mb-0.5">2022 — 2023</div>
+			<h3 class="text-black text-lg">University of Massachusetts, Amherst</h3>
+			<div class="text-neutral-500 mb-0.5">2025 — 2027(expected)</div>
 		</div>
-		<p class="byline">S.M. in Computer Science</p>
+		<p class="byline">Masters in Computer Science</p>
 	</div>
 
 	<div class="mb-4">
 		<div class="flex justify-between items-end">
-			<h3 class="text-black text-lg">Harvard University</h3>
-			<div class="text-neutral-500 mb-0.5">2019 — 2023</div>
+			<h3 class="text-black text-lg">Manipal Institute of Technology, Manipal</h3>
+			<div class="text-neutral-500 mb-0.5">2018 — 2022</div>
 		</div>
-		<p class="byline">A.B. in Computer Science and Mathematics</p>
+		<p class="byline">BTech in Computer Science and Engineering</p>
 	</div>
-
-	<p>Graduated magna cum laude, with highest honors in field.</p>
 
 	<h4 class="font-medium mt-4 mb-1">Teaching:</h4>
 	<ul>
