@@ -3,12 +3,12 @@
 /* Global Tailwind-enhanced styles */
 html {
 	@apply motion-safe:scroll-smooth;
-	background-color: theme('colors.zinc.900');
+	/* background-color: theme('colors.zinc.900'); */
 	font-family: theme('fontFamily.sans');
 }
 
 body {
-	@apply py-12 sm:py-24 md:py-32 text-zinc-100;
+	@apply py-12 sm:py-24 md:py-32 text-neutral-700;
 }
 
 hr {
@@ -30,5 +30,9 @@ hr {
 }
 
 ::selection {
-	@apply bg-neutral-200;
+	@apply bg-neutral-200 dark:bg-neutral-600;
+}
+
+.dark {
+	color-scheme: dark;
 }
