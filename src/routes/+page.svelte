@@ -77,7 +77,7 @@
 
 		<!-- Text Content -->
 		<div class="w-full md:w-2/3 space-y-5">
-			<p class="text-xl font-semibold">Hi, I’m Sagnik</p>
+			<p class="text-xl font-semibold">Hi, I’m Sagnik 👋</p>
 			<p class="text-lg md:text-xl">
 				I'm primarily interested in compilers and program synthesis, but I also make time to explore
 				reinforcement learning and energy-based models in my free time.
