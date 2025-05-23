@@ -3,8 +3,7 @@
 
 	const links = [
 		{ name: 'writings', href: '/writings' },
-		{ name: 'resume', href: '/resume' },
-		{ name: 'notes', href: 'https://sagnikc395.github.io/notes' }
+		{ name: 'resume', href: '/resume' }
 	];
 	let pageTitle: string | null = null;
 	$: {
