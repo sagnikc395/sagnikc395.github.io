@@ -2,9 +2,9 @@
 	import { page } from '$app/stores';
 
 	const links = [
-		{ name: 'projects', href: '/projects' },
 		{ name: 'writings', href: '/writings' },
-		{ name: 'resume', href: '/resume' }
+		{ name: 'resume', href: '/resume' },
+		{ name: 'notes', href: 'https://sagnikc395.github.io/notes' }
 	];
 	let pageTitle: string | null = null;
 	$: {

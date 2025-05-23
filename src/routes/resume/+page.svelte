@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Seo from '$lib/components/Seo.svelte';
+	import { Download } from 'lucide-svelte';
 	import Workplace from './Workplace.svelte';
 </script>
 
@@ -7,6 +8,21 @@
 	title="Sagnik Chatterjee – Resume"
 	description="software engineer and research , exploring the depths of RL and program synthesis"
 />
+
+<section class="layout-md my-4">
+	<h3 class="text-lg font-semibold flex items-center gap-2">
+		<span>Download a PDF version of my resume:</span>
+		<a
+			href="/assets/pdf/SagnikChatterjee-Resume.pdf"
+			target="_blank"
+			rel="noreferrer"
+			class="flex items-center text-blue-600 hover:underline"
+		>
+			<Download class="w-5 h-5 mr-1" />
+			<span class="sr-only">Download Resume</span>
+		</a>
+	</h3>
+</section>
 
 <section class="layout-md py-12">
 	<h2 class="heading2">Education</h2>
@@ -61,7 +77,7 @@
 <section class="layout-md py-12">
 	<h2 class="heading2">Professional Experience</h2>
 
-	<!-- <Workplace
+	<Workplace
 		title="Founding Engineer"
 		company="Modal Labs"
 		url="https://modal.com/"
@@ -98,7 +114,7 @@
 			For 3 years, was #1 committer, made technical decisions like adopting Rust and Svelte despite
 			early skepticism and shaped the long-term direction.
 		</li>
-	</Workplace> -->
+	</Workplace>
 </section>
 
 <style lang="postcss">

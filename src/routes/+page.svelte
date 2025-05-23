@@ -143,7 +143,7 @@
 	<hr />
 	<!-- other stuff that interests me -->
 	<div class="text-center text-zinc-800">
-		<p>Other interests: endurance running, F1, maths and J-Pop.</p>
+		<p>Other interests: endurance running, F1, maths and writing fiction</p>
 	</div>
 </div>
 
