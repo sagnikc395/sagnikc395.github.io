@@ -26,7 +26,7 @@
 
 <section class="layout-md">
 	<p class="text-sm md:text-lg mb-4">
-		<em> small writings and things that I wanna remember </em>
+		<em> ideas that I think in a jiffy and for the vibes </em>
 	</p>
 	<hr />
 </section>
