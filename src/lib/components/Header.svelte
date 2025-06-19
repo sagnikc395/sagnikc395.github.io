@@ -3,7 +3,8 @@
 
 	const links = [
 		{ name: 'writings', href: '/writings' },
-		{ name: 'resume', href: '/resume' }
+		{ name: 'resume', href: '/resume' },
+		{ name: 'blog', href: 'https://blog-sagnikc.vercel.app' }
 	];
 	let pageTitle: string | null = null;
 	$: {
