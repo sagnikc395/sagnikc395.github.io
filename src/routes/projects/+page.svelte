@@ -2,13 +2,13 @@
 	import { page } from '$app/stores';
 	import Seo from '$lib/components/Seo.svelte';
 
-	import Writings from './Writings.svelte';
+	import Projects from './Projects.svelte';
 
-	const notes = import.meta.glob('../../writings/*.md', {
+	const notes = import.meta.glob('../../projects/*.md', {
 		eager: true
 	}) as any;
 
-	const images = import.meta.glob('../../writings/*.{png,jpg,svg}', {
+	const images = import.meta.glob('../../projects/*.{png,jpg,svg}', {
 		eager: true
 	}) as any;
 
@@ -26,7 +26,7 @@
 
 <section class="layout-md">
 	<p class="text-sm md:text-lg mb-4">
-		<em> ideas that I think in a jiffy and for the vibes </em>
+		<em> an index of some of my projects and links </em>
 	</p>
 	<hr />
 </section>
@@ -35,7 +35,7 @@
 	{#each notesByDate as id (id)}
 		<section class="py-10" id={trimName(id)}>
 			<div class="mx-auto max-w-[1152px] px-4 sm:px-6">
-				<Writings data={notes[id]} {images} />
+				<Projects data={notes[id]} {images} />
 			</div>
 		</section>
 		<hr />

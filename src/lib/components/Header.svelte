@@ -2,9 +2,9 @@
 	import { page } from '$app/stores';
 
 	const links = [
-		{ name: 'writings', href: '/writings' },
+		{ name: 'projects', href: '/projects' },
 		{ name: 'resume', href: '/resume' },
-		{ name: 'blog', href: 'https://csagnik.netlify.app' }
+		{ name: 'blog', href: '/blog' }
 	];
 	let pageTitle: string | null = null;
 	$: {
