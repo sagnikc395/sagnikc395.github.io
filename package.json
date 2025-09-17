@@ -40,10 +40,12 @@
 		"@types/js-yaml": "^4.0.9",
 		"@types/marked": "^5.0.2",
 		"@types/strftime": "^0.9.8",
+		"gray-matter": "^4.0.3",
 		"js-yaml": "^4.1.0",
 		"lucide-svelte": "^0.511.0",
 		"marked": "^15.0.12",
 		"marked-smartypants": "^1.1.9",
+		"rehype-prism-plus": "^2.0.1",
 		"strftime": "^0.10.3",
 		"tailwindcss": "^4.1.7"
 	}
