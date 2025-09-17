@@ -39,8 +39,10 @@
 		<div class="w-full md:w-2/3 space-y-5">
 			<p class="text-xl font-semibold">Hi, I’m Sagnik 👋</p>
 			<p class="text-lg md:text-xl">
-				I'm primarily interested in compilers and program synthesis, but I also make time to explore
-				reinforcement learning and energy-based models in my free time.
+				I’m primarily interested in natural language processing and biomedical applications, with a
+				focus on building knowledge models tailored for real-world biomedical use cases. Along the
+				way, I’m also curious about how these systems intersect with program synthesis and broader
+				AI reasoning.
 			</p>
 			<p>
 				After sunset, you’ll usually find me nose-deep in a history book—anything from ancient

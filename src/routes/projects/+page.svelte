@@ -31,13 +31,10 @@
 	<hr />
 </section>
 
-<div class="items-center flex flex-col text-neutral-900">
+<div class="layout-md">
 	{#each notesByDate as id (id)}
-		<section class="py-10" id={trimName(id)}>
-			<div class="mx-auto max-w-[1152px] px-4 sm:px-6">
-				<Projects data={notes[id]} {images} />
-			</div>
+		<section class="py-10 border-b border-neutral-200" id={trimName(id)}>
+			<Projects data={notes[id]} {images} />
 		</section>
-		<hr />
 	{/each}
 </div>

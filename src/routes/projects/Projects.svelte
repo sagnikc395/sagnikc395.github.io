@@ -4,7 +4,6 @@
 	import { formatTime } from '$lib/utils';
 
 	export let data: Post;
-	// svelte-ignore export_let_unused
 	export let images: Record<string, { default: string }>;
 
 	function isURL(path: string): boolean {
@@ -17,58 +16,63 @@
 	}
 </script>
 
-<!-- title -->
-<h3 class="text-black text-lg md:text-xl font-semibold mb-2">
+<!-- project header -->
+<h3 class="text-black text-xl md:text-2xl font-semibold mb-4 flex flex-wrap items-center">
 	{#if data.title}
-		<span class="mr-1">{data.title}</span>
+		<span class="mr-2">{data.title}</span>
 	{/if}
 	{#if data.date}
-		<small class="whitespace-nowrap text-neutral-500 text-base font-normal">
+		<small class="text-neutral-500 text-base font-normal">
 			{formatTime('%d %B %Y', data.date)}
 		</small>
 	{/if}
 </h3>
 
-<!-- description and images -->
-<div class="">
-	<!-- image -->
+<!-- project body -->
+<div class="grid md:grid-cols-3 gap-6 items-start">
+	<!-- main image -->
 	{#if data.image}
-		<div class="col-span-3 md:col-span-1">
-			<a rel="external" href={images[`../../writings/${data.image}`]?.default}>
-				<img
-					src={isURL(data.image) ? data.image : images[`../../writings/${data.image}`]?.default}
-					alt="{data.title} preview image"
-					class:url-image={isURL(data.image)}
-				/></a
+		<div class="md:col-span-1">
+			<a
+				rel="external"
+				href={isURL(data.image) ? data.image : images[`../../projects/${data.image}`]?.default}
 			>
-		</div>
-	{/if}
-
-	<!-- sub images -->
-	{#if data.subimages}
-		<div class="grid grid-cols-3 gap-4 mb-10">
-			{#each data.subimages as image}
-				<div class="col-span-full md:col-span-1">
-					<a rel="external" href={images[`../../writings/${image}`]?.default}>
-						<img
-							src={isURL(image) ? image : images[`../../writings/${data.image}`]?.default}
-							alt="{data.title} subimage"
-						/></a
-					>
-				</div>
-			{/each}
+				<img
+					src={isURL(data.image) ? data.image : images[`../../projects/${data.image}`]?.default}
+					alt="{data.title} preview image"
+					class="rounded-lg shadow-sm max-h-64 object-cover w-full"
+				/>
+			</a>
 		</div>
 	{/if}
 
 	<!-- description -->
-	<div class="col-span-3 md:col-span-2">
+	<div
+		class="md:col-span-2 prose prose-neutral prose-headings:font-semibold prose-headings:text-black prose-p:text-neutral-800 prose-a:text-blue-600 hover:prose-a:text-blue-800 max-w-none"
+	>
 		<Markdown source={data.content} />
 	</div>
 </div>
 
+<!-- subimages -->
+{#if data.subimages}
+	<div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+		{#each data.subimages as image}
+			<a rel="external" href={isURL(image) ? image : images[`../../projects/${image}`]?.default}>
+				<img
+					src={isURL(image) ? image : images[`../../projects/${image}`]?.default}
+					alt="{data.title} subimage"
+					class="rounded-lg shadow-sm object-cover w-full max-h-48"
+				/>
+			</a>
+		{/each}
+	</div>
+{/if}
+
 <style lang="postcss">
 	@reference "tailwindcss";
-	.url-image {
-		margin: 1rem auto;
+
+	h3 {
+		@apply break-words;
 	}
 </style>
