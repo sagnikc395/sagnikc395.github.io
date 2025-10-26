@@ -4,7 +4,7 @@
 	const links = [
 		{ name: 'projects', href: '/projects' },
 		{ name: 'resume', href: '/resume' },
-		{ name: 'blog', href: '/blog' }
+		{ name: 'notes/blog', href: 'https://sagnikc395.github.io/notes/' }
 	];
 	let pageTitle: string | null = null;
 	$: {

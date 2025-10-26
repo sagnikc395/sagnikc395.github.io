@@ -46,7 +46,6 @@
 		"marked": "^15.0.12",
 		"marked-smartypants": "^1.1.9",
 		"rehype-prism-plus": "^2.0.1",
-		"shiki": "^3.12.2",
 		"strftime": "^0.10.3",
 		"tailwindcss": "^4.1.7"
 	}

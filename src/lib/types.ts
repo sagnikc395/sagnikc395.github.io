@@ -1,10 +1,3 @@
-export type Blog = {
-	title: string;
-	date: Date;
-	summary: string;
-	link?: string;
-};
-
 export type Project = {
 	title: string;
 	date: string;
