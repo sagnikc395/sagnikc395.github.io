@@ -4,12 +4,12 @@
 
 <Seo
 	title="Sagnik Chatterjee - Art"
-	description="i miss the old sagnik, staright up used to draw anime sagnik"
+	description="essays written by machines of loving grace and some by me"
 />
 
 <section class="layout-md">
 	<p class="text-sm md:text-lg mb-4">
-		<em> your boy making big art </em>
+		<em> on the art of writing a essay </em>
 	</p>
 	<hr />
 </section>
