@@ -1,3 +1,4 @@
 ## sagnikc395.github.io
 
-portfolio
+portfolio website + blog + current activities.
+
