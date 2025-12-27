@@ -34,6 +34,8 @@
 				class="rounded-xl w-64 object-cover"
 			/>
 		</div>
+		<script id="umaring_js" src="https://umaring.mkr.cx/ring.js?id=sagnikc395"></script>
+		<div id="umaring"></div>
 
 		<!-- Text Content -->
 		<div class="w-full md:w-2/3 space-y-5">

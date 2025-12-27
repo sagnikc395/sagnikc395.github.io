@@ -3,7 +3,7 @@
 </script>
 
 <Seo
-	title="Sagnik Chatterjee - Art"
+	title="Sagnik Chatterjee - Posts"
 	description="essays written by machines of loving grace and some by me"
 />
 
