@@ -30,7 +30,7 @@
 		>
 			<img
 				alt="sagnik chilling in his natural place"
-				src="/assets/images/profile.jpeg"
+				src="/assets/images/profile2.jpeg"
 				class="rounded-xl w-64 object-cover"
 			/>
 		</div>
@@ -54,12 +54,7 @@
 			</p>
 		</div>
 	</div>
-	<!-- beliefs !~!! -->
-	<div>
-		<script id="umaring_js" src="https://umaring.mkr.cx/ring.js?id=sagnikc395"></script>
-		<div id="umaring"></div>
-	</div>
-	<hr />
+
 	<div class="text-center space-y-4">
 		<h2 class="text-xl md:text-2xl font-semibold underline">Some things I believe in:</h2>
 		<ul class=" list-inside space-y-1 text-neutral-500">
@@ -77,21 +72,27 @@
 		</ul>
 	</div>
 
-	<div class="items-center">
+	<div class="flex flex-col items-center space-y-6">
 		<p class="text-center text-lg md:text-xl">
-			I'm also building a digital garden of my knowledge base and unfinished and scratched writings <br
-			/>Follow here :
+			I'm also building a digital garden of my knowledge base and unfinished writings <br />
+			Follow here:
 			<a
 				href="https://sc4-knowledge-base.vercel.app/"
 				class="underline italic"
 				rel="_noreferrer"
-				target="_blank">sagnik`s digital garden</a
+				target="_blank">sagnik's digital garden</a
 			>
 		</p>
+
+		<div class="umass-ring-container">
+			<script id="umaring_js" src="https://umaring.mkr.cx/ring.js?id=sagnikc395"></script>
+			<div id="umaring"></div>
+		</div>
 	</div>
-	<hr />
+
+	<hr class="border-neutral-200" />
 	<!-- other stuff that interests me -->
-	<div class="text-center text-zinc-800">
+	<div class="text-center text-zinc-800 pb-10">
 		<p>Other interests: endurance running, F1, maths and making sketches.</p>
 	</div>
 </div>
@@ -118,5 +119,28 @@
 		#sagnik-is {
 			@apply -mt-10;
 		}
+	}
+	.umass-ring-container {
+		background: #881c1c; /* UMass Maroon */
+		padding: 15px;
+		border-radius: 12px;
+		display: inline-block;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+		transition: transform 0.3s ease;
+		border: 2px solid #5e1414;
+		font-family: 'Inter', sans-serif;
+	}
+
+	.umass-ring-container:hover {
+		transform: translateY(-5px);
+		box-shadow: 0 8px 25px rgba(136, 28, 28, 0.3);
+	}
+
+	/* Target the text inside the ring widget */
+	#umaring,
+	#umaring a {
+		color: white !important;
+		text-decoration: none;
+		font-weight: bold;
 	}
 </style>

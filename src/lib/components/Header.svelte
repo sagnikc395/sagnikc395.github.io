@@ -4,7 +4,6 @@
 	const links = [
 		{ name: 'projects', href: '/projects' },
 		{ name: 'resume', href: '/resume' },
-		{ name: 'posts', href: '/posts' },
 		{ name: 'blog', href: '/blog' }
 	];
 	let pageTitle: string | null = null;

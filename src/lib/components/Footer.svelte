@@ -1,8 +1,8 @@
 <footer class="layout-md mt-20 text-lg flex flex-col">
 	<div class="row">
-		<span>X</span>
+		<span>LinkedIn</span>
 		<hr />
-		<a class="link" href="https://x.com/sagnikcw">@sagnikcw</a>
+		<a class="link" href="https://www.linkedin.com/in/sagnikchatterjee3/">@sagnikchatterjee3</a>
 	</div>
 	<div class="row">
 		<span>Github</span>
