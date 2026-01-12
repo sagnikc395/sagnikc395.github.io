@@ -32,7 +32,7 @@
 			<div>
 				<div class="flex justify-between items-end">
 					<h3 class="text-lg font-semibold">University of Massachusetts, Amherst</h3>
-					<p class="text-neutral-500 text-sm">2025 — 2027</p>
+					<p class="text-stone-400 text-sm">2025 — 2027</p>
 				</div>
 				<p class="byline">M.S. in Computer Science</p>
 			</div>
@@ -40,7 +40,7 @@
 			<div>
 				<div class="flex justify-between items-end">
 					<h3 class="text-lg font-semibold">Manipal Institute of Technology, Manipal</h3>
-					<p class="text-neutral-500 text-sm">2018 — 2022</p>
+					<p class="text-stone-400 text-sm">2018 — 2022</p>
 				</div>
 				<p class="byline">B.Tech in Computer Science & Engineering</p>
 			</div>
@@ -59,8 +59,8 @@
 				dates="Sept 2025 – (current)"
 				location="Amherst, MA"
 			/>
-			<ul class="divide-y divide-neutral-200 mt-2">
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">
+			<ul class="divide-y divide-stone-800 mt-2">
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
 					Independent Study: Working in UMass BioNLP Lab with Sunjae Kwon on Ontology-based LLMs for
 					Biomedical Applications
 				</li>
@@ -73,11 +73,11 @@
 		<h2 class="heading2 mb-4">Coursework</h2>
 		<div class="mb-3">
 			<h3 class="font-medium mb-2">Graduate-level (Fall 2025)</h3>
-			<ul class="divide-y divide-neutral-200">
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">
+			<ul class="divide-y divide-stone-800">
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
 					COMPSCI 685 – Advanced Natural Language Processing
 				</li>
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
 					COMPSCI 689 – Advanced Machine Learning
 				</li>
 			</ul>
@@ -85,14 +85,14 @@
 
 		<div>
 			<h3 class="font-medium mb-2">Undergraduate-level</h3>
-			<ul class="divide-y divide-neutral-200">
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">Compilers</li>
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">Operating Systems</li>
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">Distributed Systems</li>
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">Computer Networks</li>
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">Machine Learning</li>
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">Deep Learning</li>
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">Computer Vision</li>
+			<ul class="divide-y divide-stone-800">
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Compilers</li>
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Operating Systems</li>
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Distributed Systems</li>
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Computer Networks</li>
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Machine Learning</li>
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Deep Learning</li>
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Computer Vision</li>
 			</ul>
 		</div>
 	</div>
@@ -107,8 +107,8 @@
 			dates="Aug 2022 – Aug 2025"
 			location="Gurgaon, IN"
 		>
-			<ul class="divide-y divide-neutral-200">
-				<li class="py-2 hover:bg-neutral-50 rounded-md px-2">
+			<ul class="divide-y divide-stone-800">
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
 					Backend Developer integrating IBM Watson systems with Siebel CRM.
 				</li>
 			</ul>
@@ -126,6 +126,6 @@
 	}
 
 	.byline {
-		@apply font-serif italic text-neutral-700;
+		@apply font-serif italic text-stone-300;
 	}
 </style>

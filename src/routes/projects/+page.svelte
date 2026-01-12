@@ -26,14 +26,14 @@
 
 <section class="layout-md">
 	<p class="text-sm md:text-lg mb-4">
-		<em> an index of some of my projects and links </em>
+		<em> an index of some of my open source projects</em>
 	</p>
 	<hr />
 </section>
 
 <div class="layout-md">
 	{#each notesByDate as id (id)}
-		<section class="py-10 border-b border-neutral-200" id={trimName(id)}>
+		<section class="py-10 border-b border-stone-800" id={trimName(id)}>
 			<Projects data={notes[id]} {images} />
 		</section>
 	{/each}

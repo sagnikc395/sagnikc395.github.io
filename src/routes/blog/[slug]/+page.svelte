@@ -15,7 +15,7 @@
 <article class="layout-md py-10">
 	<header class="mb-8">
 		<h1 class="text-3xl font-bold mb-2">{data.title}</h1>
-		<div class="text-neutral-500">
+		<div class="text-stone-400">
 			{formatTime('%d %B %Y', data.date)}
 		</div>
 	</header>
@@ -28,7 +28,7 @@
 		/>
 	{/if}
 
-	<div class="prose prose-neutral prose-headings:font-semibold prose-headings:text-black prose-p:text-neutral-800 prose-a:text-blue-600 hover:prose-a:text-blue-800 max-w-none">
+	<div class="prose prose-stone prose-invert prose-headings:font-semibold prose-headings:text-stone-100 prose-p:text-stone-300 prose-a:text-blue-600 hover:prose-a:text-blue-800 max-w-none">
 		<Markdown source={data.content} />
 	</div>
 </article>

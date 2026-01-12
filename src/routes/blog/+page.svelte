@@ -35,11 +35,11 @@
 				<a href="/blog/{post.slug}" class="text-xl font-semibold hover:text-blue-600 transition-colors">
 					{post.title}
 				</a>
-				<span class="text-neutral-500 text-sm">
+				<span class="text-stone-400 text-sm">
 					{formatTime('%d %B %Y', post.date)}
 				</span>
 				{#if post.description}
-					<p class="text-neutral-700">{post.description}</p>
+					<p class="text-stone-300">{post.description}</p>
 				{/if}
 			</article>
 		{/each}

@@ -18,16 +18,16 @@
 	on:click={() => (hidden = false)}
 	on:keypress={() => {}}
 >
-	<h3 class="text-black text-lg leading-tight mb-1">
+	<h3 class="text-stone-100 text-lg leading-tight mb-1">
 		{title} at <a class="link" href={url}>{company}</a>
 	</h3>
 	<p class="font-light mb-2">
 		<span class="whitespace-nowrap">{dates}</span>
-		<span class="px-0.5 text-neutral-500">•</span>
+		<span class="px-0.5 text-stone-400">•</span>
 		<span class="whitespace-nowrap">{location}</span>
 	</p>
 	{#if !hidden}
-		<ul class="list-disc pl-7 marker:text-neutral-400" in:fade|local>
+		<ul class="list-disc pl-7 marker:text-stone-500" in:fade|local>
 			<slot />
 		</ul>
 	{/if}

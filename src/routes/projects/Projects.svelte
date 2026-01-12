@@ -17,12 +17,12 @@
 </script>
 
 <!-- project header -->
-<h3 class="text-black text-xl md:text-2xl font-semibold mb-4 flex flex-wrap items-center">
+<h3 class="text-stone-100 text-xl md:text-2xl font-semibold mb-4 flex flex-wrap items-center">
 	{#if data.title}
 		<span class="mr-2">{data.title}</span>
 	{/if}
 	{#if data.date}
-		<small class="text-neutral-500 text-base font-normal">
+		<small class="text-stone-400 text-base font-normal">
 			{formatTime('%d %B %Y', data.date)}
 		</small>
 	{/if}
@@ -48,7 +48,7 @@
 
 	<!-- description -->
 	<div
-		class="md:col-span-2 prose prose-neutral prose-headings:font-semibold prose-headings:text-black prose-p:text-neutral-800 prose-a:text-blue-600 hover:prose-a:text-blue-800 max-w-none"
+		class="md:col-span-2 prose prose-stone prose-invert prose-headings:font-semibold prose-a:text-blue-600 hover:prose-a:text-blue-800 max-w-none"
 	>
 		<Markdown source={data.content} />
 	</div>

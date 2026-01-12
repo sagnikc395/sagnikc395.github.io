@@ -23,10 +23,10 @@
 	}
 
 	.row span {
-		@apply text-neutral-900;
+		@apply text-stone-100;
 	}
 
 	.row hr {
-		@apply w-full mt-0.5 border-neutral-300 border-dotted;
+		@apply w-full mt-0.5 border-stone-700 border-dotted;
 	}
 </style>

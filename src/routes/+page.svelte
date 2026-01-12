@@ -8,7 +8,7 @@
 />
 
 <p
-	class="layout-md text-neutral-700 text-xl md:text-lg leading-tight font-light mb-16 p-2"
+	class="layout-md text-stone-500 text-xl md:text-lg leading-tight font-light mb-16 p-2"
 	id="sagnik-is"
 >
 	<span class="neutral">is a</span>
@@ -57,7 +57,7 @@
 
 	<div class="text-center space-y-4">
 		<h2 class="text-xl md:text-2xl font-semibold underline">Some things I believe in:</h2>
-		<ul class=" list-inside space-y-1 text-neutral-500">
+		<ul class=" list-inside space-y-1 text-stone-400">
 			<li>Complexity is often just poor organization.</li>
 			<li>Mastery begins where imitation ends.</li>
 			<li>Clarity is speed disguised as patience.</li>
@@ -90,9 +90,9 @@
 		</div>
 	</div>
 
-	<hr class="border-neutral-200" />
+	<hr class="border-stone-800" />
 	<!-- other stuff that interests me -->
-	<div class="text-center text-zinc-800 pb-10">
+	<div class="text-center text-stone-200 pb-10">
 		<p>Other interests: endurance running, F1, maths and making sketches.</p>
 	</div>
 </div>
@@ -100,18 +100,18 @@
 <style lang="postcss">
 	@reference "tailwindcss";
 	.g {
-		@apply text-neutral-900;
+		@apply text-stone-100;
 	}
 	em {
 		@apply font-serif text-[110%] leading-[100%];
 	}
 
 	.project-pair {
-		@apply grid sm:grid-cols-[1fr,2fr] gap-y-1 -mx-3 px-3 py-2 hover:bg-neutral-100 transition-colors;
+		@apply grid sm:grid-cols-[1fr,2fr] gap-y-1 -mx-3 px-3 py-2 hover:bg-stone-800 transition-colors;
 	}
 
 	aside {
-		@apply mt-0.5 text-base text-slate-700;
+		@apply mt-0.5 text-base text-stone-300;
 	}
 
 	/* Correction for vertical navigation links on mobile. */

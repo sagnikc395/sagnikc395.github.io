@@ -3,12 +3,16 @@
 /* Global Tailwind-enhanced styles */
 html {
 	@apply motion-safe:scroll-smooth;
-	/* background-color: theme('colors.zinc.900'); */
 	font-family: theme('fontFamily.sans');
-	background-color: #fdfcf8;
-	background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+	
+    /* Dark Mode (Default) */
+    background-color: #171717; /* neutral-900 */
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    color: #d6d3d1; /* stone-300 */
+    color-scheme: dark;
 	background-size: 4px 4px;
 }
+
 ::selection {
 	background-color: #00bcd4; /* or any accent color */
 	color: #ffffff; /* usually white for contrast */
@@ -20,17 +24,16 @@ html {
 	color: #ffffff;
 }
 body {
-	@apply py-12 sm:py-24 md:py-32 text-neutral-700;
+	@apply py-12 sm:py-24 md:py-32;
 }
 
 hr {
-	@apply border-neutral-200;
+	@apply border-stone-800;
 }
 
 .link {
-	@apply underline underline-offset-[3px] decoration-neutral-400 dark:decoration-neutral-500;
-	@apply hover:text-white hover:decoration-white transition-colors;
-	@apply dark:hover:text-white dark:hover:decoration-white;
+	@apply underline underline-offset-[3px] decoration-stone-600;
+	@apply hover:text-stone-100 hover:decoration-stone-100 transition-colors;
 }
 
 .layout-md {
@@ -38,13 +41,19 @@ hr {
 }
 
 .heading2 {
-	@apply text-black text-xl font-semibold mb-4;
+	@apply text-stone-100 text-xl font-semibold mb-4;
 }
 
 ::selection {
-	@apply bg-neutral-200 dark:bg-neutral-600;
+	@apply bg-stone-700;
 }
 
-.dark {
-	color-scheme: dark;
+/* Shiki Dual Theme Support - Enforcing Dark */
+html .shiki,
+html .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
 }
