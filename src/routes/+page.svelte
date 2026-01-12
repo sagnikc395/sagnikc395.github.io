@@ -34,8 +34,6 @@
 				class="rounded-xl w-64 object-cover"
 			/>
 		</div>
-		<script id="umaring_js" src="https://umaring.mkr.cx/ring.js?id=sagnikc395"></script>
-		<div id="umaring"></div>
 
 		<!-- Text Content -->
 		<div class="w-full md:w-2/3 space-y-5">
@@ -57,6 +55,10 @@
 		</div>
 	</div>
 	<!-- beliefs !~!! -->
+	<div>
+		<script id="umaring_js" src="https://umaring.mkr.cx/ring.js?id=sagnikc395"></script>
+		<div id="umaring"></div>
+	</div>
 	<hr />
 	<div class="text-center space-y-4">
 		<h2 class="text-xl md:text-2xl font-semibold underline">Some things I believe in:</h2>

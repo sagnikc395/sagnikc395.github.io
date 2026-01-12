@@ -5,7 +5,7 @@
 		{ name: 'projects', href: '/projects' },
 		{ name: 'resume', href: '/resume' },
 		{ name: 'posts', href: '/posts' },
-		{ name: 'blog', href: 'https://sagnikc395.github.io/blog/' }
+		{ name: 'blog', href: '/blog' }
 	];
 	let pageTitle: string | null = null;
 	$: {
