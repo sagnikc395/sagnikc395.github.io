@@ -79,9 +79,10 @@
 
 	<div class="items-center">
 		<p class="text-center text-lg md:text-xl">
-			I'm also building a digital garden of my knowledge and notes on AI and PL. <br />Follow here :
+			I'm also building a digital garden of my knowledge base and unfinished and scratched writings <br
+			/>Follow here :
 			<a
-				href="https://sagnikc395.github.io/notes"
+				href="https://sc4-knowledge-base.vercel.app/"
 				class="underline italic"
 				rel="_noreferrer"
 				target="_blank">sagnik`s digital garden</a
