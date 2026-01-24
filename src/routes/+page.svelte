@@ -93,7 +93,7 @@
 	<hr class="border-stone-800" />
 	<!-- other stuff that interests me -->
 	<div class="text-center text-stone-200 pb-10">
-		<p>Other interests: endurance running, F1, maths and making sketches.</p>
+		<p>Other interests: endurance running, F1, making sketches.</p>
 	</div>
 </div>
 

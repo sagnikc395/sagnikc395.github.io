@@ -16,4 +16,6 @@ but the main problem that I am facing is that there is no single good extension 
 
 i am building knowl, which is a local RAG based service that provides insights for your notes and writeups in a much more succint way , rather than just deep linkages and tag based directed graphs.
 
-i plan to soon open source it for v0.1; [knowl](https://github.com/sagnikc395/knowl)
+i plan to soon open source it for v0.1;
+
+ref: [knowl](https://github.com/sagnikc395/knowl)

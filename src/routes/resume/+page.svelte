@@ -56,7 +56,7 @@
 				title="Graduate Student Researcher"
 				company="UMass Amherst"
 				url="https://bio-nlp.github.io/"
-				dates="Sept 2025 – (current)"
+				dates="Sept 2025 – Dec 2025"
 				location="Amherst, MA"
 			/>
 			<ul class="divide-y divide-stone-800 mt-2">
@@ -71,6 +71,21 @@
 	<!-- Coursework -->
 	<div>
 		<h2 class="heading2 mb-4">Coursework</h2>
+		<div class="mb-3">
+			<h3 class="font-medium mb-2">Graduate-level (Spring 2026)</h3>
+			<ul class="divide-y divide-stone-800">
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
+					COMPSCI 603 – Robotics
+				</li>
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
+					COMPSCI 690U – Computational Biology
+				</li>
+				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
+					COMPSCI 520 – Software Engineering
+				</li>
+				
+			</ul>
+		</div>
 		<div class="mb-3">
 			<h3 class="font-medium mb-2">Graduate-level (Fall 2025)</h3>
 			<ul class="divide-y divide-stone-800">

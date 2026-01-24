@@ -12,4 +12,4 @@ for the longest time that i have been using Pytorch, i could make the model but 
 
 i built a simple autograd engine from scratch that pokes holes under this and helps me understand how does an autograd engine works under the hood.
 
-link : [autograd-engine](https://github.com/sagnikc395/autograd)
+ref : [autograd-engine](https://github.com/sagnikc395/autograd)

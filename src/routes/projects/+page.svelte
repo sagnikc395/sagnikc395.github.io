@@ -20,8 +20,8 @@
 </script>
 
 <Seo
-	title="Sagnik Chatterjee - Writings"
-	description="small writings and things that I wanna remember"
+	title="Sagnik Chatterjee - Projects"
+	description="my side projects"
 />
 
 <section class="layout-md">

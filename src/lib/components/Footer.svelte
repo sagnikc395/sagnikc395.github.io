@@ -14,6 +14,11 @@
 		<hr />
 		<a class="link" href="mailto:sagnikchatterjee607@gmail.com">sagnikchatterjee607@gmail.com</a>
 	</div>
+	<div class="row">
+		<span>X</span>
+		<hr />
+		<a class="link" href="https://x.com/sagnikc395">@sagnikc395</a>
+	</div>
 </footer>
 
 <style lang="postcss">
