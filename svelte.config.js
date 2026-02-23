@@ -13,7 +13,7 @@ const config = {
 	preprocess: [
 		vitePreprocess(),
 		mdsvex({
-			extensions: ['.svx', '.md'],
+			extensions: ['.svx'],
 			highlight: {
 				highlighter: async (code, lang) => {
 					if (lang && lang.includes('//')) return code;
@@ -33,7 +33,7 @@ const config = {
 			base: ''
 		}
 	},
-	extensions: ['.svelte', '.svx', '.md']
+	extensions: ['.svelte', '.svx']
 };
 
 export default config;

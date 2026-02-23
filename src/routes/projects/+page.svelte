@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Seo from '$lib/components/Seo.svelte';
-	import Search from '$lib/components/Search.svelte';
 	import { formatTime } from '$lib/utils';
 
 	const projects = import.meta.glob('../../projects/*.md', {
@@ -39,12 +38,10 @@
 
 <Seo title="Sagnik Chatterjee - Projects" description="my side projects" />
 
-<section class="layout-md" data-pagefind-body>
+<section class="layout-md">
 	<p class="text-sm md:text-lg mb-4">
 		<em> an index of some of my open source projects</em>
 	</p>
-
-	<Search />
 
 	<hr class="border-stone-800" />
 </section>

@@ -12,7 +12,7 @@
 	description={`Blog post: ${data.title}`}
 />
 
-<article class="layout-md py-10" data-pagefind-body data-pagefind-filter="type:blog">
+<article class="layout-md py-10">
 	<header class="mb-8">
 		<h1 class="text-3xl font-bold mb-2">{data.title}</h1>
 		<div class="text-stone-400">

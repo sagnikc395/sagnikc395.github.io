@@ -99,20 +99,6 @@
 
 <style lang="postcss">
 	@reference "tailwindcss";
-	.g {
-		@apply text-stone-100;
-	}
-	em {
-		@apply font-serif text-[110%] leading-[100%];
-	}
-
-	.project-pair {
-		@apply grid sm:grid-cols-[1fr,2fr] gap-y-1 -mx-3 px-3 py-2 hover:bg-stone-800 transition-colors;
-	}
-
-	aside {
-		@apply mt-0.5 text-base text-stone-300;
-	}
 
 	/* Correction for vertical navigation links on mobile. */
 	@media (max-width: 420px) {
@@ -138,7 +124,7 @@
 
 	/* Target the text inside the ring widget */
 	#umaring,
-	#umaring a {
+	#umaring :global(a) {
 		color: white !important;
 		text-decoration: none;
 		font-weight: bold;
