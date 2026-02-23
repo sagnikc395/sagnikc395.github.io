@@ -1,7 +1,10 @@
 ---
+title: An Autograd Engine
 date: 2025-11-8
+lead: Building a simple autograd engine from scratch to understand how fundamental operators work under the hood.
+topics: [python, deep-learning, autograd, pytorch]
 image:
-subimage:
+subimages:
 ---
 
 ## motivation

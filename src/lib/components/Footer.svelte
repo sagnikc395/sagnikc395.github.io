@@ -17,7 +17,7 @@
 	<div class="row">
 		<span>X</span>
 		<hr />
-		<a class="link" href="https://x.com/sagnikc395">@sagnikc395</a>
+		<a class="link" href="https://x.com/sagnikcw">@sagnikcw</a>
 	</div>
 </footer>
 

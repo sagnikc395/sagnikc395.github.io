@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Markdown from '$lib/components/Markdown.svelte';
-	import type { Post } from '$lib/types';
+	import type { Project } from '$lib/types';
 	import { formatTime } from '$lib/utils';
 
-	export let data: Post;
+	export let data: Project;
 	export let images: Record<string, { default: string }>;
+	export let imagePrefix: string = '../../projects/';
 
 	function isURL(path: string): boolean {
 		try {
@@ -13,6 +14,11 @@
 		} catch {
 			return false;
 		}
+	}
+
+	function getImageUrl(path: string) {
+		if (isURL(path)) return path;
+		return images[`${imagePrefix}${path}`]?.default;
 	}
 </script>
 
@@ -33,12 +39,9 @@
 	<!-- main image -->
 	{#if data.image}
 		<div class="md:col-span-1">
-			<a
-				rel="external"
-				href={isURL(data.image) ? data.image : images[`../../projects/${data.image}`]?.default}
-			>
+			<a rel="external" href={getImageUrl(data.image)}>
 				<img
-					src={isURL(data.image) ? data.image : images[`../../projects/${data.image}`]?.default}
+					src={getImageUrl(data.image)}
 					alt="{data.title} preview image"
 					class="rounded-lg shadow-sm max-h-64 object-cover w-full"
 				/>
@@ -58,9 +61,9 @@
 {#if data.subimages}
 	<div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
 		{#each data.subimages as image}
-			<a rel="external" href={isURL(image) ? image : images[`../../projects/${image}`]?.default}>
+			<a rel="external" href={getImageUrl(image)}>
 				<img
-					src={isURL(image) ? image : images[`../../projects/${image}`]?.default}
+					src={getImageUrl(image)}
 					alt="{data.title} subimage"
 					class="rounded-lg shadow-sm object-cover w-full max-h-48"
 				/>

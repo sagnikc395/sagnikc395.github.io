@@ -69,46 +69,61 @@
 	</div>
 
 	<!-- Coursework -->
-	<div>
-		<h2 class="heading2 mb-4">Coursework</h2>
-		<div class="mb-3">
-			<h3 class="font-medium mb-2">Graduate-level (Spring 2026)</h3>
-			<ul class="divide-y divide-stone-800">
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
-					COMPSCI 603 – Robotics
-				</li>
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
-					COMPSCI 690U – Computational Biology
-				</li>
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
-					COMPSCI 520 – Software Engineering
-				</li>
-				
-			</ul>
-		</div>
-		<div class="mb-3">
-			<h3 class="font-medium mb-2">Graduate-level (Fall 2025)</h3>
-			<ul class="divide-y divide-stone-800">
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
-					COMPSCI 685 – Advanced Natural Language Processing
-				</li>
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">
-					COMPSCI 689 – Advanced Machine Learning
-				</li>
-			</ul>
-		</div>
-
+	<div class="space-y-12">
 		<div>
-			<h3 class="font-medium mb-2">Undergraduate-level</h3>
-			<ul class="divide-y divide-stone-800">
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Compilers</li>
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Operating Systems</li>
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Distributed Systems</li>
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Computer Networks</li>
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Machine Learning</li>
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Deep Learning</li>
-				<li class="py-2 hover:bg-stone-800/50 rounded-md px-2">Computer Vision</li>
-			</ul>
+			<h2 class="heading2 mb-6">Coursework</h2>
+
+			<!-- Current Courses -->
+			<div class="mb-10">
+				<h3 class="text-sm font-medium text-stone-500 uppercase tracking-wider mb-4">
+					Currently Taking (Spring 2026)
+				</h3>
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+					{#each [{ id: 'COMPSCI 590NN', name: 'Neural Networks in AI and Neuroscience' }, { id: 'COMPSCI 690U', name: 'Computational Biology' }, { id: 'COMPSCI 520', name: 'Software Engineering' }] as course}
+						<div
+							class="group flex flex-col p-4 bg-stone-900/50 border border-stone-800 rounded-xl hover:border-blue-500/50 transition-all duration-300"
+						>
+							<span class="text-stone-500 text-xs font-mono mb-1">{course.id}</span>
+							<span class="text-stone-100 font-medium group-hover:text-blue-400 transition-colors"
+								>{course.name}</span
+							>
+						</div>
+					{/each}
+				</div>
+			</div>
+
+			<!-- Graduate (Completed) -->
+			<div class="mb-10">
+				<h3 class="text-sm font-medium text-stone-500 uppercase tracking-wider mb-4">
+					Graduate (Fall 2025)
+				</h3>
+				<div class="flex flex-wrap gap-2">
+					{#each [{ id: 'COMPSCI 685', name: 'Advanced Natural Language Processing' }, { id: 'COMPSCI 689', name: 'Advanced Machine Learning' }] as course}
+						<div
+							class="px-4 py-2 bg-stone-900/30 border border-stone-800 rounded-lg flex items-center gap-3"
+						>
+							<span class="text-stone-500 text-xs font-mono">{course.id}</span>
+							<span class="text-stone-300 text-sm font-medium">{course.name}</span>
+						</div>
+					{/each}
+				</div>
+			</div>
+
+			<!-- Undergraduate -->
+			<div>
+				<h3 class="text-sm font-medium text-stone-500 uppercase tracking-wider mb-4">
+					Undergraduate-level
+				</h3>
+				<div class="flex flex-wrap gap-2">
+					{#each ['Compilers', 'Operating Systems', 'Distributed Systems', 'Computer Networks', 'Machine Learning', 'Deep Learning', 'Computer Vision'] as course}
+						<span
+							class="px-3 py-1.5 bg-stone-900/20 border border-stone-800/50 rounded-full text-stone-400 text-sm font-serif italic"
+						>
+							{course}
+						</span>
+					{/each}
+				</div>
+			</div>
 		</div>
 	</div>
 

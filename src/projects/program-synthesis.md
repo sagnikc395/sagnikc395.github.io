@@ -1,7 +1,10 @@
 ---
+title: Program Synthesis & Monkey
 date: 2025-05-24
+lead: Exploring program synthesis and building a Javascript-like interpreted language from scratch.
+topics: [compilers, interpreters, rust, reinforcement-learning]
 image:
-subimage:
+subimages:
 ---
 
 ## monkey

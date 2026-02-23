@@ -1,7 +1,10 @@
 ---
+title: Knowl
 date: 2025-09-17
+lead: A local RAG based service that provides insights for your notes and writeups in Obsidian.
+topics: [rust, rag, llm, obsidian]
 image:
-subimage:
+subimages:
 ---
 
 ### motivation
