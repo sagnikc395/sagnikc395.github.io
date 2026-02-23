@@ -1,3 +1,3 @@
-## sagnikc395.github.io
+# sagnikc395.github.io
 
 portfolio website and blog.

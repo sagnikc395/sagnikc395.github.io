@@ -1,15 +1,17 @@
-// See https://svelte.dev/docs/kit/types#app.d.ts
-// for information about these interfaces
-declare global {
-	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
-		// interface PageState {}
-		// interface Platform {}
-	}
+declare module '*.yaml';
+declare module '*.md';
+
+declare module '*.png' {
+	const value: string;
+	export default value;
 }
 
-declare module '*.yaml';
+declare module '*.jpg' {
+	const value: string;
+	export default value;
+}
 
-export {};
+declare module '*.svg' {
+	const value: string;
+	export default value;
+}

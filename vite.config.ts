@@ -1,4 +1,4 @@
-import { sveltekit } from '@sveltejs/kit/vite';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
 import { dataToEsm } from '@rollup/pluginutils';
@@ -80,5 +80,13 @@ function markdown() {
 }
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit(), pluginYaml(), markdown()]
+	publicDir: 'static',
+	resolve: {
+		alias: {
+			'$lib': '/src/lib',
+			'$posts': '/src/posts',
+			'$projects': '/src/projects'
+		}
+	},
+	plugins: [tailwindcss(), react(), pluginYaml(), markdown()]
 });
