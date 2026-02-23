@@ -6,4 +6,4 @@ image:
 
 ## why ?
 
-recently , wenting zhao put out an very interesting ![tweet](/static/assets/x/wenting_zhao_infra_tweet.png)
+recently , wenting zhao put out an very interesting ![tweet](/assets/x/wenting_zhao_infra_tweet.png)
