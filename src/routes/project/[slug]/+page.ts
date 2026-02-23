@@ -9,7 +9,10 @@ export const load: PageLoad = async ({ params }) => {
 			title: project.title,
 			date: project.date,
 			image: project.image,
-			subimages: project.subimages
+			subimages: project.subimages,
+			repo: project.repo,
+			topics: project.topics,
+			lead: project.lead
 		};
 	} catch (e) {
 		throw error(404, 'Project not found');

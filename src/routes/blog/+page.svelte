@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Seo from '$lib/components/Seo.svelte';
+	import Search from '$lib/components/Search.svelte';
 	import { formatTime } from '$lib/utils';
 
 	const posts = import.meta.glob('../../posts/*.md', {
@@ -22,11 +23,14 @@
 	description="My thoughts and writings"
 />
 
-<section class="layout-md">
+<section class="layout-md" data-pagefind-body>
 	<h1 class="text-2xl font-bold mb-6">Blog</h1>
 	<p class="text-sm md:text-lg mb-4">
 		<em>writings and thoughts</em>
 	</p>
+
+	<Search />
+
 	<hr class="mb-8" />
 
 	<div class="flex flex-col gap-8">

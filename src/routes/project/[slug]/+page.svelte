@@ -12,7 +12,7 @@
 
 <Seo title="Sagnik Chatterjee - {data.title}" description={data.title} />
 
-<section class="layout-md py-10">
+<section class="layout-md py-10" data-pagefind-body data-pagefind-filter="type:project">
 	<a href="/projects" class="text-stone-400 hover:text-stone-100 mb-8 inline-block">
 		&larr; Back to projects
 	</a>
