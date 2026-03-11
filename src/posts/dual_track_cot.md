@@ -1,6 +1,6 @@
 ---
 title: "Dual-Track CoT: Budget-Aware Stepwise Guidance for Small LMs"
-date: 2025-01-15
+date: 2026-01-15
 tags: [nlp, llm, chain-of-thought, reasoning, fine-tuning, process-supervision]
 ---
 
