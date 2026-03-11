@@ -16,6 +16,7 @@ const Blog: React.FC = () => {
 				...(post.default || post)
 			};
 		})
+		.filter((post) => !post.draft)
 		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 	return (

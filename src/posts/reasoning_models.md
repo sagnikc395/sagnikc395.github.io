@@ -1,5 +1,5 @@
 ---
-title: About Research from a beginner's perspective 
+title: Reasoning Models - the why, how and the methods  
 date: 2026-3-10
 image:
 draft: true

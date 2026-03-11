@@ -16,4 +16,5 @@ export type Post = {
 	content: string;
 	image?: string;
 	subimages?: string[];
+	draft?: boolean;
 };

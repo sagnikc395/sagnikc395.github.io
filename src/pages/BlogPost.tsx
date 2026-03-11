@@ -16,7 +16,12 @@ const BlogPost: React.FC = () => {
 				const path = `../posts/${slug}.md`;
 				if (posts[path]) {
 					const data: any = await posts[path]();
-					setPost(data.default || data);
+					const postData = data.default || data;
+					if (postData.draft) {
+						navigate('/404');
+						return;
+					}
+					setPost(postData);
 				} else {
 					navigate('/404');
 				}
