@@ -21,6 +21,4 @@ i am building obscure, which is a CLI tool that works with agents to intelligent
 
 the agent based approach means it can reason about your notes contextually, find non-obvious connections, and generate visual mind maps that actually reflect how your ideas relate to each other.
 
-i plan to soon open source it for v0.1;
-
 ref: [obscure](https://github.com/sagnikc395/obscure)
