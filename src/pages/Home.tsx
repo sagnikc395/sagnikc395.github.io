@@ -80,33 +80,6 @@ const Home: React.FC = () => {
               especially in the context of complex biological discovery
               workflows.
             </p>
-
-            <p>
-              Outside research, I try to keep a disciplined routine. I’m a big
-              <b className="pl-1">Formula 1</b> fan, enjoy writing occasionally
-              on my
-              <a href="https://substack.com/@sagnietzche" className="underline">
-                {" "}
-                Substack
-              </a>
-              , and spend a lot of time reading history—from ancient empires to
-              modern revolutions. My current reading list lives on
-              <a
-                href="https://www.goodreads.com/user/show/199470071-sagnik-chatterjee"
-                className="underline"
-              >
-                {" "}
-                Goodreads
-              </a>
-              .
-            </p>
-
-            <p>
-              Fitness is another constant in my life. Most days start or end
-              with cardio or conditioning, and I’m currently training toward
-              <b>HYROX 2027</b>. Long runs, hard workouts, and quiet routines
-              are my way of staying grounded outside the world of research.
-            </p>
           </div>
         </div>
 
@@ -135,8 +108,32 @@ const Home: React.FC = () => {
 
         <hr className="border-stone-800" />
         {/* other stuff that interests me */}
-        <div className="text-center text-stone-200 pb-10">
-          <p>Other interests: endurance running, F1, making sketches.</p>
+        <div className="text-center text-stone-200 pb-10 flex flex-col">
+          <p>
+            Other interests: endurance running, watching{" "}
+            <a
+              href="https://www.youtube.com/shorts/pch-oIxAnUg"
+              className="p-2 underline"
+            >
+              F1
+            </a>{" "}
+            and
+            <a
+              href="https://www.youtube.com/shorts/vJqNDSuiEJ8"
+              className="
+			p-2 underline"
+            >
+              Premier League
+            </a>
+            , and I also
+            <a
+              className="p-2 underline"
+              href="https://substack.com/@sagnietzche"
+            >
+              write about
+            </a>
+            TV shows and movies
+          </p>
         </div>
       </div>
     </>
