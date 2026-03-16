@@ -1,5 +1,5 @@
 ---
-title: Research from a beginner's perspective 
+title: Research from a beginner's perspective
 date: 2026-1-12
 image:
 draft: true

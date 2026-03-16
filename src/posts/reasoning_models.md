@@ -1,5 +1,5 @@
 ---
-title: Reasoning Models - the why, how and the methods  
+title: Reasoning Models - the why, how and the methods
 date: 2026-3-10
 image:
 draft: true

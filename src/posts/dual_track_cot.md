@@ -6,13 +6,13 @@ tags: [nlp, llm, chain-of-thought, reasoning, fine-tuning, process-supervision]
 
 # Dual-Track CoT: Budget-Aware Stepwise Guidance for Small LMs
 
-*Course project for CS685 Advanced Natural Language Processing, UMass Amherst, Fall 2025. Joint work with Atharva Patil and Sricharan Ramesh. Code on [GitHub](https://github.com/atharvadpatil/DualTrack-COT).*
+_Course project for CS685 Advanced Natural Language Processing, UMass Amherst, Fall 2025. Joint work with Atharva Patil and Sricharan Ramesh. Code on [GitHub](https://github.com/atharvadpatil/DualTrack-COT)._
 
-*Read the full [technical report](../../static/assets/pdf/Dual_Track_CoT_Technical_Report.pdf)*
+_Read the full [technical report](../../static/assets/pdf/Dual_Track_CoT_Technical_Report.pdf)_
 
 ## Motivation
 
-Chain-of-thought prompting works well for large models, but smaller ones (~8B parameters) still fall apart on multi-step math reasoning. The standard remedies — self-consistency (Wang et al., 2023), Tree-of-Thoughts (Yao et al., 2023), critique-revise loops (Zheng et al., 2024) — improve accuracy but at significant token cost, and none of them offer step-level control during generation. Most existing process-supervised approaches like STEPCO (Wu et al., 2024) and Math-Shepherd (Wang et al., 2024) intervene only *after* a full chain has been generated, meaning tokens get wasted on steps that follow an undetected early mistake.
+Chain-of-thought prompting works well for large models, but smaller ones (~8B parameters) still fall apart on multi-step math reasoning. The standard remedies — self-consistency (Wang et al., 2023), Tree-of-Thoughts (Yao et al., 2023), critique-revise loops (Zheng et al., 2024) — improve accuracy but at significant token cost, and none of them offer step-level control during generation. Most existing process-supervised approaches like STEPCO (Wu et al., 2024) and Math-Shepherd (Wang et al., 2024) intervene only _after_ a full chain has been generated, meaning tokens get wasted on steps that follow an undetected early mistake.
 
 We wanted to explore whether separating step generation from step evaluation — and doing both with fine-tuned small models — could give us reasonable accuracy under hard token constraints. The practical target is on-device or cost-constrained settings where you can't sample 40 chains and majority-vote.
 
@@ -47,12 +47,12 @@ Evaluated on 50 held-out GSM8K problems. We report 95% Wilson confidence interva
 
 ### Unconstrained Setting
 
-| Method | Accuracy | 95% CI |
-|--------|----------|--------|
-| Plain CoT (single model, direct answer) | 78.0% | [64.8%, 87.2%] |
-| Dual CoT, few-shot only, no fine-tuning | 24.0% | [14.3%, 37.4%] |
-| Fine-tuned Decomposer only (no Evaluator) | 68.0% | [54.2%, 79.2%] |
-| Fine-tuned Dual CoT | 72.0% | [58.3%, 82.5%] |
+| Method                                    | Accuracy | 95% CI         |
+| ----------------------------------------- | -------- | -------------- |
+| Plain CoT (single model, direct answer)   | 78.0%    | [64.8%, 87.2%] |
+| Dual CoT, few-shot only, no fine-tuning   | 24.0%    | [14.3%, 37.4%] |
+| Fine-tuned Decomposer only (no Evaluator) | 68.0%    | [54.2%, 79.2%] |
+| Fine-tuned Dual CoT                       | 72.0%    | [58.3%, 82.5%] |
 
 The non-fine-tuned Dual CoT at 24% was the clearest result: naive prompted multi-step reasoning actively hurts when the models aren't trained for their roles. The models couldn't produce calibrated intermediate steps, the Evaluator gave noisy scores, and the system rarely even produced the `FINAL_ANSWER` token.
 
@@ -77,11 +77,11 @@ We manually inspected all 50 trajectories. The failure taxonomy:
 
 **Evaluator mis-scoring** was the most frequent issue. Three flavors:
 
-1. *Over-penalizing correct steps*: the Decomposer produces a valid step, the Evaluator marks it wrong and pushes the trajectory toward a worse interpretation. This is actively harmful — correct progress gets derailed.
+1. _Over-penalizing correct steps_: the Decomposer produces a valid step, the Evaluator marks it wrong and pushes the trajectory toward a worse interpretation. This is actively harmful — correct progress gets derailed.
 
-2. *Approving conceptually wrong steps*: the Evaluator checks local arithmetic but misses global errors. E.g., the Decomposer misreads "150%" as "0.15" — the subsequent multiplication is internally consistent so the Evaluator approves it. Or the Decomposer hallucinates specific calendar years when the problem only provides ages, and the Evaluator accepts it because the arithmetic within the hallucinated timeline is valid.
+2. _Approving conceptually wrong steps_: the Evaluator checks local arithmetic but misses global errors. E.g., the Decomposer misreads "150%" as "0.15" — the subsequent multiplication is internally consistent so the Evaluator approves it. Or the Decomposer hallucinates specific calendar years when the problem only provides ages, and the Evaluator accepts it because the arithmetic within the hallucinated timeline is valid.
 
-3. *Missing loops*: the Decomposer repeats the same content for multiple steps, and the Evaluator keeps scoring it highly. No progress despite high token usage.
+3. _Missing loops_: the Decomposer repeats the same content for multiple steps, and the Evaluator keeps scoring it highly. No progress despite high token usage.
 
 **Decomposer ignoring feedback** was a distinct pattern. The Evaluator correctly identifies an error and provides a useful hint, but the Decomposer keeps regenerating the same flawed structure. This suggests that conditioning on natural-language hints isn't sufficient to redirect the model's generation when the underlying reasoning plan (not just a single arithmetic detail) needs to change.
 
@@ -122,4 +122,4 @@ Three directions that seem most promising:
 
 ---
 
-*CS685 Advanced NLP, Fall 2025, UMass Amherst. Collaborators: Atharva Patil, Sricharan Ramesh.*
+_CS685 Advanced NLP, Fall 2025, UMass Amherst. Collaborators: Atharva Patil, Sricharan Ramesh._

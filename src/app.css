@@ -1,97 +1,100 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* Global Tailwind-enhanced styles */
 html {
-	@apply motion-safe:scroll-smooth;
-	font-family: theme('fontFamily.sans');
-	
-    /* Dark Mode (Default) */
-    background-color: #171717; /* neutral-900 */
-    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    color: #d6d3d1; /* stone-300 */
-    color-scheme: dark;
-	background-size: 4px 4px;
+  @apply motion-safe:scroll-smooth;
+  font-family: theme("fontFamily.sans");
+
+  /* Dark Mode (Default) */
+  background-color: #171717; /* neutral-900 */
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  color: #d6d3d1; /* stone-300 */
+  color-scheme: dark;
+  background-size: 4px 4px;
 }
 
 ::selection {
-	background-color: #00bcd4; /* or any accent color */
-	color: #ffffff; /* usually white for contrast */
+  background-color: #00bcd4; /* or any accent color */
+  color: #ffffff; /* usually white for contrast */
 }
 
 /* For Firefox */
 ::-moz-selection {
-	background-color: #00bcd4;
-	color: #ffffff;
+  background-color: #00bcd4;
+  color: #ffffff;
 }
 body {
-	@apply py-12 sm:py-24 md:py-32;
+  @apply py-12 sm:py-24 md:py-32;
 }
 
 hr {
-	@apply border-stone-800;
+  @apply border-stone-800;
 }
 
 .link {
-	@apply underline underline-offset-[3px] decoration-stone-600;
-	@apply hover:text-stone-100 hover:decoration-stone-100 transition-colors;
+  @apply underline underline-offset-[3px] decoration-stone-600;
+  @apply hover:text-stone-100 hover:decoration-stone-100 transition-colors;
 }
 
 .layout-md {
-	@apply max-w-screen-md mx-auto px-4 sm:px-6;
+  @apply max-w-screen-md mx-auto px-4 sm:px-6;
 }
 
 .heading2 {
-	@apply text-stone-100 text-xl font-semibold mb-4;
+  @apply text-stone-100 text-xl font-semibold mb-4;
 }
 
 .md-output p {
-	@apply mb-4 leading-7;
+  @apply mb-4 leading-7;
 }
 
 .md-output strong {
-	@apply font-semibold;
+  @apply font-semibold;
 }
 
 .md-output h2 {
-	@apply text-xl font-semibold mt-8 mb-4 text-stone-100;
+  @apply text-xl font-semibold mt-8 mb-4 text-stone-100;
 }
 
 .md-output h3 {
-	@apply text-lg font-semibold mt-6 mb-3 text-stone-100;
+  @apply text-lg font-semibold mt-6 mb-3 text-stone-100;
 }
 
 .md-output ul {
-	@apply list-disc list-outside ml-5 mb-4;
+  @apply list-disc list-outside ml-5 mb-4;
 }
 
 .md-output ol {
-	@apply list-decimal list-outside ml-5 mb-4;
+  @apply list-decimal list-outside ml-5 mb-4;
 }
 
 .md-output li {
-	@apply mb-1;
+  @apply mb-1;
 }
 
 .md-output blockquote {
-	@apply border-l-4 border-stone-700 pl-4 italic text-stone-400 mb-4;
+  @apply border-l-4 border-stone-700 pl-4 italic text-stone-400 mb-4;
 }
 
 /* Inline code */
 .md-output :not(pre) > code {
-	@apply font-mono text-[0.9em] bg-stone-800 px-1.5 py-0.5 rounded text-stone-200;
+  @apply font-mono text-[0.9em] bg-stone-800 px-1.5 py-0.5 rounded text-stone-200;
 }
 
 /* Code blocks (Shiki) */
 .md-output pre.shiki {
-	@apply p-4 rounded-lg overflow-x-auto mb-6 text-sm leading-relaxed border border-stone-800;
+  @apply p-4 rounded-lg overflow-x-auto mb-6 text-sm leading-relaxed border border-stone-800;
 }
 
 .md-output pre.shiki code {
-	@apply bg-transparent p-0 text-inherit;
+  @apply bg-transparent p-0 text-inherit;
 }
 
 ::selection {
-	@apply bg-stone-700;
+  @apply bg-stone-700;
 }
 
 /* Shiki Dual Theme Support - Enforcing Dark */

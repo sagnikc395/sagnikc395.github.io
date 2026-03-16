@@ -1,20 +1,20 @@
 export type Project = {
-	title: string;
-	date: string;
-	content: string;
-	repo: string;
-	topics: string[];
-	lead: string;
-	image: string;
-	image_border?: boolean;
-	subimages?: string[];
+  title: string;
+  date: string;
+  content: string;
+  repo: string;
+  topics: string[];
+  lead: string;
+  image: string;
+  image_border?: boolean;
+  subimages?: string[];
 };
 
 export type Post = {
-	title: string;
-	date: string;
-	content: string;
-	image?: string;
-	subimages?: string[];
-	draft?: boolean;
+  title: string;
+  date: string;
+  content: string;
+  image?: string;
+  subimages?: string[];
+  draft?: boolean;
 };
