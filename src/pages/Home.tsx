@@ -89,7 +89,7 @@ const Home: React.FC = () => {
             unfinished writings <br />
             Follow here:
             <a
-              href="https://sc4-knowledge-base.vercel.app/"
+              href="https://sagnikc395.github.io/knowledge-base/"
               className="underline italic"
               rel="noreferrer"
               target="_blank"
