@@ -3,7 +3,7 @@ title: Building a Deep Research Agent from Scratch
 date: 2026-03-21
 lead: a multi-agent deep research system using open-source models, firecrawl MCP for web search, and smolagents for agent coordination - all wrapped in a TUI.
 topics: [python, agents, deep-research-agent, tui, smolagents, firecrawl, huggingface]
-image:
+image: 
 subimages:
 ---
 
