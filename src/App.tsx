@@ -10,6 +10,7 @@ import ProjectPage from "./pages/ProjectPage";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Resume from "./pages/Resume";
+import Ideas from "./pages/Ideas";
 
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isMobile = /Android|iPhone/i.test(navigator.userAgent);
@@ -46,6 +47,7 @@ const App: React.FC = () => {
               <Route path="/" element={<Home />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/project/:slug" element={<ProjectPage />} />
+              <Route path="/ideas" element={<Ideas />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/resume" element={<Resume />} />
