@@ -84,20 +84,6 @@ const Home: React.FC = () => {
         </div>
 
         <div className="flex flex-col items-center space-y-6">
-          <p className="text-center text-lg md:text-xl">
-            I'm also building a digital garden of my knowledge base and
-            unfinished writings <br />
-            Follow here:
-            <a
-              href="https://sagnikc395.github.io/knowledge-base/"
-              className="underline italic"
-              rel="noreferrer"
-              target="_blank"
-            >
-              sagnik's digital garden
-            </a>
-          </p>
-
           <div className="bg-[#881c1c] p-[15px] rounded-[12px] inline-block shadow-[0_4px_15px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out border-2 border-[#5e1414] font-sans hover:translate-y-[-5px] hover:shadow-[0_8px_25px_rgba(136,28,28,0.3)]">
             <div
               id="umaring"
