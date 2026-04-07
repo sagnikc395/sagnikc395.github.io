@@ -1,4 +1,11 @@
-# building a zapier clone
+---
+title: zapier - building a open source automation workflow
+date: 2026-04-07
+lead: making an open source automation workflow
+topics: [nextjs, typescript, postgresql, prisma]
+image:
+subimages:
+---
 
 ## motivation
 
