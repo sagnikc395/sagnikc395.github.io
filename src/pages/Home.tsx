@@ -21,17 +21,17 @@ const Home: React.FC = () => {
     <>
       <Seo
         title="Sagnik Chatterjee"
-        description="Software engineer, researcher interested in program synthesis."
+        description="CS grad student focused on mechanistic interpretability and building AI agents."
       />
 
       <p
         className="layout-md text-stone-500 text-xl md:text-lg leading-tight font-light mb-16 p-2 max-[420px]:-mt-10"
         id="sagnik-is"
       >
-        <div className="neutral">is a</div>
-        software engineer<span className="neutral">, ai fanboy </span>
+        <span className="neutral">is a </span>
+        cs grad student<span className="neutral">, mech interp nerd </span>
         <br />
-        and researcher<span className="neutral"></span>
+        and agent builder
         <br />
       </p>
 
@@ -52,33 +52,30 @@ const Home: React.FC = () => {
 
           {/* Text Content */}
           <div className="w-full md:w-2/3 space-y-5">
-            <p className="text-xl font-semibold">Hi, I’m Sagnik 👋</p>
+            <p className="text-xl font-semibold">Hi, I'm Sagnik 👋</p>
 
             <p className="text-lg md:text-xl">
-              I work at the intersection of <b>computational biology and AI</b>,
-              with a focus on{" "}
-              <b>drug discovery using protein language models</b> and
-              large-scale biological sequence modeling. I'm interested in
-              building
-              <b>knowledge-aware AI systems</b> that can reason over biological
-              data and uncover functional insights from proteins, pathways, and
-              molecular interactions.
+              I work on <b>mechanistic interpretability</b> and <b>AI agents</b>
+              , with a focus on understanding{" "}
+              <b>what's actually happening inside neural networks</b> and
+              building systems that can <b>reason, plan, and act</b> in the
+              world. I'm interested in reverse-engineering model internals —
+              circuits, features, attention patterns — and using those insights
+              to build more reliable and steerable AI systems.
             </p>
 
             <p>
-              My work brings together ideas from{" "}
+              My work sits at the intersection of{" "}
               <b>
-                biomedical NLP, biological foundation models, and knowledge
-                representation
+                interpretability research, agent architectures, and language
+                model behavior
               </b>
-              . I'm particularly interested in integrating structured biomedical
-              knowledge—such as ontologies and knowledge graphs like{" "}
-              <b>SNOMED CT</b> and <b>MeSH</b>—with modern language models to
-              improve reasoning, grounding, and reliability in scientific AI
-              systems. More broadly, I’m curious about how these approaches
-              intersect with <b>program synthesis and machine reasoning</b>,
-              especially in the context of complex biological discovery
-              workflows.
+              . I'm particularly drawn to questions about how capabilities
+              emerge in transformers — things like{" "}
+              <b>superposition, polysemanticity, and in-context learning</b> —
+              and how a clearer mechanistic picture can inform the design of
+              better <b>tool-using and reasoning agents</b>. More broadly, I
+              care about making AI systems we can actually understand and trust.
             </p>
           </div>
         </div>
@@ -93,6 +90,7 @@ const Home: React.FC = () => {
         </div>
 
         <hr className="border-stone-800" />
+
         {/* other stuff that interests me */}
         <div className="text-center text-stone-200 pb-10 flex flex-col">
           <p>
@@ -103,21 +101,20 @@ const Home: React.FC = () => {
             >
               F1
             </a>{" "}
-            and
+            and{" "}
             <a
               href="https://www.youtube.com/shorts/vJqNDSuiEJ8"
-              className="
-			p-2 underline"
+              className="p-2 underline"
             >
               Premier League
             </a>
-            , and I also
+            , and I also{" "}
             <a
               className="p-2 underline"
               href="https://substack.com/@sagnietzche"
             >
               write about
-            </a>
+            </a>{" "}
             TV shows and movies
           </p>
         </div>
