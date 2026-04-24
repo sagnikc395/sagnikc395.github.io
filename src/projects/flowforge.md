@@ -1,5 +1,5 @@
 ---
-title: Building FlowForge: A Distributed Workflow Engine with Temporal
+title: FlowForge A Distributed Workflow Engine with Temporal
 date: 2026-04-24
 lead: Building a distributed workflow engine to understand what durable execution,
   retries, compensation, and operational visibility actually look like in code.
