@@ -6,7 +6,7 @@
   topics: [python, distributed-systems, raft, consensus]
   image:
   subimages:
-  ---
+---
 
   # motivation
 
