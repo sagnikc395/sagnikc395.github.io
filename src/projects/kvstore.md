@@ -1,11 +1,11 @@
 ---
-  title: A Distributed Key-Value Store with Raft
-  date: 2026-04-24
-  lead: Building a distributed in-memory key-value store from scratch to understand
+title: A Distributed Key-Value Store with Raft
+date: 2026-04-24
+lead: Building a distributed in-memory key-value store from scratch to understand
    how consensus algorithms actually work under the hood.
-  topics: [python, distributed-systems, raft, consensus]
-  image:
-  subimages:
+topics: [python, distributed-systems, raft, consensus]
+image:
+subimages:
 ---
 
   # motivation
