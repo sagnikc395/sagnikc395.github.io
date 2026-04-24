@@ -16,10 +16,6 @@ subimages:
    I had no real sense of what made it hard to implement, or where the subtle bugs
   lived.
 
-  The honest version is that I wanted to build something that could survive a node
-  going down and keep serving requests correctly. Not a toy that faked it, but
-  something where the correctness guarantees were real.
-
   ## what i built
 
   The project is a 3-node replicated key-value store written entirely in Python,
@@ -129,9 +125,3 @@ subimages:
   compared to algorithms that allow concurrent writes from multiple nodes. The cost
    is that writes are blocked during elections and the leader is a bottleneck. That
    trade-off is often worth it.
-
-  The third thing is that the gap between "I understand this algorithm" and "I can
-  implement this algorithm correctly" is significant. I had read the Raft paper
-  twice before starting this project and still got the log consistency check wrong
-  on the first pass. There is no substitute for building it.
-  
