@@ -27,13 +27,6 @@ const Footer: React.FC = () => {
           sagnikchatterjee607@gmail.com
         </a>
       </div>
-      <div className="flex items-center space-x-4">
-        <span className="text-stone-100">X</span>
-        <hr className="w-full mt-0.5 border-stone-700 border-dotted" />
-        <a className="link" href="https://x.com/sagnikcw">
-          @sagnikcw
-        </a>
-      </div>
     </footer>
   );
 };
