@@ -4,4 +4,4 @@ personal website and blog.
 
 ## unofficial 
 
-- building `/ideas` as a way to keep track of my project ideas , other thinking of what im really interested in and other things im building.
+- building `/ideas` as a way to keep track of some project ideas that I have and would possibly build down the line.
