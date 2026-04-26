@@ -1,108 +1,53 @@
-## AI Engineering Projects that im building
+## AI Agents & Mechanistic Interpretability Projects
 
 
-## 1. Production RAG Application
-Objective: Build a domain-specific "Ask my Docs" - extend the obsidian cli on this
-with hybrid retrieval (BM25 + vector search), cross-encoder re-ranking, citation enforecement
-and a CI-gated evaluation pipeline.
+## 1. Tool-Use Trace Analyzer (Agents + Mech Interp)
+Objective: Build an agent that solves multi-step tasks (web search, code execution, file I/O), then use activation patching to identify which attention heads and MLP layers "decide" to call which tool. Publish a circuit diagram mapping tool-selection behavior to specific model components.
 
 
-## 2. Local SLM app with Ollama
-Objective: Run models entirely offline.Benchmark inference performance.
-Compare 3 models on the same hardware. Document the quality-vs-speed tradeoffs.
-Privacy, latency and cost constraints are real-show that we understand them.
+## 2. Failure Mode Taxonomy for Autonomous Agents
+Objective: Design a harness that stress-tests a ReAct/function-calling agent across >200 adversarial prompts. Categorize failures (hallucinated tool args, infinite loops, goal misgeneralization). Map each failure class back to internal representations using logit lens and probing classifiers.
 
 
-## 3. Monitoring and Observability
-Objective: Add tracing, latency tracking(p50/p95), cost-per-request,and quality metrics to our RAG system.
-Build regression gating into CI.
-70%of production AI work that nobody puts in the portfolio.
+## 3. Sparse Autoencoders on Agent Reasoning Chains
+Objective: Train SAEs on the residual stream of a small open-weight model (Llama 3.1 8B or Mistral) while it executes multi-hop reasoning tasks. Identify monosemantic features that activate during planning vs. tool-retrieval vs. answer synthesis. Reproduce and extend Anthropic's sparse feature work on a reasoning-specific domain.
 
 
-## 4. Fine-Tuning with LoRA and DPO
-Objective: Fine tune for a specific task (JSON extraction or tool calling).
-Use LoRA/QLoRA for efficient training.
-Add preference tuning with DPO.
-Show before-and-after metrics with actual numbers.
+## 4. Reward Hacking Detection via Internal Probes
+Objective: Fine-tune an agent on a simple environment where reward hacking is possible. Train linear probes on mid-layer activations to predict *when* the agent is about to hack vs. genuinely solve. Use this as an early-warning system and gate it into a CI safety pipeline.
 
 
-## 5. Real time Multimodal Application
-Objective: Build a voice-assistant or streaming pipeline.Decompose e2e latency into a detailed budget.
-Add graceful degradation and timeout handling.
-Show we understand real-time systems.
+## 5. Cross-Model Circuit Comparison
+Objective: Pick one well-studied circuit (indirect object identification, greater-than, or docstring completion). Replicate it across 3 model families (Pythia, Gemma, Llama). Quantify how circuit structure shifts with scale and training data. Write this up as a short paper — this is a genuine research gap.
 
 
 ## Step-by-step architecture of what we are building:
 
-If you're trying to break into AI engineering in 2026 or level up from where you are, here are 5 portfolio projects that will genuinely make a difference when you're sitting in front of a hiring manager.
+These projects sit at the intersection of two of the fastest-moving areas in AI research right now. Agents work is about *what* models do externally; mech interp is about *why* they do it internally. Combining both is a rare, high-signal portfolio angle that almost no candidates have.
 
-I'm not talking about tutorial projects where you deploy a basic chatbot. I'm talking about work that makes someone look at your GitHub and say, "this person actually understands how production AI systems work.
+---
 
-The 5 Projects:
-Project 1: Production RAG Application
-Build a domain-specific "Ask My Docs" system with hybrid retrieval (BM25 + vector search), cross-encoder reranking, citation enforcement, and a CI-gated evaluation pipeline. This is the most common pattern in enterprise AI right now.
+**Project 1: Tool-Use Trace Analyzer**
+- TransformerLens Documentation – Essential library for hooks, activation patching, and attention head analysis: https://transformerlensorg.github.io/TransformerLens/
+- Wang et al. "Interpretability in the Wild" (IOI Circuit) – The canonical reference for circuit analysis methodology: https://arxiv.org/abs/2211.00593
+- LangGraph for agent scaffolding: https://langchain-ai.github.io/langgraph/
 
-- LangChain's Official RAG Tutorial - A step-by-step guide to building retrieval chains: https://docs.langchain.com/oss/python/langchain/rag 
+**Project 2: Failure Mode Taxonomy**
+- ToolBench / AgentBench – Existing agent benchmarks to extend or stress-test against: https://github.com/OpenBMB/ToolBench
+- Logit Lens explainer (nostalgebraist): https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens
+- ReAct Paper – Grounding for the agent architecture you'll be breaking: https://arxiv.org/abs/2210.03629
 
-- Cohere: Rerank Guide - Explains how cross-encoders work and why they improve retrieval precision: https://www.google.com/search?q=https://docs.cohere.com/docs/rerank-guide 
+**Project 3: Sparse Autoencoders on Reasoning Chains**
+- Anthropic's SAE paper and open-source release: https://transformer-circuits.pub/2023/monosemantic-features
+- EleutherAI's SAE library (SAEBench): https://github.com/EleutherAI/sae
+- GSM8K for reasoning task traces: https://huggingface.co/datasets/openai/gsm8k
 
-- Ragas Documentation - Learn how to evaluate faithfulness, answer relevance, and context precision: https://docs.ragas.io/ 
+**Project 4: Reward Hacking Detection**
+- Anthropic's "Alignment Faking" paper – Strong prior work to build on: https://arxiv.org/abs/2412.14093
+- Probing classifiers tutorial (Neel Nanda): https://www.neelnanda.io/mechanistic-interpretability/glossary
+- Gymnasium for environment scaffolding: https://gymnasium.farama.org/
 
-- If you are a beginner in LangChain/ LangGraph check out my workshop which will give you deep-dive into it along with hands-on experience: https://topmate.io/the_gen_academy/1855779 
-
-- Here is a deep-dive RAG workshop I put together, it is in 2 parts
-- - RAG Foundations: https://topmate.io/aishwarya_srinivasan/1662461 
-- - Advanced RAG Workshop: https://topmate.io/aishwarya_srinivasan/1750331 
-
-Project 2: Local SLM App with Ollama
-Run models entirely offline. Benchmark inference performance. Compare 3 models on the same hardware. Document the quality-vs-speed tradeoffs. Privacy, latency, and cost constraints are real- show you understand them.
-
-- Ollama Official GitHub & Quickstart - The easiest way to get Mistral or Llama running on your machine: https://github.com/ollama/ollama 
-
-- FastAPI Official Tutorial - Essential for wrapping your local model into a usable API: https://fastapi.tiangolo.com/tutorial/ 
-
-- Instructor (Python Library) - While she mentioned Pydantic, the Instructor library is the industry standard for enforcing Pydantic schemas on LLM outputs and handling retries gracefully: https://python.useinstructor.com/ 
-
-- Hugging Face: Quantization Guide - A great read on how GGUF, Q4, and Q5 formats shrink models without completely destroying quality: https://huggingface.co/docs/optimum/concept_guides/quantization 
-
-Project 3: Monitoring & Observability
-Add tracing, latency tracking (p50/p95), cost-per-request, and quality metrics to your RAG system. Build regression gating into CI. This is 70% of production AI work that nobody puts in their portfolio.
-
-- Here is a AI Evals workshop where we cover all you need to know about Evals and a hands-on lab: https://topmate.io/the_gen_academy/1962949 
-
-- Langfuse Documentation - Highly recommended as it's open-source. Their docs on "Tracing" and "Scores/Evaluations" are exactly what you need for this project: https://langfuse.com/docs 
-
-- LangSmith Walkthrough - LangChain's native observability tool; great for understanding prompt versioning and tracing: https://docs.smith.langchain.com/ 
-
-- Eugene Yan's "Patterns for Building LLM Systems" - A must-read article on how production AI systems are architected, monitored, and evaluated: https://eugeneyan.com/writing/llm-patterns/ 
-
-
-Project 4: Fine-Tuning with LoRA & DPO
-Fine-tune for a specific task (JSON extraction or tool-calling). Use LoRA/QLoRA for efficient training. Add preference tuning with DPO. Show before-and-after metrics with actual numbers.
-
-Datasets you can use for FT:
-- SFT data: 
-- - HuggingFaceH4/ultrachat_200k – High-quality multi-turn chat, filtered from ShareGPT-style logs; widely used in open-source instruction models and supported out of the box by Oumi SFT tooling: https://huggingface.co/datasets/HuggingFaceH4/ultrachat_200k 
-
-- - Nemotron-Instruction-Following-Chat-v1 -  Large, high-quality, commercially-usable instruction-following and chat dataset from NVIDIA, combining verifier-filtered assistant conversations and structured-output examples for post-training LLMs
-https://huggingface.co/datasets/nvidia/Nemotron-Instruction-Following-Chat-v1 
-
-- - GSM8K – A dataset of 8.5k high-quality, linguistically diverse grade-school math word problems designed to test multi-step reasoning in language models: https://huggingface.co/datasets/openai/gsm8k 
-
-- - Good Preference dataset  – argilla/distilabel-intel-orca-dpo-pairs is a curated preference dataset (prompt, chosen, rejected) derived from Intel/orca_dpo_pairs, cleaned and enriched for better DPO-based chat alignment of open-source LLMs: https://huggingface.co/datasets/argilla/distilabel-intel-orca-dpo-pairs 
-
-Coding Dataset:
-- - OpenCodeInstruct – 5M diverse Python coding instruction–response pairs (questions, solutions, tests, execution feedback, and quality judgments) for training general-purpose code LLMs: https://huggingface.co/datasets/nvidia/OpenCodeInstruct. 
-
-- - OpenCoder opc-sft-stage1 – A curated multi-source supervised fine-tuning mix focused on code understanding and generation, used to train the OpenCoder models: https://huggingface.co/datasets/OpenCoder-LLM/opc-sft-stage1 
-
-Project 5: Real-Time Multimodal Application
-Build a voice assistant or streaming pipeline. Decompose end-to-end latency into a detailed budget. Add graceful degradation and timeout handling. Show you understand real-time systems.
-
-- Orchestration Framework:
-- - Pipecat AI - An incredible open-source framework specifically built for creating real-time voice and multimodal AI agents. It handles the WebSockets and latency tracking: https://github.com/pipecat-ai/pipecat 
-
-- Speech-to-Text (ASR) & Text-to-Speech (TTS):
-
-- - Deepgram API Documentation - Excellent guides on streaming audio transcription: https://developers.deepgram.com/
-
+**Project 5: Cross-Model Circuit Comparison**
+- Pythia model suite (controlled scale experiments): https://github.com/EleutherAI/pythia
+- ARENA Mechanistic Interpretability curriculum – Best structured curriculum for this work: https://arena-chapter1-transformer-interp.streamlit.app/
+- Neel Nanda's 200 Concrete Open Problems in Mech Interp – Find your exact research gap here: https://www.alignmentforum.org/posts/LbrPTJ4fmABEdEnLf/
