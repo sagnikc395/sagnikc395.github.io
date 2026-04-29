@@ -8,7 +8,7 @@ tags: [nlp, llm, chain-of-thought, reasoning, fine-tuning, process-supervision]
 
 _Course project for CS685 Advanced Natural Language Processing, UMass Amherst, Fall 2025. Joint work with Atharva Patil and Sricharan Ramesh. Code on [GitHub](https://github.com/atharvadpatil/DualTrack-COT)._
 
-_Read the full [technical report](../../static/assets/pdf/Dual_Track_CoT_Technical_Report.pdf)_
+_Read the full [paper](https://arxiv.org/abs/2604.25039)
 
 ## Motivation
 
