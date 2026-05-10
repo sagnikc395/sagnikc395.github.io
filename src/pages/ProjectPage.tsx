@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import Seo from "../lib/components/Seo";
 import ProjectDetail from "../lib/components/ProjectDetail";
+import Utterances from "../lib/components/Utterances";
 
 const images = import.meta.glob("../projects/*.{png,jpg,svg}", {
   eager: true,
@@ -52,6 +53,8 @@ const ProjectPage: React.FC = () => {
           images={images}
           imagePrefix="../projects/"
         />
+
+        <Utterances />
       </section>
     </>
   );
