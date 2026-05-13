@@ -1,7 +1,7 @@
 ---
 title: "Does Showing Your Work Help LLMs Learn Tools? A Continual Learning Experiment"
 date: 2026-05-10
-tags: [nlp, llm, continual-learning, tool-use, qlora, fine-tuning]
+tags: [nlp, llm, continual-learning, tool-use, qlora, fine-tuning,agents]
 ---
 
 # Does Showing Your Work Help LLMs Learn Tools?
@@ -11,6 +11,8 @@ Here's a question that bothered me through most of this semester: when we train 
 It sounds academic. But it connects to something genuinely important about how LLMs learn. Most training data shows finished products: polished answers, complete code, final outputs. The messy intermediate process that produced the answer is usually thrown away. This is a bit like trying to learn chess by only ever seeing the final board state, never the moves that got there.
 
 For this project (done with Vishnu Vardhan Reddy B and Soumik Bhatta for CS 590NN at UMass Amherst), we tried to get a concrete handle on this question using tool-use data, where the intermediate process is actually available and structured.
+
+Link to the paper: [Paper](https://arxiv.org/abs/2605.09734)
 
 ## The Setup
 

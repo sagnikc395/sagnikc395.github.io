@@ -14,6 +14,8 @@ So: can we predict it from sequence alone?
 
 This is what SCOPE (Siamese Contrastive Operon Pair Embeddings) tried to answer. Done with Akarsh Gupta and Kenneth Rodrigues, the project compared protein language model embeddings against traditional hand-crafted features for the binary task of operon pair classification — given two consecutive genes in a genome, do they belong to the same transcription unit?
 
+Link to the paper: ![paper](https://arxiv.org/abs/2605.11022)
+
 ## The Setup
 
 The task is a pairwise binary classification problem. For each pair of neighboring protein sequences, predict: operonic (1) or not (0). This framing comes from the DGEB benchmark (Diverse Genomic Embedding Benchmark), which evaluates whether learned sequence representations encode biologically meaningful relationships.
