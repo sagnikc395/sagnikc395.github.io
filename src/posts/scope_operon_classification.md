@@ -14,7 +14,7 @@ So: can we predict it from sequence alone?
 
 This is what SCOPE (Siamese Contrastive Operon Pair Embeddings) tried to answer. Done with Akarsh Gupta and Kenneth Rodrigues, the project compared protein language model embeddings against traditional hand-crafted features for the binary task of operon pair classification — given two consecutive genes in a genome, do they belong to the same transcription unit?
 
-Link to the paper: ![paper](https://arxiv.org/abs/2605.11022)
+Link to the paper: [Paper](https://arxiv.org/abs/2605.21022)
 
 ## The Setup
 
