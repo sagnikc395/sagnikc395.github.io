@@ -2,6 +2,7 @@
 title: "Finding the Algorithm Inside the Black Box - An Emperical Study of Neural Network using Transformer Lens and Mech Interp"
 date: 2026-04-27
 tags: [nlp, mech-interp, gpt-2, transformer-lens]
+draft: true
 ---
 
 
