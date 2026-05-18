@@ -1,127 +1,315 @@
----
-title: A Distributed Key-Value Store with Raft
-date: 2026-04-24
-lead: Building a distributed in-memory key-value store from scratch to understand
-   how consensus algorithms actually work under the hood.
-topics: [python, distributed-systems, raft, consensus]
-image:
-subimages:
----
+# Building a Distributed Key-Value Store in Go
 
-  # motivation
+Distributed systems are easiest to understand when they are made concrete. This
+project is a small distributed key-value store written in Go, but it touches many
+of the ideas that show up in production storage systems: leader election, log
+replication, quorum reads, write-ahead logging, snapshots, TTL expiration,
+membership changes, and client-side routing.
 
-  I had been reading about distributed systems for a while. CAP theorem, eventual
-  consistency, linearizability -- the theory made sense on paper. But I kept
-  running into the same wall: I could describe how Raft worked at a high level, but
-   I had no real sense of what made it hard to implement, or where the subtle bugs
-  lived.
+The goal was not to build another wrapper around an existing database. The goal
+was to build the moving parts directly enough to understand how they interact,
+while keeping the system small enough to reason about.
 
-  ## what i built
+The result is a cluster of Go nodes that expose a simple HTTP JSON API:
 
-  The project is a 3-node replicated key-value store written entirely in Python,
-  using only the standard library. No external dependencies at runtime. The system
-  has three layers: a Raft consensus module that handles agreement between nodes,
-  an in-memory store with optional per-key TTL, and a proxy that sits in front of
-  the cluster and routes requests using consistent hashing.
+```bash
+curl -X POST http://127.0.0.1:8000/kv/set \
+  -H 'Content-Type: application/json' \
+  -d '{"key":"foo","value":"bar"}'
 
-  ref: [kv-store](https://github.com/sagnikc395/kv-store)
+curl 'http://127.0.0.1:8000/kv/get?key=foo'
+```
 
-  ## the raft layer
+Behind those calls, the request flows through a proxy, reaches a Raft-backed
+node, gets replicated through the cluster, is committed by quorum, is written to
+a local WAL, and is finally applied to an in-memory map.
 
-  Raft is supposed to be the "understandable" consensus algorithm. After
-  implementing it, I think that reputation is earned -- but understandable does not
-   mean simple.
+## The Shape of the System
 
-  The core loop is this: nodes start as followers. If a follower does not hear from
-   a leader within a randomized timeout (I used 300 to 500 milliseconds), it
-  promotes itself to candidate, increments its term, votes for itself, and fires
-  `RequestVote` RPCs to every peer. If it collects a strict majority of votes, it
-  becomes leader. The randomized timeout is the key detail -- without it, two nodes
-   could time out simultaneously every single time and the cluster would never
-  elect a leader.
+At a high level, the system has two executables:
 
-  Once a leader is elected, it sends `AppendEntries` RPCs to replicate log entries.
-   A write is committed only after a majority of nodes have acknowledged it. The
-  leader then advances its commit index and applies the entry to the state machine.
+- `kv-node`: a storage node that owns the key-value API, Raft RPC handlers, WAL
+  recovery, snapshot compaction, TTL cleanup, and cluster membership endpoints.
+- `kv-proxy`: a lightweight HTTP proxy that accepts client requests, selects a
+  node through a consistent hash ring, refreshes cluster membership from the
+  nodes, and retries leader-only operations against the current leader.
 
-  The part that took me the longest to get right was the log consistency check.
-  Before a follower accepts new entries, it verifies that the `prev_log_index` and
-  `prev_log_term` in the request match what it has locally. If they do not match,
-  it rejects the request and the leader decrements `next_index` for that peer and
-  retries. This is how a node that fell behind and rejoined the cluster catches up
-  -- the leader walks back until it finds the point where the logs agree, then
-  replays everything forward.
+The main packages are:
 
-  ## the part not in the paper
+- `internal/store`: concurrent in-memory key-value storage, TTL handling, command
+  application, snapshots, and restore.
+- `internal/raft`: leader election, log replication, persistent Raft metadata,
+  snapshots, membership changes, and HTTP transport.
+- `internal/wal`: JSONL write-ahead log replay plus snapshot compaction.
+- `internal/routing`: a consistent hash ring used by the proxy.
 
-  One thing the Raft paper does not specify is what happens when a leader becomes
-  partitioned from the rest of the cluster. Vanilla Raft says: followers will
-  eventually time out and elect a new leader. The old leader will eventually step
-  down when it gets a response with a higher term. But in the meantime, the
-  partitioned leader sits there accepting writes that it cannot commit, blocking
-  the client.
+The runtime architecture looks like this:
 
-  To reduce that window, I added a leader isolation detector. Every heartbeat
-  round, the leader tracks whether a majority of `AppendEntries` responses came
-  back successful. If the leader has not seen quorum acknowledgment within a
-  bounded timeout (the minimum of the election timeout and 125 milliseconds), it
-  steps itself down to follower immediately. This is a liveness improvement that is
-   not in the original paper but shows up in production Raft implementations.
+```text
+Client
+  |
+  v
+HTTP proxy (:8000)
+  |
+  v
+Consistent hash ring
+  |
+  +--> Go node (:7001) -- Raft HTTP --> peers
+  +--> Go node (:7002) -- Raft HTTP --> peers
+  +--> Go node (:7003) -- Raft HTTP --> peers
 
-  Another small correctness fix: when a node reverts to follower state, `voted_for`
-   should only be cleared when the incoming term is strictly greater than the
-  current term. Clearing it unconditionally means a node could grant two votes in
-  the same term to different candidates, which can cause a split-brain.
+Each node:
+  HTTP KV API -> Raft log -> quorum commit -> WAL append -> in-memory store
+                                     |
+                                     +-> snapshot compaction
+```
 
-  ## the write-ahead log
+The system is intentionally simple: one Raft group replicates the key-value
+state across the cluster. The proxy's hash ring gives clients a stable first
+node to try for each key, but writes still have to land on the elected Raft
+leader. If the proxy hits a follower and receives a conflict, it discovers the
+leader through `/status` and retries the request there.
 
-  The WAL is simpler than the consensus layer but just as important. Every
-  committed command (a set, delete, or get that went through Raft and got applied
-  to the store) is written to a JSON-lines file with an explicit `fsync` call after
-   each write. On restart, the node replays the WAL line by line and rebuilds its
-  in-memory state before starting the Raft server.
+## Why Raft Is the Center of the Design
 
-  The WAL stores applied commands, not Raft log entries. This means a restarted
-  node comes back as a follower at term zero and re-syncs its Raft log from the
-  cluster, but its key-value state is already restored from disk. The trade-off is
-  that Raft metadata (current term and voted_for) is not persisted, which
-  technically violates the durability requirement in the Raft paper. In practice,
-  for a three-node cluster where at most one node is ever down, this does not cause
-   correctness issues -- but it is the kind of thing that would need to be fixed
-  before calling this production-ready.
+The hardest part of a distributed key-value store is not the map. It is agreeing
+on the order of mutations.
 
-  ## the proxy and routing
+If two clients write the same key through two different nodes, every replica
+needs to apply those writes in the same order. If a node crashes and comes back,
+it needs to catch up without inventing a different history. If the leader fails,
+the cluster needs to elect a new leader without losing committed writes.
 
-  The proxy sits in front of the cluster and handles all client requests. It uses a
-   consistent hash ring to route each key to a node. Each physical node gets 100
-  virtual nodes on the ring (hashed as `node#0` through `node#99` using MD5), and
-  key lookup is a binary search over the sorted list of virtual node hashes. This
-  gives O(log n) routing and distributes keys evenly without a central directory.
+That is the job of Raft in this project.
 
-  The proxy does not do leader-aware routing. It hashes a key to a node and sends
-  the request there. If that node is not the leader, the Raft layer rejects the
-  write. In the current implementation this means clients can see failures during
-  elections. Fixing this properly would require the proxy to either redirect to the
-   known leader or the node to forward the request to the leader on behalf of the
-  client.
+Each node tracks the standard pieces of Raft state:
 
-  ## deployment
+- `currentTerm`
+- `votedFor`
+- replicated log entries
+- commit index
+- last applied index
+- snapshot boundary
+- cluster membership
 
-  The full cluster runs with Docker Compose: three nodes with named volumes for WAL
-   persistence and a proxy container wired to all three. The cluster tolerates a
-  single node failure -- with two nodes still up, the remaining nodes can still
-  form a quorum and elect a leader.
+The leader accepts client mutations and appends them to its log. Followers accept
+`AppendEntries` requests over HTTP JSON RPC. Once a log entry is replicated to a
+quorum, the leader advances the commit index. Each node then emits committed log
+entries on a commit channel so the storage layer can apply them in order.
 
-  ## what i actually learnt
+That separation is important. Raft decides what is committed. The key-value store
+only applies committed commands.
 
-  The first thing is that correctness in distributed systems is defined relative to
-   failure scenarios you have to think about explicitly. Writing code that works
-  when nothing goes wrong is easy. The hard part is deciding what happens when a
-  message is delayed, a node restarts mid-write, or a leader is partitioned from
-  exactly half the cluster.
+## The Write Path
 
-  The second thing is that Raft's strength is that it serializes all decisions
-  through a single leader. This makes reasoning about correctness much easier
-  compared to algorithms that allow concurrent writes from multiple nodes. The cost
-   is that writes are blocked during elections and the leader is a bottleneck. That
-   trade-off is often worth it.
+A write starts at `/kv/set` or `/kv/delete`. The node handler decodes the request
+into a `store.Command`, submits it to Raft, and waits for the corresponding log
+index to be applied locally before returning success.
+
+That last wait matters. Without it, the API could acknowledge a write merely
+because the leader accepted it into memory. This implementation waits for the
+write to pass through the Raft commit path and reach the local state machine.
+
+The simplified flow is:
+
+```text
+POST /kv/set
+  -> decode command
+  -> convert TTL to an absolute expiration timestamp
+  -> append command to leader's Raft log
+  -> replicate to followers
+  -> commit after quorum
+  -> append command to local WAL
+  -> apply command to in-memory store
+  -> return {"ok": true, "index": ...}
+```
+
+The code also handles an important TTL detail before replication. A client can
+send a TTL in seconds, but a replicated command should not depend on when each
+replica happens to apply it. The node converts relative TTLs into absolute
+expiration timestamps before submitting the command. That means a key with a
+five-second TTL expires at the same logical wall-clock point after restart and
+across replicas, instead of getting a fresh five seconds every time the WAL is
+replayed.
+
+## The Read Path
+
+Reads are deceptively tricky in a replicated system. A follower may have stale
+state, and even a leader needs to know it is still the leader before serving a
+linearizable read.
+
+This project uses a read-index style path. Before serving `/kv/get` or
+`/kv/keys`, the node asks Raft for a read index. The leader confirms it still has
+quorum contact, then returns an index that represents a safe point in the log.
+The HTTP handler waits until the local state machine has applied through that
+index before reading from the in-memory store.
+
+The flow is:
+
+```text
+GET /kv/get?key=foo
+  -> request Raft read index
+  -> confirm leader quorum
+  -> wait until local applied index >= read index
+  -> read from store
+```
+
+This is more expensive than just reading the map, but it keeps the API honest:
+clients get a read that is tied to the replicated log rather than a random local
+view of state.
+
+## Durability: WAL Plus Raft Metadata
+
+The project has two forms of persistence.
+
+First, Raft metadata is stored in `raft_state.json`. This includes the current
+term, vote, membership, retained log, and snapshot metadata. Persisting this
+state is required for Raft correctness across restarts. A node must not forget
+which term it was in or who it voted for.
+
+Second, committed key-value commands are appended to a JSONL write-ahead log in
+`wal.log`. On startup, a node loads `snapshot.json` first and then replays the
+remaining WAL commands on top of it.
+
+That gives the node a practical recovery path:
+
+```text
+start node
+  -> load snapshot.json
+  -> replay wal.log
+  -> restore in-memory store
+  -> load raft_state.json
+  -> resume Raft
+```
+
+The WAL is intentionally boring: each mutation is one JSON object per line. That
+makes it easy to inspect while developing, and it keeps recovery logic small.
+
+## Snapshot Compaction
+
+An append-only WAL is simple, but it cannot grow forever. The project supports
+compaction by writing the current key-value state into `snapshot.json` and
+truncating the WAL.
+
+Raft has its own snapshot boundary too. When the state machine snapshots, the
+Raft node can compact its retained log and remember:
+
+- last included index
+- last included term
+- snapshot data
+
+This matters for lagging followers. If a follower is too far behind and the
+leader no longer has the old log entries, the leader can send an
+`InstallSnapshot` request. The follower installs the snapshot, updates its Raft
+snapshot boundary, restores the key-value state, and continues replication from
+that point.
+
+That is a major step beyond a toy in-memory map. It means the system has a story
+for long-running clusters, restarts, and followers that need to recover from a
+compacted history.
+
+## Cluster Membership
+
+The cluster supports dynamic add and remove operations:
+
+```bash
+curl -X POST http://127.0.0.1:7001/cluster/add \
+  -H 'Content-Type: application/json' \
+  -d '{"id":4,"url":"http://127.0.0.1:7004"}'
+
+curl -X POST http://127.0.0.1:7001/cluster/remove \
+  -H 'Content-Type: application/json' \
+  -d '{"id":4}'
+```
+
+Membership changes are represented as Raft log entries. That means a node is not
+added or removed just because one process updates a local map. The change has to
+go through the same replicated commit path as key-value writes.
+
+The proxy also benefits from this. It periodically queries `/cluster/members`
+and rebuilds its local hash ring from the current node URLs. That keeps client
+routing aligned with the cluster without requiring the proxy to be restarted for
+every membership update.
+
+The implementation uses single-step add/remove changes, not Raft joint
+consensus. That is a deliberate simplification and an important limitation. It
+keeps the project approachable while still demonstrating the mechanics of
+replicated configuration changes.
+
+## Concurrency Model
+
+Go is a good fit for this kind of project because the system naturally decomposes
+into long-running concurrent loops:
+
+- election timers
+- heartbeat replication
+- commit notification
+- TTL cleanup
+- proxy membership refresh
+- HTTP request handling
+
+The design uses goroutines for those background tasks, channels for committed
+entries and installed snapshots, and mutexes around shared Raft and store state.
+
+One useful boundary is the handoff from Raft to the state machine. Raft owns
+ordering and commitment. The key-value layer owns applying commands, maintaining
+TTL state, writing the WAL, and producing snapshots. That keeps the internal
+contracts understandable even as the system runs concurrently.
+
+## Running It Locally
+
+The cluster can be run directly with Go:
+
+```bash
+go run ./cmd/kv-node --id=1 --addr=:7001 --wal-dir=./data/node1 \
+  --advertise-url=http://127.0.0.1:7001 \
+  --peers=2=http://127.0.0.1:7002,3=http://127.0.0.1:7003
+
+go run ./cmd/kv-node --id=2 --addr=:7002 --wal-dir=./data/node2 \
+  --advertise-url=http://127.0.0.1:7002 \
+  --peers=1=http://127.0.0.1:7001,3=http://127.0.0.1:7003
+
+go run ./cmd/kv-node --id=3 --addr=:7003 --wal-dir=./data/node3 \
+  --advertise-url=http://127.0.0.1:7003 \
+  --peers=1=http://127.0.0.1:7001,2=http://127.0.0.1:7002
+
+go run ./cmd/kv-proxy --addr=:8000 \
+  --nodes=http://127.0.0.1:7001,http://127.0.0.1:7002,http://127.0.0.1:7003
+```
+
+Or with Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+The repository also includes tests for the store, WAL, hash ring, and Raft
+behavior:
+
+```bash
+go test ./...
+```
+
+## What This Project Teaches
+
+A key-value store sounds simple until the failure cases appear. The interesting
+parts are not `map[string]string`; they are the questions around it:
+
+- Who is allowed to accept writes?
+- How do replicas agree on mutation order?
+- What happens when a node crashes after acknowledging a command?
+- How does a restarted node recover state?
+- How do reads avoid stale data?
+- How does a follower catch up after compaction?
+- How does the proxy learn that membership changed?
+
+This project answers those questions with a compact implementation built around
+Raft, a durable WAL, snapshots, and HTTP JSON APIs. It is not trying to be a
+production database, and it intentionally leaves out harder production concerns
+like joint-consensus reconfiguration, authentication, backpressure, metrics,
+multi-group sharding, and advanced storage engines.
+
+That is also what makes it useful. The code is small enough to inspect, run, and
+modify, but complete enough to show the real shape of a replicated storage
+system. It turns the abstract pieces of distributed systems into something you
+can start, break, restart, and observe from your terminal.
