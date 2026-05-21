@@ -43,6 +43,7 @@ function markdown() {
               "python",
               "yaml",
               "diff",
+              "go",
             ],
           });
         }

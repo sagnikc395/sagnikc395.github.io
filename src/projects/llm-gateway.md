@@ -317,4 +317,6 @@ uv run pytest
 - [Redis](https://redis.io/)
 - [Apache Kafka](https://kafka.apache.org/)
 
-ref: [llm-gateway](https://github.com/sagnikc395/llm-gateway)
+ref: 
+- [llm-gateway](https://github.com/sagnikc395/llm-gateway)
+- [litellm](https://github.com/BerriAI/litellm)
