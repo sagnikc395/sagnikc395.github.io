@@ -1,5 +1,5 @@
-import React from "react";
-import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
+import type { FC } from "react";
 
 interface SeoProps {
   title: string;
@@ -7,20 +7,35 @@ interface SeoProps {
   description: string;
 }
 
-const Seo: React.FC<SeoProps> = ({ title, ogTitle, description }) => {
-  return (
-    <Helmet>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:title" content={ogTitle ?? title} />
-      <meta property="og:description" content={description} />
-      <meta
-        property="og:image"
-        content="https://sagnikc395.github.io/assets/images/profile.jpeg"
-      />
-      <meta name="twitter:card" content="summary_large_image" />
-    </Helmet>
+function setMeta(attribute: "name" | "property", key: string, content: string) {
+  let meta = document.head.querySelector<HTMLMetaElement>(
+    `meta[${attribute}="${key}"]`,
   );
+
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.setAttribute(attribute, key);
+    document.head.appendChild(meta);
+  }
+
+  meta.content = content;
+}
+
+const Seo: FC<SeoProps> = ({ title, ogTitle, description }) => {
+  useEffect(() => {
+    document.title = title;
+    setMeta("name", "description", description);
+    setMeta("property", "og:title", ogTitle ?? title);
+    setMeta("property", "og:description", description);
+    setMeta(
+      "property",
+      "og:image",
+      "https://sagnikc395.github.io/assets/images/profile.jpeg",
+    );
+    setMeta("name", "twitter:card", "summary_large_image");
+  }, [description, ogTitle, title]);
+
+  return null;
 };
 
 export default Seo;

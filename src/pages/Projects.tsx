@@ -5,6 +5,7 @@ import { formatTime } from "../lib/utils";
 
 const projects = import.meta.glob("../projects/*.md", {
   eager: true,
+  query: "?meta",
 }) as any;
 
 const images = import.meta.glob("../projects/*.{png,jpg,svg}", {
@@ -70,6 +71,8 @@ const Projects: React.FC = () => {
                       <img
                         src={getImageUrl(project.image)}
                         alt={project.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover rounded-lg grayscale group-hover:grayscale-0 transition-all duration-500"
                       />
                     </div>

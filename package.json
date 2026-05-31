@@ -31,25 +31,12 @@
     "@rollup/pluginutils": "^5.1.4",
     "@tailwindcss/vite": "^4.1.7",
     "@types/js-yaml": "^4.0.9",
-    "@types/marked": "^5.0.2",
-    "@types/strftime": "^0.9.8",
-    "framer-motion": "^12.34.3",
-    "gray-matter": "^4.0.3",
     "js-yaml": "^4.1.0",
-    "lucide-react": "^0.575.0",
     "marked": "^15.0.12",
     "marked-smartypants": "^1.1.9",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-helmet-async": "^2.0.5",
     "react-router-dom": "^7.13.1",
-    "rehype-prism-plus": "^2.0.1",
-    "strftime": "^0.10.3",
     "tailwindcss": "^4.1.7"
-  },
-  "overrides": {
-    "react-helmet-async": {
-      "react": "$react"
-    }
   }
 }

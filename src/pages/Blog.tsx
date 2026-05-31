@@ -5,6 +5,7 @@ import { formatTime } from "../lib/utils";
 
 const posts = import.meta.glob("../posts/*.md", {
   eager: true,
+  query: "?meta",
 }) as Record<string, any>;
 
 const Blog: React.FC = () => {

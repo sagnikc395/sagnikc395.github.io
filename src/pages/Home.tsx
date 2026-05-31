@@ -1,15 +1,21 @@
 import React, { useEffect } from "react";
 import Seo from "../lib/components/Seo";
+import { cancelIdleRun, runWhenIdle } from "../lib/idle";
 
 const Home: React.FC = () => {
   useEffect(() => {
-    const script = document.createElement("script");
-    script.id = "umaring_js";
-    script.src = "https://umaring.mkr.cx/ring.js?id=sagnikc395";
-    script.async = true;
-    document.body.appendChild(script);
+    const handle = runWhenIdle(() => {
+      if (document.getElementById("umaring_js")) return;
+
+      const script = document.createElement("script");
+      script.id = "umaring_js";
+      script.src = "https://umaring.mkr.cx/ring.js?id=sagnikc395";
+      script.async = true;
+      document.body.appendChild(script);
+    });
 
     return () => {
+      cancelIdleRun(handle);
       const existingScript = document.getElementById("umaring_js");
       if (existingScript) {
         existingScript.remove();
@@ -43,11 +49,22 @@ const Home: React.FC = () => {
             className="w-full md:w-1/3 flex justify-center items-center md:justify-start"
             style={{ alignSelf: "stretch" }}
           >
-            <img
-              alt="sagnik chilling in his natural place"
-              src="/assets/images/profile2.jpeg"
-              className="rounded-xl w-64 object-cover"
-            />
+            <picture>
+              <source
+                srcSet="/assets/images/profile2-512.webp"
+                type="image/webp"
+              />
+              <img
+                alt="sagnik chilling in his natural place"
+                src="/assets/images/profile2.jpeg"
+                width="256"
+                height="341"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                className="rounded-xl w-64 object-cover"
+              />
+            </picture>
           </div>
 
           {/* Text Content */}

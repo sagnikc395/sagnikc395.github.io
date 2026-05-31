@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { cancelIdleRun, runWhenIdle } from "../idle";
 
 const Utterances: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -6,14 +7,23 @@ const Utterances: React.FC = () => {
   useEffect(() => {
     if (!ref.current || ref.current.querySelector("script")) return;
 
-    const script = document.createElement("script");
-    script.src = "https://utteranc.es/client.js";
-    script.setAttribute("repo", "sagnikc395/sagnikc395.github.io");
-    script.setAttribute("issue-term", "pathname");
-    script.setAttribute("theme", "github-dark");
-    script.setAttribute("crossorigin", "anonymous");
-    script.async = true;
-    ref.current.appendChild(script);
+    const container = ref.current;
+    const handle = runWhenIdle(() => {
+      if (container.querySelector("script")) return;
+
+      const script = document.createElement("script");
+      script.src = "https://utteranc.es/client.js";
+      script.setAttribute("repo", "sagnikc395/sagnikc395.github.io");
+      script.setAttribute("issue-term", "pathname");
+      script.setAttribute("theme", "github-dark");
+      script.setAttribute("crossorigin", "anonymous");
+      script.async = true;
+      container.appendChild(script);
+    });
+
+    return () => {
+      cancelIdleRun(handle);
+    };
   }, []);
 
   return (

@@ -10,15 +10,19 @@ import { markedSmartypants } from "marked-smartypants";
 
 /** A custom Markdown plugin for Vite, with TOML/YAML frontmatter support and Shiki highlighting. */
 function markdown() {
-  let highlighter: Awaited<ReturnType<typeof createHighlighter>> | null = null;
+  let highlighterPromise: ReturnType<typeof createHighlighter> | null = null;
 
   return {
     name: "markdown",
 
     async transform(src: string, id: string) {
-      if (/\.md$/.test(id)) {
+      const [filePath, query = ""] = id.split("?", 2);
+
+      if (/\.md$/.test(filePath)) {
+        const metadataOnly = new URLSearchParams(query).has("meta");
         let frontmatter = {};
         let content = src;
+
         if (src.startsWith("---")) {
           const end = src.indexOf("---", 3);
           if (end === -1) {
@@ -28,8 +32,15 @@ function markdown() {
           content = src.substring(end + 3).trim();
         }
 
-        if (!highlighter) {
-          highlighter = await createHighlighter({
+        if (metadataOnly) {
+          return {
+            code: dataToEsm(frontmatter),
+            map: null,
+          };
+        }
+
+        if (!highlighterPromise) {
+          highlighterPromise = createHighlighter({
             themes: ["vitesse-light", "vitesse-dark"],
             langs: [
               "javascript",
@@ -47,12 +58,13 @@ function markdown() {
             ],
           });
         }
+        const highlighter = await highlighterPromise;
 
         const marked = new Marked(markedSmartypants(), {
           gfm: true,
           renderer: {
             code({ text, lang }) {
-              return highlighter!.codeToHtml(text, {
+              return highlighter.codeToHtml(text, {
                 lang: lang || "text",
                 themes: {
                   light: "vitesse-light",
