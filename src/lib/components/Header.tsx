@@ -3,14 +3,16 @@ import { Link, useLocation } from "react-router-dom";
 
 const links = [
   { name: "projects", href: "/projects" },
-  // { name: "ideas", href: "/ideas" },
   { name: "blog", href: "/blog" },
-  { name: "projects", href: "/projects" },
 ];
 
 const Header: React.FC = () => {
   const location = useLocation();
-  const activeLink = links.find((link) => link.href === location.pathname);
+  const activeLink = links.find(
+    (link) =>
+      location.pathname === link.href ||
+      location.pathname.startsWith(`${link.href}/`),
+  );
   const pageTitle = activeLink
     ? activeLink.name.charAt(0).toUpperCase() + activeLink.name.slice(1)
     : null;

@@ -8,7 +8,6 @@ const Projects = React.lazy(() => import("./pages/Projects"));
 const ProjectPage = React.lazy(() => import("./pages/ProjectPage"));
 const Blog = React.lazy(() => import("./pages/Blog"));
 const BlogPost = React.lazy(() => import("./pages/BlogPost"));
-const Ideas = React.lazy(() => import("./pages/Ideas"));
 
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <main>{children}</main>;
@@ -24,7 +23,6 @@ const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/project/:slug" element={<ProjectPage />} />
-            <Route path="/ideas" element={<Ideas />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route

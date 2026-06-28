@@ -18,3 +18,4 @@ export type Post = {
   subimages?: string[];
   draft?: boolean;
 };
+

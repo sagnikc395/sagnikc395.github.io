@@ -23,8 +23,8 @@ const Footer: React.FC = () => {
       <div className="flex items-center space-x-4">
         <span className="text-stone-100">Email</span>
         <hr className="w-full mt-0.5 border-stone-700 border-dotted" />
-        <a className="link" href="mailto:sagnikchatterjee607@gmail.com">
-          sagnikchatterjee607@gmail.com
+        <a className="link" href="mailto:sagnikchatte@umass.edu">
+          sagnikchatte@umass.edu
         </a>
       </div>
     </footer>
