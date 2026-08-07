@@ -8,6 +8,53 @@ import { createHighlighter } from "shiki";
 import { Marked } from "marked";
 import { markedSmartypants } from "marked-smartypants";
 
+/** Strips Markdown syntax off a line, leaving readable plain text. */
+function stripInline(line: string): string {
+  return line
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/<[^>]+>/g, "")
+    .replace(/`([^`]*)`/g, "$1")
+    .replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Builds a short plain-text preview from a post body, for the blog list hover cards. */
+function excerptOf(content: string, maxWords = 55): string {
+  const words: string[] = [];
+  let inCodeFence = false;
+
+  for (const rawLine of content.split("\n")) {
+    const line = rawLine.trim();
+
+    if (line.startsWith("```")) {
+      inCodeFence = !inCodeFence;
+      continue;
+    }
+    if (inCodeFence) continue;
+
+    // Skip headings, quotes, tables, rules, images.
+    if (!line) continue;
+    if (/^(#{1,6}\s|>|\||-{3,}|\*{3,}|!\[)/.test(line)) continue;
+    // Skip whole-line italic asides ("_Course project for CS685…_").
+    if (/^_.*$/.test(line)) continue;
+
+    const text = stripInline(line.replace(/^([-*+]|\d+\.)\s+/, "")).replace(
+      /^[_*]+|[_*]+$/g,
+      "",
+    );
+    if (!text) continue;
+
+    words.push(...text.split(" "));
+    if (words.length >= maxWords) break;
+  }
+
+  if (words.length === 0) return "";
+  const truncated = words.length > maxWords;
+  return words.slice(0, maxWords).join(" ") + (truncated ? "…" : "");
+}
+
 /** A custom Markdown plugin for Vite, with TOML/YAML frontmatter support and Shiki highlighting. */
 function markdown() {
   let highlighterPromise: ReturnType<typeof createHighlighter> | null = null;
@@ -34,7 +81,7 @@ function markdown() {
 
         if (metadataOnly) {
           return {
-            code: dataToEsm(frontmatter),
+            code: dataToEsm({ excerpt: excerptOf(content), ...frontmatter }),
             map: null,
           };
         }
