@@ -75,6 +75,18 @@ hr {
   @apply mb-1;
 }
 
+.md-output img {
+  @apply w-full h-auto rounded-lg bg-white p-2 my-2 border border-stone-800;
+}
+
+.md-output figure {
+  @apply my-6;
+}
+
+.md-output figcaption {
+  @apply text-sm text-stone-400 text-center mt-2;
+}
+
 .md-output blockquote {
   @apply border-l-4 border-stone-700 pl-4 italic text-stone-400 mb-4;
 }

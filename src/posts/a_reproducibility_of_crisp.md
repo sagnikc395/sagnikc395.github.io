@@ -45,7 +45,27 @@ the authors' release covers feature selection, the LoRA optimisation and evaluat
 
 a few judgement calls were forced along the way and they are worth recording, because they are the kind of thing that silently changes numbers. the frozen reference model in the retention loss is obtained by disabling the LoRA adapters rather than keeping a second copy of the weights in memory, with a test asserting that the adapter disabled logits match the original exactly. activations are read at each block's output, which is what the public SAEs were trained on, and the hook deliberately reads the unnormalised stream. the activation count difference is normalised by token count before subtracting, because the cyber retain corpus is roughly four times the size of the forget corpus and without rescaling the statistic would mostly rank corpus size. and the bio forget corpus turns out not to live where the rest of the WMDP corpora live, so the data layer had to learn about a separate gated repository.
 
+the loss curves from the first Gemma 2 2B runs look the way the paper's weighting implies they should: the unlearning term drifts around while the retention and coherence terms dominate the total and pull it down, with the occasional spike where a batch of retain text lands badly.
+
+![training loss curves for gemma2-2b on the bio domain](/assets/images/crisp-training_gemma2-2b_bio_crisp.png)
+
+![training loss curves for gemma2-2b on the cyber domain](/assets/images/crisp-training_gemma2-2b_cyber_crisp.png)
+
 there is also a second evaluation backend that runs the model through mlx on Apple silicon, which is several times faster locally and keeps a quantised Gemma 2 2B at around 1.5 GB. it is inference only, since CRISP differentiates through per layer residual activations and mlx exposes neither forward hooks nor that autograd surface. quantised weights also perturb the residual stream, so it is for fast iteration and sanity checks, not for reported numbers.
+
+## where the pipeline currently sits
+
+the harness runs end to end and produces the six numbers, so what follows is a picture of the plumbing working rather than a result. at the moment the edited model tracks the original almost exactly on every axis, which is the signature of an edit that has not bitten yet, not evidence about the method.
+
+![six evaluation metrics, original versus crisp, gemma2-2b bio](/assets/images/crisp-metrics_gemma2-2b_bio.png)
+
+![six evaluation metrics, original versus crisp, gemma2-2b cyber](/assets/images/crisp-metrics_gemma2-2b_cyber.png)
+
+the same thing said as a trade off: the point that should be moving left, toward chance accuracy on WMDP, while holding its height on in domain MMLU, is currently sitting on top of the unedited model.
+
+![forget/retain trade-off, gemma2-2b bio](/assets/images/crisp-tradeoff_gemma2-2b_bio.png)
+
+![forget/retain trade-off, gemma2-2b cyber](/assets/images/crisp-tradeoff_gemma2-2b_cyber.png)
 
 ## the hazards i already know about
 
