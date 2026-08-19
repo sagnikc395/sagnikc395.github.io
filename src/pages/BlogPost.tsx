@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Seo from "../lib/components/Seo";
 import Markdown from "../lib/components/Markdown";
 import Utterances from "../lib/components/Utterances";
+import References from "../lib/components/References";
 import { formatTime } from "../lib/utils";
 
 const BlogPost: React.FC = () => {
@@ -61,6 +62,8 @@ const BlogPost: React.FC = () => {
         <div className="prose prose-stone prose-invert prose-headings:font-semibold prose-headings:text-stone-100 prose-p:text-stone-300 prose-a:text-blue-600 hover:prose-a:text-blue-800 max-w-none">
           <Markdown source={post.content} />
         </div>
+
+        <References references={post.references} />
 
         <Utterances />
       </article>

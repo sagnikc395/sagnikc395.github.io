@@ -5,6 +5,13 @@ lead: a multi-agent deep research system using open-source models, firecrawl MCP
 topics: [python, agents, deep-research-agent, tui, smolagents, firecrawl, huggingface]
 image: 
 subimages:
+references:
+  - title: "How we built our multi-agent research system"
+    url: https://www.anthropic.com/engineering/multi-agent-research-system
+    author: Anthropic
+  - title: autoresearch
+    url: https://github.com/karpathy/autoresearch
+    author: Andrej Karpathy
 ---
 
 ## motivation

@@ -1,6 +1,7 @@
 import React from "react";
 import Markdown from "./Markdown";
 import type { Project } from "../types";
+import References from "./References";
 import { formatTime } from "../utils";
 
 interface ProjectDetailProps {
@@ -75,6 +76,8 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
           ))}
         </div>
       )}
+
+      <References references={data.references} />
     </>
   );
 };

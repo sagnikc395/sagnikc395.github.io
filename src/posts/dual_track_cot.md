@@ -2,6 +2,18 @@
 title: "Dual-Track CoT: Budget-Aware Stepwise Guidance for Small LMs"
 date: 2026-01-15
 tags: [nlp, llm, chain-of-thought, reasoning, fine-tuning, process-supervision]
+references:
+  - title: "Self-Consistency Improves Chain of Thought Reasoning in Language Models"
+    url: https://arxiv.org/abs/2203.11171
+    author: Wang et al., 2023
+  - title: "Tree of Thoughts: Deliberate Problem Solving with Large Language Models"
+    url: https://arxiv.org/abs/2305.10601
+    author: Yao et al., 2023
+  - title: "Math-Shepherd: Verify and Reinforce LLMs Step-by-step without Human Annotations"
+    url: https://arxiv.org/abs/2312.08935
+    author: Wang et al., 2024
+  - title: "DualTrack-CoT source code"
+    url: https://github.com/atharvadpatil/DualTrack-COT
 ---
 
 # Dual-Track CoT: Budget-Aware Stepwise Guidance for Small LMs
