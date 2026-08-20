@@ -87,6 +87,27 @@ hr {
   @apply text-sm text-stone-400 text-center mt-2;
 }
 
+/* Tables (GFM) */
+.md-output table {
+  @apply block w-full max-w-full overflow-x-auto my-6 text-sm border-collapse;
+}
+
+.md-output thead {
+  @apply border-b border-stone-700;
+}
+
+.md-output th {
+  @apply px-3 py-2 text-left font-semibold text-stone-100 align-bottom whitespace-nowrap;
+}
+
+.md-output td {
+  @apply px-3 py-2 text-left align-top border-t border-stone-800;
+}
+
+.md-output tbody tr:hover {
+  @apply bg-stone-900/40;
+}
+
 .md-output blockquote {
   @apply border-l-4 border-stone-700 pl-4 italic text-stone-400 mb-4;
 }
