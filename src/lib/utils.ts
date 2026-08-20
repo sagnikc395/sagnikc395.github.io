@@ -19,3 +19,24 @@ export function formatTime(format: string, date: Date | string): string {
 
   return longUtcDate.format(value);
 }
+
+export function isURL(path: string): boolean {
+  try {
+    new URL(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function getImageUrl(
+  path: string,
+  imagePrefix = "../projects/",
+  images: Record<string, { default: string }> = {} as Record<
+    string,
+    { default: string }
+  >,
+) {
+  if (isURL(path)) return path;
+  return images[`${imagePrefix}${path}`]?.default;
+}

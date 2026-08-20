@@ -2,7 +2,7 @@ import React from "react";
 import Markdown from "./Markdown";
 import type { Project } from "../types";
 import References from "./References";
-import { formatTime } from "../utils";
+import { formatTime, isURL, getImageUrl } from "../utils";
 
 interface ProjectDetailProps {
   data: Project;
@@ -15,20 +15,6 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
   images,
   imagePrefix = "../../projects/",
 }) => {
-  function isURL(path: string): boolean {
-    try {
-      new URL(path);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  function getImageUrl(path: string) {
-    if (isURL(path)) return path;
-    return images[`${imagePrefix}${path}`]?.default;
-  }
-
   return (
     <>
       {/* project header */}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Seo from "../lib/components/Seo";
-import { formatTime } from "../lib/utils";
+import { formatTime, getImageUrl, isURL } from "../lib/utils";
 
 const projects = import.meta.glob("../projects/*.md", {
   eager: true,
@@ -14,21 +14,6 @@ const images = import.meta.glob("../projects/*.{png,jpg,svg}", {
 
 function getSlug(id: string) {
   return id.match(/\.\.\/projects\/(.*)\.md$/)?.[1];
-}
-
-function isURL(path: string): boolean {
-  try {
-    new URL(path);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function getImageUrl(path: string) {
-  if (!path) return null;
-  if (isURL(path)) return path;
-  return images[`../projects/${path}`]?.default;
 }
 
 const Projects: React.FC = () => {
