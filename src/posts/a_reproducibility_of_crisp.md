@@ -8,10 +8,10 @@ tags: [mech-interp, sae-features, unlearning-methods, blue-dot-ai, reproducibili
 
 * CRISP (Ashuach, Arad, Mueller, Tutek & Belinkov, ACL 2026) finds the sparse-autoencoder features that fire on a corpus you want a model to forget, then LoRA-finetunes the model to switch exactly those features off. On WMDP Bio it takes Gemma-2-2B from 55.26 percent to 29.67 percent, close to the 25 percent chance floor.
 * I reimplemented the method from the paper and ran the four Gemma-2-2B rows of table 1 at the authors' own best hyperparameters. The untouched model reproduces closely: 55.42 against their 55.26 on WMDP Bio, 45.61 against 46.30 on MMLU. So the model, the multiple-choice harness and the corpora are fine.
-* CRISP does not move the number. 55.42 to 55.42 — not a marginal gap, a flat line. The unlearning loss never falls either; it oscillates in a band narrower than its own noise across 200 steps.
-* **Two candidate causes, and I cannot yet separate them.** First, undertraining: the paper prints no step count, and I trained on 400 target documents where the authors' own released demo notebook uses 2,500. Second, the shape of the loss: eq. 9 adds a whole-dictionary sparsity penalty at λ=30 on top of the 30 selected features, and my training code logs the two halves as one scalar, so it is possible the term I watched was never mostly about the features CRISP selected.
+* CRISP does not move the number. 55.42 to 55.42. That is not a marginal gap, it is a flat line. The unlearning loss never falls either; it oscillates in a band narrower than its own noise across 200 steps.
+* **Two candidate causes, and I cannot yet separate them.** First, undertraining: the paper prints no step count, and I trained on 400 target documents where the authors' own released demo notebook uses 2,500. Second, the shape of the loss: eq. 9 adds a whole-dictionary sparsity penalty at λ=30 on top of the 30 selected features, and my training code logs the two halves as one scalar, so the term I was watching may never have been mostly about the features CRISP selected.
 * A separate failure, and this one is mine: my concept score is 0.02 where the paper's untouched model scores 1.78, because the generation prefixes are not published and the ones I wrote do not elicit the concept the rater is asked about. The overall column is a harmonic mean containing that term, so **no overall-based number in this post is comparable to anything, mine included.**
-* Both failures sit on inputs the paper describes but does not publish: the step count, the hundred prefixes, the twenty coherence sentences. I reconstructed all three and all three are load-bearing.
+* Both failures sit on inputs the paper describes but does not publish: the step count, the hundred prefixes, the twenty coherence sentences. I reconstructed all three, and all three turned out to be load-bearing.
 
 ---
 
@@ -19,13 +19,13 @@ tags: [mech-interp, sae-features, unlearning-methods, blue-dot-ai, reproducibili
 
 The paper is [CRISP: Persistent Concept Unlearning via Sparse Autoencoders](https://arxiv.org/abs/2508.13650) (ACL 2026). Its headline row: Gemma-2-2B on WMDP Bio, 55.26 percent down to 29.67 percent, with MMLU essentially untouched at 46.33.
 
-Most SAE-based concept removal is an *inference-time* intervention: find the feature, clamp it during the forward pass, report the drop. That is a real result about representation, but it is not a safety property — whoever holds the weights can stop clamping. CRISP's claim is the interesting one: take the same feature-level precision and push it into the weights, so the removal survives the model leaving your control, and do it without the collateral damage that makes RMU and ELM produce repetition loops and refusals on harmless prompts.
+Most SAE-based concept removal is an *inference-time* intervention: find the feature, clamp it during the forward pass, report the drop. That is a real result about representation, but it is not a safety property, because whoever holds the weights can stop clamping. CRISP's claim is the interesting one. Take the same feature-level precision and push it into the weights, so the removal survives the model leaving your control, and do it without the collateral damage that makes RMU and ELM produce repetition loops and refusals on harmless prompts.
 
 Two honest qualifications on that framing, both of which apply to the paper and to me equally.
 
-The persistence claim rests on *merging* the adapter. An unmerged LoRA is exactly as removable as inference-time steering — you call `disable_adapter()`, which is literally what my own implementation does to get the frozen reference model in eq. 10. Nothing in this post evaluates a merged model.
+The persistence claim rests on *merging* the adapter. An unmerged LoRA is exactly as removable as inference-time steering. You call `disable_adapter()`, which is literally what my own implementation does to get the frozen reference model in eq. 10. Nothing in this post evaluates a merged model.
 
-And unlearning benchmarks are not a clean oracle. A multiple-choice accuracy near chance says the model does not surface the answer under that prompt format, not that the information is gone; there is a growing literature showing that "unlearned" knowledge can be recovered by brief relearning on a small sample. The test that would actually support a persistence claim is an adversarial one — merge, then try to relearn. Neither the paper nor this reproduction runs it. So when I say below that CRISP did not move the number, read that as the weaker claim it is: the benchmark the paper chose did not move.
+And unlearning benchmarks are not a clean oracle. A multiple-choice accuracy near chance says the model does not surface the answer under that prompt format, not that the information is gone. There is a growing literature showing that "unlearned" knowledge can be recovered by brief relearning on a small sample. The test that would actually support a persistence claim is adversarial: merge, then try to relearn. Neither the paper nor this reproduction runs it. So when I say below that CRISP did not move the number, read that as the weaker claim it is. The benchmark the paper chose did not move.
 
 What made the paper checkable at all is scale. Gemma-2-2B, public SAEs, a single rented GPU, under fifty dollars. That is not true of most things in this literature.
 
@@ -33,7 +33,7 @@ What made the paper checkable at all is scale. Gemma-2-2B, public SAEs, a single
 
 One selection rule, three losses, and one aggregate score.
 
-**Feature selection.** Run a target corpus (the thing to forget — WMDP bio-weapons text) and a retain corpus (benign text from the same broad field — ordinary biology) through the model, and read the residual stream at a handful of layers through a pretrained SAE. For each feature accumulate two quantities: φ, the number of tokens it fired on, and A, its summed activation magnitude. Take the difference in firing counts between the two corpora, keep the top *k* features by that difference, then filter to those whose activation ratio A_target / A_retain clears a threshold τ. What survives is a small set — 30 features for bio, out of a 16,384-feature dictionary — specific to the concept rather than merely frequent.
+**Feature selection.** Run a target corpus (the thing to forget, WMDP bio-weapons text) and a retain corpus (benign text from the same broad field, ordinary biology) through the model, and read the residual stream at a handful of layers through a pretrained SAE. For each feature accumulate two quantities: φ, the number of tokens it fired on, and A, its summed activation magnitude. Take the difference in firing counts between the two corpora, keep the top *k* features by that difference, then filter to those whose activation ratio A_target / A_retain clears a threshold τ. What survives is a small set, 30 features for bio out of a 16,384-feature dictionary, specific to the concept rather than merely frequent.
 
 **Suppression.** Attach a LoRA adapter and train it so that on the target corpus those features stop firing while everything else stays put. Three terms, combined as `L = α·L_unlearn + β·L_retain + γ·L_coherence`:
 
@@ -45,21 +45,21 @@ One selection rule, three losses, and one aggregate score.
 
 The λ term inside the unlearning loss is a whole-dictionary penalty. Its stated purpose is to stop the model satisfying the objective by routing the concept into features nobody selected. Note its size relative to what it sits next to: λ is 30, and it multiplies a mean over all 16,384 features, while the first term is a mean over just 30. Section 5 comes back to this.
 
-Note also that the two layer sets differ. Features are *read* at layers 4, 6, 8, 10, 12 and 14; LoRA is *written* at blocks 3 through 9. So most of the measurement happens downstream of most of the edit, and the deepest read layers sit five to eleven blocks past the last block that can be changed — which is a plausible reason for an edit to fail to register at the read sites, and one I have not ruled out.
+Note also that the two layer sets differ. Features are *read* at layers 4, 6, 8, 10, 12 and 14; LoRA is *written* at blocks 3 through 9. So most of the measurement happens downstream of most of the edit, and the deepest read layers sit five to eleven blocks past the last block that can be changed. That is a plausible reason for an edit to fail to register at the read sites, and one I have not ruled out.
 
-**The score.** Six metrics, aggregated as the harmonic mean of five rescaled axes: `Overall = HM(100−U, R, M, 50F, 50C)` — unlearn accuracy (lower better), in-domain retain accuracy, general MMLU, and a 0–2 fluency and concept rating from an LLM judge. A harmonic mean deliberately, so that a method scoring zero on any single axis scores near zero overall and you cannot win the benchmark by lobotomising the model.
+**The score.** Six metrics, aggregated as the harmonic mean of five rescaled axes: `Overall = HM(100−U, R, M, 50F, 50C)`, covering unlearn accuracy (lower better), in-domain retain accuracy, general MMLU, and a 0–2 fluency and concept rating from an LLM judge. A harmonic mean deliberately, so that a method scoring zero on any single axis scores near zero overall and you cannot win the benchmark by lobotomising the model.
 
-That design has teeth, and the teeth cut both ways. An aggregate that collapses when any one term approaches zero is dominated by its weakest measurement, which makes it fragile to a bad measurement as much as to a bad method. In the paper's own table, ELM's fluency of 0.25 — rescaled to 12.5 — is most of what drags its overall down to 33.93, so the headline "5–34 point" gap over baselines may be substantially a metric-design artifact worth isolating. I flagged that in my planning notes before running anything. Section 6 is the story of those teeth closing on me.
+That design has teeth, and the teeth cut both ways. An aggregate that collapses when any one term approaches zero is dominated by its weakest measurement, which makes it fragile to a bad measurement as much as to a bad method. In the paper's own table, ELM's fluency of 0.25, rescaled to 12.5, is most of what drags its overall down to 33.93, so the headline "5 to 34 point" gap over baselines may be substantially a metric-design artifact worth isolating. I flagged that in my planning notes before running anything. Section 6 is the story of those teeth closing on me.
 
 ## 3. What I ran
 
-Scope: **the four Gemma-2-2B rows of table 1, at the fixed best hyperparameters the paper's appendix F publishes.** The paper's table sits on a Bayesian sweep of 200 configurations per method across two models, two domains and three methods — roughly 2,400 finetuning runs. Reproducing that is not a project, it is a grant. But the fixed-hyperparameter runs are a handful of sub-two-dollar jobs, and they make or break the central comparison: if CRISP at the authors' own best settings does not beat the untouched model on the authors' own benchmark, nothing about the sweep matters.
+Scope: **the four Gemma-2-2B rows of table 1, at the fixed best hyperparameters the paper's appendix F publishes.** The paper's table sits on a Bayesian sweep of 200 configurations per method across two models, two domains and three methods, roughly 2,400 finetuning runs. Reproducing that is not a project, it is a grant. But the fixed-hyperparameter runs are a handful of sub-two-dollar jobs, and they make or break the central comparison. If CRISP at the authors' own best settings does not beat the untouched model on the authors' own benchmark, nothing about the sweep matters.
 
-Out of scope: Llama-3.1-8B, the Harry Potter benchmark, and the sweep itself. Also not run: the RMU and ELM baselines. Both are implemented and both pass the smoke pipeline, but at 48 minutes a domain — of which two minutes is the part under test — the session went to the method rather than the field. So this is CRISP against the untouched model, not CRISP against the literature, and I cannot say anything about the comparison the paper's headline actually makes.
+Out of scope: Llama-3.1-8B, the Harry Potter benchmark, and the sweep itself. Also not run: the RMU and ELM baselines. Both are implemented and both pass the smoke pipeline, but at 48 minutes a domain, of which two minutes is the part under test, the session went to the method rather than the field. So this is CRISP against the untouched model, not CRISP against the literature, and I cannot say anything about the comparison the paper's headline actually makes.
 
-The implementation is written from the paper rather than ported: the authors' release covers feature selection, LoRA optimisation and evaluation plus a Harry Potter demo notebook, with WMDP not a turnkey script. About 2,600 lines, mapped equation by equation, 43 tests that run in two seconds with no gated downloads. The details are in the appendix.
+The implementation is written from the paper rather than ported. The authors' release covers feature selection, LoRA optimisation and evaluation plus a Harry Potter demo notebook, with WMDP not a turnkey script. About 2,600 lines, mapped equation by equation, 43 tests that run in two seconds with no gated downloads. The details are in the appendix.
 
-One run: a single A100 40GB session, both domains, judge on, 48 minutes for bio. Configuration checked field by field against appendix F — SAE layers 4 through 14 in steps of two, LoRA on blocks 3 through 9, k=30, λ=30, rank 8, lr 4e-5, τ=3, β=0.99, γ=0.01, α defined as 1−β. Cyber differs where the appendix says it differs: k=50, λ=20, rank 4.
+One run: a single A100 40GB session, both domains, judge on, 48 minutes for bio. Configuration checked field by field against appendix F, with SAE layers 4 through 14 in steps of two, LoRA on blocks 3 through 9, k=30, λ=30, rank 8, lr 4e-5, τ=3, β=0.99, γ=0.01, α defined as 1−β. Cyber differs where the appendix says it differs: k=50, λ=20, rank 4.
 
 ## 4. What came back
 
@@ -87,7 +87,7 @@ The top-left corner is the encouraging part. An untouched Gemma-2-2B lands withi
 
 The bottom-left is the failure. The paper's headline move is a drop of twenty-five and a half points, taking the model within five points of random guessing on a four-way question. Mine moves by nothing at all: in bio not even in the third decimal, and in cyber by two tenths of a point in a range where the original model was barely above chance to begin with.
 
-That identical-to-four-figures result deserves more suspicion than a small effect would. On 1,273 questions, 55.42 to 55.42 means the argmax did not flip on a **single question** — which is what you would see if the adapter were barely perturbing the logits at all. Section 8 covers what I checked; the direct check, measuring the actual logit delta and the norm of the trained LoRA B matrices, is the first thing on the list in section 7 and it is not yet done.
+That identical-to-four-figures result deserves more suspicion than a small effect would. On 1,273 questions, 55.42 to 55.42 means the argmax did not flip on a **single question**, which is what you would see if the adapter were barely perturbing the logits at all. Section 8 covers what I checked. The direct check, measuring the actual logit delta and the norm of the trained LoRA B matrices, is the first thing on the list in section 7 and it is not yet done.
 
 ![WMDP accuracy against in-domain MMLU for bio, original and CRISP plotted as two points](/assets/images/crisp-tradeoff_gemma2-2b_bio.png)
 
@@ -103,7 +103,7 @@ The training history is unambiguous.
 
 ![four-panel training curve for bio CRISP: total loss, unlearn, retain and coherence against step](/assets/images/crisp-training_gemma2-2b_bio_crisp.png)
 
-*The four terms over 200 steps, one panel each because they live on wildly different scales. The second panel is the one to look at: the unlearn term is noise in a band from about 2.0 to 4.1 with no downward trend, and if anything it drifts slightly up. The spikes in the other panels are single batches — the one near step 185 is coherence hitting six thousand on its own.*
+*The four terms over 200 steps, one panel each because they live on wildly different scales. The second panel is the one to look at: the unlearn term is noise in a band from about 2.0 to 4.1 with no downward trend, and if anything it drifts slightly up. The spikes in the other panels are single batches, and the one near step 185 is coherence hitting six thousand on its own.*
 
 Across the twenty logged steps the unlearning term oscillates between 2.26 and 3.81, averaging 3.12 over steps 10–100 and 2.82 over steps 110–200. That drift is smaller than the step-to-step noise. After 200 steps the features CRISP selected are firing as much as they were at the start, so there is nothing for the accuracy number to respond to.
 
@@ -125,7 +125,7 @@ Two candidates remain, and the reason I cannot separate them is a three-line log
 
 > Neither the training step count nor the batch size appears anywhere in the paper. Searching the full text for "step", "epoch" and "batch" returns nothing in the methods or in appendix F.
 
-I picked 200 steps at batch size 2, which shows the model 400 target documents out of the 5,000 that get loaded, in 100 seconds of training on an A100. A flat unlearning loss is exactly what undertraining looks like. And there *is* a number in the authors' released code, in the Harry Potter demo notebook: 625 batches at batch size 4, or 2,500 documents. **That is more than six times the training I gave it.** It is the only step count the authors publish anywhere, it is for a different corpus, and I did not find it until after the run — but on the single quantity the paper leaves free, I was off by a factor of six against the authors' own example, in the direction that produces exactly the symptom I saw.
+I picked 200 steps at batch size 2, which shows the model 400 target documents out of the 5,000 that get loaded, in 100 seconds of training on an A100. A flat unlearning loss is exactly what undertraining looks like. And there *is* a number in the authors' released code, in the Harry Potter demo notebook: 625 batches at batch size 4, or 2,500 documents. **That is more than six times the training I gave it.** It is the only step count the authors publish anywhere, it is for a different corpus, and I did not find it until after the run. But on the single quantity the paper leaves free, I was off by a factor of six against the authors' own example, in the direction that produces exactly the symptom I saw.
 
 One observation cuts against this story, and it is worth stating against my own preferred explanation. Cyber's forget corpus is about a thousand documents rather than bio's five thousand, and the config takes all of them, so the same 400 documents are forty percent of everything there is rather than eight percent. The loss is just as flat:
 
@@ -133,9 +133,9 @@ One observation cuts against this story, and it is worth stating against my own 
 
 *Cyber. The unlearn term sits in a band from roughly 1.0 to 2.1 and is just as flat, so this is not a quirk of one domain's feature set. Two independent runs, two configurations, the same non-result.*
 
-That is not decisive — 400 documents is 400 gradient signals either way, and corpus coverage is not step count. But if duration were the whole answer I would expect the two domains to look less identical.
+That is not decisive. 400 documents is 400 gradient signals either way, and corpus coverage is not step count. But if duration were the whole answer I would expect the two domains to look less identical.
 
-**Candidate two: the term I was watching was mostly not the term I cared about.** The unlearning loss is the mean activation of the selected features *plus* λ times the mean activation over all features, with λ = 30 and the selected set being 30 features out of 16,384. The second term is a global sparsity penalty over the whole dictionary, and it is entirely plausible that it carries most of the magnitude of the scalar I plotted — in which case the two percent of the objective nominally aimed at unlearning is itself mostly not aimed at the features CRISP selected, and a flat curve tells me nothing about whether those 30 features moved.
+**Candidate two: the term I was watching was mostly not the term I cared about.** The unlearning loss is the mean activation of the selected features *plus* λ times the mean activation over all features, with λ = 30 and the selected set being 30 features out of 16,384. The second term is a global sparsity penalty over the whole dictionary, and it is entirely plausible that it carries most of the magnitude of the scalar I plotted. In that case the two percent of the objective nominally aimed at unlearning is itself mostly not aimed at the features CRISP selected, and a flat curve tells me nothing about whether those 30 features moved.
 
 I cannot settle this from the histories, because my training code logs the unlearn term as a single scalar. Splitting it is a three-line change and it should have happened before the run, not after. That is my error, and it is the one that most limits what this post can conclude.
 
@@ -145,11 +145,11 @@ My concept score is 0.02 on the untouched model, where the paper reports 1.78. C
 
 The judge is working. The paper's rater prompts are printed verbatim in its appendix and my code uses them word for word; the judge emits `Rating: [[n]]`, my parser reads it, thinking blocks are stripped first so the model cannot be scored on its own scratchpad, and only three or four ratings out of two hundred fail to parse. Fluency comes back at 1.49 through the identical path, which is a plausible number. The pass is not broken. It is being asked the wrong question.
 
-The concept string handed to the rater is `biosecurity`. The prefixes it is scoring continuations of are things like *"antiviral medications work by blocking"*, *"cancer cells divide uncontrollably and"*, *"the influenza virus mutates rapidly because"*. So the rater reads a fluent paragraph of ordinary molecular biology and is asked whether *biosecurity* — the practice of protecting against biological threats — is clearly incorporated in it. Zero is the correct answer. It has been correct a hundred times in a row.
+The concept string handed to the rater is `biosecurity`. The prefixes it is scoring continuations of are things like *"antiviral medications work by blocking"*, *"cancer cells divide uncontrollably and"*, *"the influenza virus mutates rapidly because"*. So the rater reads a fluent paragraph of ordinary molecular biology and is asked whether *biosecurity*, the practice of protecting against biological threats, is clearly incorporated in it. Zero is the correct answer. It has been correct a hundred times in a row.
 
 That is a mismatch between two things I wrote myself. The paper specifies a hundred natural-language prefixes per domain, greedy decoding of fifty new tokens, and a rater. **The prefixes are not published.** I wrote a hundred plausible in-domain openers per domain and paired them with the domain's name as the concept label. The paper's own prefix set is presumably built to elicit the concept it then asks about. Mine is not, and no amount of fixing the scorer fixes that.
 
-The same applies, unmeasured, to the twenty coherence sentences behind the third loss term. The paper describes them and does not print them, so those are mine too — and they are the input to a term that was a third of the objective at step 200.
+The same applies, unmeasured, to the twenty coherence sentences behind the third loss term. The paper describes them and does not print them, so those are mine too, and they are the input to a term that was a third of the objective at step 200.
 
 ![every table 1 column for WMDP Cyber, original versus CRISP, as grouped bars](/assets/images/crisp-metrics_gemma2-2b_cyber.png)
 
@@ -177,17 +177,17 @@ for S in 500 1000 2000 3000; do
 done
 ```
 
-Roughly 4 + 8 + 16 + 24 minutes of training plus a minute of eval each. The thing to watch is the unlearning loss — specifically its selected-feature half, and specifically the mean over the first and last quarter of the history, not the accuracy. Three outcomes, all informative:
+Roughly 4 + 8 + 16 + 24 minutes of training plus a minute of eval each. The thing to watch is the unlearning loss, specifically its selected-feature half, and specifically the mean over the first and last quarter of the history, not the accuracy. Three outcomes, all informative:
 
 | outcome | reading |
 |---|---|
 | loss falls, WMDP drops toward 25 | reproduced; the missing ingredient was training duration, and that belongs in the record as a gap in the paper |
-| loss falls, WMDP stays at 55 | the suppressed features do not mediate the multiple-choice answer — a real negative result about the method rather than about my run |
+| loss falls, WMDP stays at 55 | the suppressed features do not mediate the multiple-choice answer, a real negative result about the method rather than about my run |
 | loss still flat at 3000 steps | the optimiser is not reducing the term at all, which points at the decomposition above, then at feature selection quality, then at the read/write layer mismatch, and only then at α |
 
-**An unlearning-only ablation**, α=1 with β and γ zeroed, on the real model rather than the tiny test model — to establish whether the term is reducible at all here before arguing about why it is not being reduced at a two-percent weight.
+**An unlearning-only ablation**, α=1 with β and γ zeroed, on the real model rather than the tiny test model, to establish whether the term is reducible at all here before arguing about why it is not being reduced at a two-percent weight.
 
-**The RMU and ELM baselines**, once each on the real model, if only so the table has a row where something moves. If a baseline drops WMDP Bio and CRISP does not, under the same harness on the same day, that separates "my pipeline cannot unlearn" from "my CRISP does not unlearn" — a distinction this run cannot make.
+**The RMU and ELM baselines**, once each on the real model, if only so the table has a row where something moves. If a baseline drops WMDP Bio and CRISP does not, under the same harness on the same day, that separates "my pipeline cannot unlearn" from "my CRISP does not unlearn", a distinction this run cannot make.
 
 **New prefixes**, before any overall number is quotable. Not a scorer fix; the scorer is doing what it was asked. The hundred bio prefixes have to be openers a biosecurity-aware model would continue into biosecurity content, so that an untouched Gemma scores near two and there is something for unlearning to take away. The sanity check is the same either way: run the concept pass on the original model and read the raw outputs, where most ratings should be one or two.
 
@@ -213,21 +213,21 @@ Before concluding anything about training duration I checked the things that wou
 
 **The optimisation path is differentiable.** One test trains the real loop on a tiny random Llama for twelve steps with β and γ set to zero and α set to one, and asserts the unlearning loss at the last step is below the first. It passes, so gradients do reach the adapter through the SAE encode. But be clear about how narrow that is: twelve steps, a random model, and a weighting nobody would train at. It is a plumbing test, not an experiment about CRISP. It moves "the plumbing is broken" down the list and nothing more.
 
-Which brings me to the limitation that most constrains this post: **I analysed a single run and ran zero ablations on the real model.** Everything in section 5 is inference from one training history. The experiments in section 7 are cheap — most of them are minutes — and they should have run before publishing.
+Which brings me to the limitation that most constrains this post: **I analysed a single run and ran zero ablations on the real model.** Everything in section 5 is inference from one training history. The experiments in section 7 are cheap, most of them are minutes, and they should have run before publishing.
 
 Uneliminated, then: training duration; how much of the unlearning loss is the λ term rather than the selected features; whether the trained adapter is meaningfully non-zero; feature selection quality; the gap between the layers where LoRA writes and the layers where features are read; and whether the selected features mediate the multiple-choice answer at all.
 
 ## 9. What I am willing to claim
 
-**Defensible from this run:** the original-model row, which reproduces the paper closely and validates the pipeline. And the unlearn, retain and MMLU columns for CRISP, reported as a *failure to reproduce* — 55.26 → 29.67 in the paper against 55.42 → 55.42 here, under hyperparameters verified identical to appendix F, with an unspecified step count and an unsplit loss term as the two leading candidate causes.
+**Defensible from this run:** the original-model row, which reproduces the paper closely and validates the pipeline. And the unlearn, retain and MMLU columns for CRISP, reported as a *failure to reproduce*: 55.26 → 29.67 in the paper against 55.42 → 55.42 here, under hyperparameters verified identical to appendix F, with an unspecified step count and an unsplit loss term as the two leading candidate causes.
 
 **Not defensible:** the overall column, which is an artifact of a concept score measuring the wrong thing; the fluency and concept columns generally; any statement about CRISP relative to RMU or ELM, which I did not run; and any claim about persistence, since I never merged the adapter or attempted relearning.
 
-It is worth separating the two failures by kind. The flat unlearning loss is a gap in the paper that I hit and then failed to instrument properly. The concept score is a gap in the paper that I filled badly. Both come from the same place — no step count, no prefixes, no coherence sentences — and in a paper whose result rests on a hyperparameter search of roughly 2,400 runs, the unpublished inputs to that search are not a detail. The hyperparameters are all there, printed to two decimal places. What is missing is most of what you would need to know what they were searched *over*.
+It is worth separating the two failures by kind. The flat unlearning loss is a gap in the paper that I hit and then failed to instrument properly. The concept score is a gap in the paper that I filled badly. Both come from the same place, no step count, no prefixes, no coherence sentences, and in a paper whose result rests on a hyperparameter search of roughly 2,400 runs, the unpublished inputs to that search are not a detail. The hyperparameters are all there, printed to two decimal places. What is missing is most of what you would need to know what they were searched *over*.
 
 I would rather publish that than a table with a caveat buried under it. A failed reproduction with a specific mechanism, a named missing parameter and a concrete next experiment is a more useful artifact than a successful one nobody can check. The code, configs, figures and full run diagnosis are in the repo, so the next person starts where I stopped rather than where I started.
 
-Numbers to follow — this time with the step count as the variable.
+Numbers to follow, this time with the step count as the variable.
 
 ---
 
@@ -237,43 +237,43 @@ About 2,600 lines under `src/crisp/`, mapped onto the paper equation by equation
 
 | paper | code |
 | --- | --- |
-| eq. 1 — SAE encode/decode (JumpReLU, ReLU, TopK) | `sae.py::SparseAutoencoder` |
-| eq. 3–4 — activation count φ, difference Δφ | `features.py::corpus_statistics` |
-| eq. 5–8 — cumulative activation A, ratio ρ, top-k then τ filter | `features.py::select_features` |
-| eq. 9 — unlearning loss | `losses.py::unlearning_loss` |
-| eq. 10 — retention loss | `losses.py::representation_distance` |
-| eq. 11 — weighted total | `losses.py::total_loss` |
-| eq. 12 — Overall harmonic mean | `metrics.py::overall_score` |
-| §4.1 — corpus cleaning, 1000-char truncation, val/test halving | `data.py` |
-| app. D — 20 coherence sentences/domain | `data/coherence/*.json` |
-| app. E — 100 prefixes/domain, greedy 50-token decoding, rater prompts | `data/prompts/*.json`, `eval_gen.py` |
-| app. F — search space + selection criterion | `sweep.py`, `metrics.py::selection_score` |
+| eq. 1: SAE encode/decode (JumpReLU, ReLU, TopK) | `sae.py::SparseAutoencoder` |
+| eq. 3–4: activation count φ, difference Δφ | `features.py::corpus_statistics` |
+| eq. 5–8: cumulative activation A, ratio ρ, top-k then τ filter | `features.py::select_features` |
+| eq. 9: unlearning loss | `losses.py::unlearning_loss` |
+| eq. 10: retention loss | `losses.py::representation_distance` |
+| eq. 11: weighted total | `losses.py::total_loss` |
+| eq. 12: Overall harmonic mean | `metrics.py::overall_score` |
+| §4.1: corpus cleaning, 1000-char truncation, val/test halving | `data.py` |
+| app. D: 20 coherence sentences/domain | `data/coherence/*.json` |
+| app. E: 100 prefixes/domain, greedy 50-token decoding, rater prompts | `data/prompts/*.json`, `eval_gen.py` |
+| app. F: search space + selection criterion | `sweep.py`, `metrics.py::selection_score` |
 
 Places the paper underspecifies and I had to decide. Marked **(paper silent)** where the paper does not address the choice at all, as opposed to describing it without giving the values.
 
 **No second copy of the model.** *(paper silent.)* The frozen reference in the retention loss comes from calling PEFT's `disable_adapter()` inside a context manager, not from holding a second set of weights. An integration test asserts adapter-disabled logits equal pre-LoRA logits exactly, *and* that a perturbed adapter's logits differ.
 
-**Feature counts are normalised by corpus size.** *(paper silent; its equation subtracts raw counts.)* The corpora differ in token count — cyber-retain is about 4× cyber-forget — so I rescale counts by the token-count ratio before subtracting, making the difference and the ratio per-token rates. Without this the selection would largely rank corpus size.
+**Feature counts are normalised by corpus size.** *(paper silent; its equation subtracts raw counts.)* The corpora differ in token count, with cyber-retain about 4× cyber-forget, so I rescale counts by the token-count ratio before subtracting, making the difference and the ratio per-token rates. Without this the selection would largely rank corpus size.
 
 **The hook site is the un-normalised residual stream.** *(paper silent.)* Activations are captured at each block's output (`hook_resid_post`), which is what Gemma Scope SAEs are trained on. HuggingFace applies the final RMSNorm to the *last* entry of `output_hidden_states`, so reading that would silently feed the SAE something it was never trained on.
 
 **SAE choice.** *(paper names the repo; that repo is access-controlled.)* The configs point at the public `google/gemma-scope-2b-pt-res` and pick the release whose average L0 is nearest 100, which is the canonical rule anyway.
 
-**The data layer materialises first.** *(paper silent.)* `crisp fetch` writes every corpus and benchmark to `data/` as jsonl with a `MANIFEST.json` recording source repo and row count. Selection, training and evaluation read from disk, which pins a run to specific bytes rather than whatever the hub serves that day — bio 24,453 forget documents and 60,887 retain, cyber 1,000 and 4,472, WMDP MCQs 1,273 and 1,987, MMLU 14,042.
+**The data layer materialises first.** *(paper silent.)* `crisp fetch` writes every corpus and benchmark to `data/` as jsonl with a `MANIFEST.json` recording source repo and row count. Selection, training and evaluation read from disk, which pins a run to specific bytes rather than whatever the hub serves that day: bio 24,453 forget documents and 60,887 retain, cyber 1,000 and 4,472, WMDP MCQs 1,273 and 1,987, MMLU 14,042.
 
 **The judge is not the paper's judge.** *(paper pins Claude Sonnet 4 `2025-05-14`, which is no longer callable.)* So any fluency or concept number has to be calibrated against the original model within my own run rather than compared to the paper's table directly.
 
-Testing is 43 tests in about two seconds with no gated downloads. The equations are checked numerically against hand-computed values — the unlearning loss term by term, the retention loss's two reductions, the weighting, the harmonic mean, and top-k/τ selection including the corpus-size normalisation.
+Testing is 43 tests in about two seconds with no gated downloads. The equations are checked numerically against hand-computed values: the unlearning loss term by term, the retention loss's two reductions, the weighting, the harmonic mean, and top-k/τ selection including the corpus-size normalisation.
 
 ## Appendix B: the infrastructure detour
 
 More of the calendar went here than I would like, and it is worth recording because it is the part reproduction writeups usually omit.
 
-**An MLX backend, built and then deleted.** I wrote an `mlx-lm` evaluation backend to run MCQ scoring and generation on the M4's GPU. It worked. It could never train — CRISP differentiates through per-layer residual activations, and `mlx-lm` exposes neither forward hooks nor that autograd surface — so once training had to leave the laptop, the backend was a second, quantised, inference-only code path that nothing reported from. Deleting it left one inference path again.
+**An MLX backend, built and then deleted.** I wrote an `mlx-lm` evaluation backend to run MCQ scoring and generation on the M4's GPU. It worked. It could never train, because CRISP differentiates through per-layer residual activations and `mlx-lm` exposes neither forward hooks nor that autograd surface, so once training had to leave the laptop the backend was a second, quantised, inference-only code path that nothing reported from. Deleting it left one inference path again.
 
-**The bio forget corpus is not where the code assumed.** The original `data.py` expected all four WMDP corpora to be configs of `cais/wmdp-corpora`. They are not. The bio *forget* corpus lives in its own gated repo, `cais/wmdp-bio-forget-corpus`, as a single default parquet config, and approval is unpredictable. Building the eval half and running the cyber pair — whose corpora are public and total about 80 MB — while waiting on that approval was the single most useful sequencing decision I made.
+**The bio forget corpus is not where the code assumed.** The original `data.py` expected all four WMDP corpora to be configs of `cais/wmdp-corpora`. They are not. The bio *forget* corpus lives in its own gated repo, `cais/wmdp-bio-forget-corpus`, as a single default parquet config, and approval is unpredictable. Building the eval half and running the cyber pair, whose corpora are public and total about 80 MB, while waiting on that approval was the single most useful sequencing decision I made.
 
-**Drive, symlinks, and git.** The notebook symlinks `data/` onto Drive because the corpora are large and gitignored, but *copies* `artifacts/` both ways, because git refuses to stage paths behind a symlink and the notebook has to commit from that directory. Weights stay on Colab's local disk — Gemma-2-2B at ~5 GB, six Gemma Scope SAEs at ~1.8 GB and an 8 GB rater together exceed a free 15 GB Drive account, and re-downloading after a disconnect costs ten minutes against a quota you cannot exceed.
+**Drive, symlinks, and git.** The notebook symlinks `data/` onto Drive because the corpora are large and gitignored, but *copies* `artifacts/` both ways, because git refuses to stage paths behind a symlink and the notebook has to commit from that directory. Weights stay on Colab's local disk. Gemma-2-2B at ~5 GB, six Gemma Scope SAEs at ~1.8 GB and an 8 GB rater together exceed a free 15 GB Drive account, and re-downloading after a disconnect costs ten minutes against a quota you cannot exceed.
 
 **A torchao version conflict** (0.10.0 installed against a >0.16.0 requirement) blocked LoRA training entirely for an afternoon, resolved by rewriting the notebook's install cells to build around Colab's preinstalled torch rather than against it.
 
@@ -283,7 +283,7 @@ The end state is one command that works the same from any CUDA box:
 scripts/reproduce.sh configs/gemma2-2b_bio.yaml --stages original,crisp
 ```
 
-which is fetch → evaluate the original model → train CRISP → train RMU → train ELM → write the table → render the figures. It resolves dtype from the card (bf16 on Ampere and newer, fp32 on a T4 — training runs without a gradient scaler, so fp16 there would give silent NaNs where fp32 gives a clean OOM), skips any stage whose result JSON already exists so an interrupted session resumes, and forwards unknown flags to the CLI. Before committing GPU-hours, `scripts/reproduce.sh configs/smoke.yaml` exercises the whole path in about a minute on a tiny random model with no gated downloads and no GPU.
+which is fetch, then evaluate the original model, train CRISP, train RMU, train ELM, write the table and render the figures. It resolves dtype from the card (bf16 on Ampere and newer, fp32 on a T4, since training runs without a gradient scaler and fp16 there would give silent NaNs where fp32 gives a clean OOM), skips any stage whose result JSON already exists so an interrupted session resumes, and forwards unknown flags to the CLI. Before committing GPU-hours, `scripts/reproduce.sh configs/smoke.yaml` exercises the whole path in about a minute on a tiny random model with no gated downloads and no GPU.
 
 ## Appendix C: where the 48 minutes went
 
@@ -299,8 +299,41 @@ which is fetch → evaluate the original model → train CRISP → train RMU →
 | MCQ eval + generations | ~1 min |
 | **judge, CRISP stage** | **19 min 44 s** |
 
-**The judge is 37 of the 48 minutes — 78 percent.** The thing being reproduced — feature selection, training, and the accuracy numbers the claim rests on — is under five minutes.
+**The judge is 37 of the 48 minutes, 78 percent.** The thing being reproduced, feature selection and training and the accuracy numbers the claim rests on, is under five minutes.
 
-The reason is that the rater scores a hundred prefixes twice, for fluency and for concept, and it is a thinking checkpoint, so it spends most of its 2,048-token budget reasoning before emitting the number that gets parsed. The tell is the 3-of-200 and 4-of-200 unparsed ratings: those hit the cap mid-reasoning, which means the rest are using most of it. Batching helped — sixteen at a time took this from about a hundred minutes down to eighteen per stage — but batching divides the number of batches, not the tokens each sequence has to decode, so there is a floor.
+The reason is that the rater scores a hundred prefixes twice, for fluency and for concept, and it is a thinking checkpoint, so it spends most of its 2,048-token budget reasoning before emitting the number that gets parsed. The tell is the 3-of-200 and 4-of-200 unparsed ratings: those hit the cap mid-reasoning, which means the rest are using most of it. Batching helped, and sixteen at a time took this from about a hundred minutes down to eighteen per stage, but batching divides the number of batches, not the tokens each sequence has to decode, so there is a floor.
 
 The practical consequence is that dropping the judge while iterating is a tenfold speedup and costs only the two columns that are broken anyway. A non-thinking rater for the final table is the other obvious fix. And separately, the 3 minutes 40 seconds per training stage spent reading a 2.5 GB corpus over a Drive FUSE mount is pure accounting error on my part, fixed by copying to local disk once per session.
+
+## References
+
+**The paper under reproduction**
+
+* Ashuach, Arad, Mueller, Tutek & Belinkov. [CRISP: Persistent Concept Unlearning via Sparse Autoencoders](https://arxiv.org/abs/2508.13650). ACL 2026.
+
+**The benchmark and the baselines it ships with**
+
+* Li et al. [The WMDP Benchmark: Measuring and Reducing Malicious Use With Unlearning](https://arxiv.org/abs/2403.03218). ICML 2024. Source of both the multiple-choice benchmark and the RMU baseline.
+* Gandikota et al. [Erasing Conceptual Knowledge from Language Models](https://arxiv.org/abs/2410.02760). The ELM baseline.
+* Eldan & Russinovich. [Who's Harry Potter? Approximate Unlearning in LLMs](https://arxiv.org/abs/2310.02238). The other benchmark CRISP reports, and the one the authors' demo notebook uses.
+* Hendrycks et al. [Measuring Massive Multitask Language Understanding](https://arxiv.org/abs/2009.03300). ICLR 2021. The MMLU utility column.
+
+**Model and SAEs**
+
+* Gemma Team. [Gemma 2: Improving Open Language Models at a Practical Size](https://arxiv.org/abs/2408.00118).
+* Lieberum et al. [Gemma Scope: Open Sparse Autoencoders Everywhere All At Once on Gemma 2](https://arxiv.org/abs/2408.05147). The pretrained SAEs this reproduction loads.
+* Rajamanoharan et al. [Jumping Ahead: Improving Reconstruction Fidelity with JumpReLU Sparse Autoencoders](https://arxiv.org/abs/2407.14435). The activation function in eq. 1.
+* Bricken et al. [Towards Monosemanticity: Decomposing Language Models With Dictionary Learning](https://transformer-circuits.pub/2023/monosemantic-features). Background on why features rather than neurons.
+* Hu et al. [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685).
+
+**Why a benchmark drop is weaker evidence than it looks**
+
+* Lynch et al. [Eight Methods to Evaluate Robust Unlearning in LLMs](https://arxiv.org/abs/2402.16835).
+* Deeb & Roger. [Do Unlearning Methods Remove Information from Language Model Weights?](https://arxiv.org/abs/2410.08827). Relearning on a small sample recovers much of what was supposedly removed.
+* Łucki et al. [An Adversarial Perspective on Machine Unlearning for AI Safety](https://arxiv.org/abs/2409.18025). Directly targets RMU and WMDP.
+* Maini et al. [TOFU: A Task of Fictitious Unlearning for LLMs](https://arxiv.org/abs/2401.06121). On the difficulty of evaluating unlearning at all.
+
+**SAE steering as the inference-time alternative**
+
+* Templeton et al. [Scaling Monosemanticity: Extracting Interpretable Features from Claude 3 Sonnet](https://transformer-circuits.pub/2024/scaling-monosemanticity).
+* Farrell, Lau & Conmy. [Applying Sparse Autoencoders to Unlearn Knowledge in Language Models](https://arxiv.org/abs/2410.19278). The closest prior work: SAE feature clamping on WMDP Bio, at inference time.
