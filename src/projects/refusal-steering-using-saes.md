@@ -2,7 +2,14 @@
 title: Refusal Steering with Sparse Autoencoders
 date: 2026-08-11
 lead: testing when sparse-autoencoder features are worth their cost over simple linear directions for detecting and steering refusal in language models.
-topics: [mechanistic-interpretability, sparse-autoencoders, refusal-steering, llm-safety, gemma]
+topics:
+  [
+    mechanistic-interpretability,
+    sparse-autoencoders,
+    refusal-steering,
+    llm-safety,
+    gemma,
+  ]
 image: https://raw.githubusercontent.com/sagnikc395/refusal-steering-using-saes/main/artifacts/figures/effect_versus_cost.png
 subimages:
   - https://raw.githubusercontent.com/sagnikc395/refusal-steering-using-saes/main/artifacts/sweep/figures/dose_response.png
