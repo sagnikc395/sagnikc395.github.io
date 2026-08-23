@@ -16,8 +16,8 @@ const Footer: React.FC = () => {
       <div className="flex items-center space-x-4">
         <span className="text-stone-100">Github</span>
         <hr className="w-full mt-0.5 border-stone-700 border-dotted" />
-        <a className="link" href="https://github.com/sagnik395">
-          @sagnik395
+        <a className="link" href="https://github.com/sagnikc395">
+          @sagnikc395
         </a>
       </div>
       <div className="flex items-center space-x-4">

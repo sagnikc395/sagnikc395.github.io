@@ -9,7 +9,7 @@ const Home: React.FC = () => {
 
       const script = document.createElement("script");
       script.id = "umaring_js";
-      script.src = "https://umaring.mkr.cx/ring.js?id=sagnikc395";
+      script.src = "https://umaring.mkr.cx/ring.js?id=sagnikc395&mode=link";
       script.async = true;
       document.body.appendChild(script);
     });
@@ -97,14 +97,22 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-center space-y-6">
-          <div className="bg-[#881c1c] p-[15px] rounded-[12px] inline-block shadow-[0_4px_15px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out border-2 border-[#5e1414] font-sans hover:translate-y-[-5px] hover:shadow-[0_8px_25px_rgba(136,28,28,0.3)]">
-            <div
-              id="umaring"
-              className="text-white !no-underline font-bold"
-            ></div>
+        <nav className="umaring" aria-label="UMass Amherst web ring">
+          <p className="umaring-label">
+            <span aria-hidden="true" className="umaring-dot" />
+            UMass web ring
+          </p>
+
+          <div className="umaring-links">
+            <a id="umaring_prev" className="umaring-link umaring-link-prev">
+              Previous site
+            </a>
+            <span className="umaring-divider" aria-hidden="true" />
+            <a id="umaring_next" className="umaring-link umaring-link-next">
+              Next site
+            </a>
           </div>
-        </div>
+        </nav>
       </div>
     </>
   );

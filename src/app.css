@@ -47,6 +47,48 @@ hr {
   @apply text-stone-100 text-xl font-semibold mb-4;
 }
 
+/* UMass web ring */
+.umaring {
+  @apply w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3;
+  @apply border-y border-stone-800 py-4 text-sm;
+}
+
+.umaring-label {
+  @apply flex items-center gap-2 text-stone-500 uppercase tracking-[0.16em] text-[0.68rem] font-semibold;
+}
+
+.umaring-dot {
+  @apply block size-1.5 rounded-full bg-red-400;
+  box-shadow: 0 0 0 3px rgb(248 113 113 / 0.1);
+}
+
+.umaring-links {
+  @apply flex items-center gap-3 text-stone-300;
+}
+
+.umaring-link {
+  @apply relative transition-colors duration-200 hover:text-stone-50;
+}
+
+.umaring-link-prev::before {
+  content: "\2190";
+  @apply mr-1.5 text-stone-600 transition-colors duration-200;
+}
+
+.umaring-link-next::after {
+  content: "\2192";
+  @apply ml-1.5 text-stone-600 transition-colors duration-200;
+}
+
+.umaring-link:hover::before,
+.umaring-link:hover::after {
+  @apply text-red-400;
+}
+
+.umaring-divider {
+  @apply h-4 w-px bg-stone-800;
+}
+
 .md-output p {
   @apply mb-4 leading-7;
 }
