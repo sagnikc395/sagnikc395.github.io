@@ -76,9 +76,9 @@ const Home: React.FC = () => {
               , with a focus on understanding{" "}
               <b>what's actually happening inside neural networks</b> and
               building systems that can <b>reason, plan, and act</b> in the
-              world. I'm interested in reverse-engineering model internals —
-              circuits, features, attention patterns — and using those insights
-              to build more reliable and steerable AI systems.
+              world. I'm interested in reverse-engineering model internals,
+              including circuits, features, and attention patterns, and using
+              those insights to build more reliable and steerable AI systems.
             </p>
 
             <p>
@@ -88,8 +88,8 @@ const Home: React.FC = () => {
                 model behavior
               </b>
               . I'm particularly drawn to questions about how capabilities
-              emerge in transformers — things like{" "}
-              <b>superposition, polysemanticity, and in-context learning</b> —
+              emerge in transformers, including{" "}
+              <b>superposition, polysemanticity, and in-context learning</b>,
               and how a clearer mechanistic picture can inform the design of
               better <b>tool-using and reasoning agents</b>. More broadly, I
               care about making AI systems we can actually understand and trust.
@@ -104,36 +104,6 @@ const Home: React.FC = () => {
               className="text-white !no-underline font-bold"
             ></div>
           </div>
-        </div>
-
-        <hr className="border-stone-800" />
-
-        {/* other stuff that interests me */}
-        <div className="text-center text-stone-200 pb-10 flex flex-col">
-          <p>
-            Other interests: endurance running, watching{" "}
-            <a
-              href="https://www.youtube.com/shorts/pch-oIxAnUg"
-              className="p-2 underline"
-            >
-              F1
-            </a>{" "}
-            and{" "}
-            <a
-              href="https://www.youtube.com/shorts/vJqNDSuiEJ8"
-              className="p-2 underline"
-            >
-              Premier League
-            </a>
-            , and I also{" "}
-            <a
-              className="p-2 underline"
-              href="https://substack.com/@sagnietzche"
-            >
-              write about
-            </a>{" "}
-            TV shows and movies
-          </p>
         </div>
       </div>
     </>
