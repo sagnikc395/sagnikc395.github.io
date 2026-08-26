@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 const links = [
   { name: "projects", href: "/projects" },
   { name: "blog", href: "/blog" },
+  { name: "reading", href: "/reading-list" },
 ];
 
 const Header: React.FC = () => {

@@ -66,6 +66,9 @@ function markdown() {
       const [filePath, query = ""] = id.split("?", 2);
 
       if (/\.md$/.test(filePath)) {
+        // Let Vite's built-in raw loader return markdown source for data files.
+        if (new URLSearchParams(query).has("raw")) return null;
+
         const metadataOnly = new URLSearchParams(query).has("meta");
         let frontmatter = {};
         let content = src;
