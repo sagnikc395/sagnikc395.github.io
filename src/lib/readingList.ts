@@ -3,6 +3,7 @@ export interface ReadingItem {
   title: string;
   url: string;
   note: string;
+  done: boolean;
 }
 
 export interface ReadingMonth {
@@ -35,10 +36,13 @@ export function parseReadingList(source: string): ReadingItem[] {
   return source
     .split("\n")
     .map((line) => {
-      const item = line.match(/^\s*[-*]\s+(\d{4}-\d{2}-\d{2})\s+(.+)$/);
+      const item = line.match(
+        /^\s*[-*]\s+(?:\[([ xX])\]\s+)?(\d{4}-\d{2}-\d{2})\s+(.+)$/,
+      );
       if (!item) return null;
 
-      const [, date, body] = item;
+      const [, check, date, body] = item;
+      const done = check ? check.toLowerCase() === "x" : false;
       if (!validDate(date)) return null;
 
       const markdownLink = body.match(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/);
@@ -53,7 +57,7 @@ export function parseReadingList(source: string): ReadingItem[] {
         .replace(/^[-:,\s]+/, "")
         .trim();
 
-      return { date, title, url, note };
+      return { date, title, url, note, done };
     })
     .filter((item): item is ReadingItem => Boolean(item))
     .sort((a, b) => b.date.localeCompare(a.date));

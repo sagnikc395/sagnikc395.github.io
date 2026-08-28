@@ -1,5 +1,5 @@
 type IdleHandle = {
-  id: number;
+  id: number | ReturnType<typeof setTimeout>;
   type: "idle" | "timeout";
 };
 
@@ -22,9 +22,9 @@ export function cancelIdleRun(handle: IdleHandle) {
     handle.type === "idle" &&
     typeof window.cancelIdleCallback === "function"
   ) {
-    window.cancelIdleCallback(handle.id);
+    window.cancelIdleCallback(handle.id as number);
     return;
   }
 
-  globalThis.clearTimeout(handle.id);
+  globalThis.clearTimeout(handle.id as never);
 }

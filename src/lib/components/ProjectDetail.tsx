@@ -29,13 +29,17 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
 
       {/* project body */}
       <div className="grid md:grid-cols-3 gap-6 items-start">
-        {/* main image */}
+        {/* main image — Svelte-level LCP: lazy offscreen, decode async */}
         {data.image && (
           <div className="md:col-span-1">
             <a rel="external" href={getImageUrl(data.image)}>
               <img
                 src={getImageUrl(data.image)}
                 alt={`${data.title} preview image`}
+                loading="lazy"
+                decoding="async"
+                width={640}
+                height={360}
                 className="rounded-lg shadow-sm max-h-64 object-cover w-full"
               />
             </a>
@@ -48,7 +52,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
         </div>
       </div>
 
-      {/* subimages */}
+      {/* subimages — lazy + async decode for offscreen */}
       {data.subimages && (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
           {data.subimages.map((image, index) => (
@@ -56,6 +60,10 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
               <img
                 src={getImageUrl(image)}
                 alt={`${data.title} subimage`}
+                loading="lazy"
+                decoding="async"
+                width={400}
+                height={300}
                 className="rounded-lg shadow-sm object-cover w-full max-h-48"
               />
             </a>

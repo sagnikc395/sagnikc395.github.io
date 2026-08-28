@@ -1,8 +1,9 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Header from "./lib/components/Header";
 import Footer from "./lib/components/Footer";
 import Home from "./pages/Home";
+import { runWhenIdle } from "./lib/idle";
 
 const Projects = React.lazy(() => import("./pages/Projects"));
 const ProjectPage = React.lazy(() => import("./pages/ProjectPage"));
@@ -10,11 +11,28 @@ const Blog = React.lazy(() => import("./pages/Blog"));
 const BlogPost = React.lazy(() => import("./pages/BlogPost"));
 const ReadingList = React.lazy(() => import("./pages/ReadingList"));
 
+// SvelteKit-like prefetch: warm up route chunks on idle so navigation is instant
+function usePrefetchRoutes() {
+  useEffect(() => {
+    const handle = runWhenIdle(() => {
+      void import("./pages/Blog");
+      void import("./pages/Projects");
+      void import("./pages/ReadingList");
+    });
+    return () => {
+      // idle handle cleanup via runWhenIdle's cancel not needed here (no cancelIdleRun import to avoid cycle)
+      // prefetch is best-effort; no cleanup
+      void handle;
+    };
+  }, []);
+}
+
 const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <main>{children}</main>;
 };
 
 const App: React.FC = () => {
+  usePrefetchRoutes();
   return (
     <div className="min-h-screen flex flex-col">
       <Header />

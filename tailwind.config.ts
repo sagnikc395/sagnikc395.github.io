@@ -1,6 +1,8 @@
-/** @type {import('tailwindcss').Config} */
+import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
+
 export default {
-  content: ["./src/**/*.{html,js,svelte,ts,tsx,jsx}"],
+  content: ["./src/**/*.{html,ts,tsx}"],
   darkMode: "selector",
   theme: {
     extend: {
@@ -12,8 +14,5 @@ export default {
       },
     },
   },
-  plugins: [
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require("@tailwindcss/typography"),
-  ],
-};
+  plugins: [typography],
+} satisfies Config;

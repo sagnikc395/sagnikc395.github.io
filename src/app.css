@@ -181,3 +181,10 @@ html .shiki span {
   font-weight: var(--shiki-dark-font-weight) !important;
   text-decoration: var(--shiki-dark-text-decoration) !important;
 }
+
+/* Svelte-level perf: offscreen content skips rendering, like Svelte's fine-grained updates */
+.prose,
+.md-output {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1000px;
+}
