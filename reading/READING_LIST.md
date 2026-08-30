@@ -6,3 +6,4 @@ Bare bullets without a checkbox are treated as to-read.
 The page sorts them newest first. Checking/unchecking in the UI saves locally (localStorage) and overrides the file's `[x]` default.
 
 - 2026-08-25 [Reinforcement Learning for LLMS](https://cameronrwolfe.substack.com/p/llm-rl)
+- 2026-08-30 [Current AI seems pretty misaligned](https://www.lesswrong.com/posts/WewsByywWNhX9rtwi/current-ais-seem-pretty-misaligned-to-me)
