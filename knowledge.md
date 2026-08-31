@@ -41,3 +41,6 @@ React 19 SPA (Vite 6, TypeScript, Tailwind CSS v4) with custom build-time Markdo
 - `static/` is Vite's publicDir (copied verbatim to dist); `dist/` is build output (gitignored).
 - Deployed via GitHub Pages (user site, repo name = domain); `vercel.json` present but Pages is the deploy target.
 - No unit-test framework; the only automated check is `npm run check:reading-list`.
+
+# Agent Configuration
+- Import skills from: ./.agents/skills/SKILL.md

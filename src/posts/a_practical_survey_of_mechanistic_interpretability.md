@@ -2,7 +2,14 @@
 title: "A Practical Survey of Mechanistic Interpretability Techniques"
 date: 2026-08-23
 description: "A plain-English guide to the most widely used techniques for studying how neural networks represent information and produce behavior, with the benefits and limits of each method."
-tags: [machine-learning, interpretability, mechanistic-interpretability, transformers, llm]
+tags:
+  [
+    machine-learning,
+    interpretability,
+    mechanistic-interpretability,
+    transformers,
+    llm,
+  ]
 references:
   - title: "A Mathematical Framework for Transformer Circuits"
     url: https://transformer-circuits.pub/2021/framework/index.html
@@ -93,7 +100,7 @@ Some heads attend to the previous token, matching punctuation, repeated names, o
 
 **Main limitation:** attention weights are not the same as causal importance. A head can place a large weight on a token while writing little useful information to the residual stream. Conversely, a modest attention weight can have a large effect if the associated value vector is important. Attention analysis should therefore include the head's output and, ideally, an intervention.
 
-In short, attention weights show where a head reads from. They do not, by themselves, tell us what the head reads or whether the result matters.
+So attention weights show where a head reads from. They do not, by themselves, tell us what the head reads or whether the result matters.
 
 ## 3. Logit Lens and Direct Logit Attribution
 
@@ -172,7 +179,7 @@ Manual circuit discovery can be slow, so automated methods score nodes or edges 
 
 **Main limitation:** a circuit is always defined relative to a task, dataset, metric, and level of abstraction. A circuit found on a narrow template may not generalize to natural inputs. Gradient-based approximations can miss nonlinear interactions, while exhaustive causal testing is expensive.
 
-A convincing circuit should satisfy at least three tests: it should be faithful to the original model, sufficient to reproduce much of the behavior, and robust across a meaningful range of examples.
+A convincing circuit should satisfy at least three tests: it should be faithful to the original model, sufficient to reproduce much of the behavior, and hold up across a meaningful range of examples.
 
 ## 9. Sparse Autoencoders and Dictionary Learning
 
@@ -213,18 +220,18 @@ Sparse autoencoders can enter this workflow when neurons are too mixed to serve 
 
 ## A Compact Comparison
 
-| Technique | Primary question | Main benefit | Main caution |
-| --- | --- | --- | --- |
-| Activation inspection | What activates here? | Fast hypothesis generation | Correlation is not causation |
-| Attention analysis | Where does a head read from? | Reveals token relationships | Attention weight is not importance |
-| Logit lens | How does the prediction develop? | Connects states to vocabulary | Intermediate decoding can mislead |
-| Probing | What information is decodable? | Quantitative representation test | Decodable does not mean used |
-| Ablation | Is this component necessary? | Simple causal evidence | Intervention may be unnatural |
-| Activation patching | Where is causal information carried? | Precise localization | Sensitive to baselines and metrics |
-| Path patching | Which connection carries the effect? | Reveals information flow | Expensive and combinatorial |
-| Circuit discovery | What subgraph implements the behavior? | Algorithm-level explanation | Often task-specific |
-| Sparse autoencoders | What features lie behind mixed neurons? | Handles superposition | Learned features are imperfect |
-| Steering | Does changing the feature alter behavior? | Causal validation and control | Strong edits may be artificial |
+| Technique             | Primary question                          | Main benefit                     | Main caution                       |
+| --------------------- | ----------------------------------------- | -------------------------------- | ---------------------------------- |
+| Activation inspection | What activates here?                      | Fast hypothesis generation       | Correlation is not causation       |
+| Attention analysis    | Where does a head read from?              | Reveals token relationships      | Attention weight is not importance |
+| Logit lens            | How does the prediction develop?          | Connects states to vocabulary    | Intermediate decoding can mislead  |
+| Probing               | What information is decodable?            | Quantitative representation test | Decodable does not mean used       |
+| Ablation              | Is this component necessary?              | Simple causal evidence           | Intervention may be unnatural      |
+| Activation patching   | Where is causal information carried?      | Precise localization             | Sensitive to baselines and metrics |
+| Path patching         | Which connection carries the effect?      | Reveals information flow         | Expensive and combinatorial        |
+| Circuit discovery     | What subgraph implements the behavior?    | Algorithm-level explanation      | Often task-specific                |
+| Sparse autoencoders   | What features lie behind mixed neurons?   | Handles superposition            | Learned features are imperfect     |
+| Steering              | Does changing the feature alter behavior? | Causal validation and control    | Strong edits may be artificial     |
 
 ## What Counts as Good Evidence?
 
@@ -238,9 +245,7 @@ Third, distinguish necessity from sufficiency. Ablation tests whether a componen
 
 Fourth, test generalization. An explanation found on one prompt template may describe that template rather than the underlying behavior. Evaluation should vary wording, entities, positions, and difficulty.
 
-Finally, keep the claim proportional to the evidence. A probe supports a statement about decodability. Patching supports a statement about causal mediation under a particular counterfactual. A robust circuit requires both localization and a tested account of component interactions.
-
-## Conclusion
+Finally, keep the claim proportional to the evidence. A probe supports a statement about decodability. Patching supports a statement about causal mediation under a particular counterfactual. A circuit that survives controls requires both localization and a tested account of component interactions.
 
 There is no single best mechanistic interpretability technique. The field works through a ladder of evidence. Visualization suggests what a component might represent. Probing measures whether information is available. Ablation and patching test whether it matters. Path analysis and circuit discovery explain how the pieces interact. Sparse autoencoders provide alternative units when neurons are too entangled, while steering tests whether those units can control behavior.
 

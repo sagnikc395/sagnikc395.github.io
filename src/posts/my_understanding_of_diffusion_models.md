@@ -1,10 +1,10 @@
 ---
 title: My Teeny Tiny Understanding of Diffusion Models
-date: 2026-3-10
+date: 2026-03-10
 image:
 ---
 
-_(This took a lot of time to write, as I had to traverse through my course notes again and refer to sources , and Im really glad I did that as it really solidified the understanding of the topic not only from an exam perspective but also really really understand how modern diffusion models came into being)_
+_(I wrote this after re-reading my course notes and the sources behind them. It helped the ideas stick far better than exam prep alone did.)_
 
 # From Noise to Cats: A Deep Dive into Normalizing Flows and Diffusion Models
 
@@ -37,7 +37,7 @@ Here is the core recipe shared by nearly all deep generative models:
 
 The transformation T_w is a neural network with learnable parameters w. The idea is that if T_w is expressive enough, it can warp the simple Gaussian into whatever complicated shape the data actually lives on.
 
-Generating samples is easy — just draw z and compute T_w(z). But computing the _probability_ of a given data point x is the hard part, and how different models handle it is what separates normalizing flows from diffusion models.
+Generating samples is easy — just draw z and compute T*w(z). But computing the \_probability* of a given data point x is the hard part, and how different models handle it is what separates normalizing flows from diffusion models.
 
 ## Part I: Normalizing Flows
 
@@ -276,7 +276,7 @@ P_φ(x_{i-1} | x_i) = N(x_{i-1} | μ_φ(x_i, i),  σ²(i) · I)
 
 Here μ*φ is a neural network — in practice typically a large U-Net or Transformer — that takes the noisy image x_i and the time step i as inputs, and predicts the mean of a Gaussian for the denoised x*{i-1}.
 
-This is the liberating feature of diffusion models. The neural network does **not** need to be invertible. It has no Jacobian constraint. It can be any architecture, unconstrained by any structural requirement. This is why diffusion models can leverage the most powerful neural networks that exist.
+This is the liberating feature of diffusion models. The neural network does **not** need to be invertible. It has no Jacobian constraint. It can be any architecture, unconstrained by any structural requirement. This is why diffusion models can use the most powerful neural networks that exist.
 
 We also define P_φ(x_L) = N(0, I), since the forward process ends near a standard Gaussian.
 
@@ -317,7 +317,7 @@ Substituting in P*φ(x*{i-1}|x*i) = N(μ*φ(x_i, i), σ²(i)·I) and taking the 
 ELBO(x₀)  =  C'  -  Σ_{i=1}^{L}  E_q[  1/(2σ²(i))  ·  ‖x_{i-1} - μ_φ(x_i, i)‖²  ]
 ```
 
-This is **mean-squared error regression**. The model μ*φ is trained to predict x*{i-1} (the slightly less noisy image) from x_i (the slightly more noisy image). All the variational machinery, the entire forward process derivation — it collapses to: _train a neural network to denoise images_. That's the training objective.
+This is **mean-squared error regression**. The model μ*φ is trained to predict x*{i-1} (the slightly less noisy image) from x*i (the slightly more noisy image). All the variational machinery, the entire forward process derivation — it collapses to: \_train a neural network to denoise images*. That's the training objective.
 
 ### Training Algorithm
 
@@ -380,7 +380,7 @@ The general principle is this: _when you cannot compute the marginal likelihood 
 
 **Expressiveness vs. tractability never goes away.** Every method in probabilistic machine learning navigates some version of this tradeoff. Normalizing flows sit at one extreme: exact computation, constrained architecture. Diffusion models sit at another: approximate computation via ELBO, unconstrained architecture. Understanding the tradeoff explicitly is what lets you reason about why one approach might be better for a given problem — and what the next generation of methods might look like.
 
-## Summary: The Essential Math
+## The Essential Math
 
 **Normalizing Flows — Change of Variables:**
 
@@ -432,7 +432,7 @@ min_φ  Σ_{i=1}^{L}  E_q[  ‖x_{i-1} - μ_φ(x_i, i)‖²  ]
 
 Which in practice means: train a neural network to predict the denoised image from the noisy one, at random noise levels.
 
-## Final Thought
+## Closing thought
 
 What I find most compelling about these two models is that they represent two completely different philosophical stances toward the same problem — and both stances are internally consistent and mathematically principled.
 

@@ -20,7 +20,7 @@ references:
 
 _Course project for CS685 Advanced Natural Language Processing, UMass Amherst, Fall 2025. Joint work with Atharva Patil and Sricharan Ramesh. Code on [GitHub](https://github.com/atharvadpatil/DualTrack-COT)._
 
-_Read the full [paper](https://arxiv.org/abs/2604.25039)
+_Read the full [paper](https://arxiv.org/abs/2604.25039)_
 
 ## Motivation
 
@@ -70,7 +70,7 @@ The non-fine-tuned Dual CoT at 24% was the clearest result: naive prompted multi
 
 Fine-tuning recovers most of the gap. The Decomposer alone reaches 68%, and adding the Evaluator brings it to 72%. The 4-point difference between these isn't statistically significant at n=50 (the CIs overlap), but the Dual CoT variant exposes interpretable intermediate reasoning — you can inspect exactly where and why the model went wrong.
 
-The plain CoT baseline at 78% is worth discussing. It benefits from the model seeing the entire problem in a single forward pass without the overhead of structured interaction. Our system pays a tax for the step-by-step protocol: more calls, more formatting tokens, more opportunities for the Evaluator to mis-score a good step. The question is whether this tax buys you something under constrained budgets.
+The plain CoT baseline at 78% needs explaining. It benefits from the model seeing the entire problem in a single forward pass without the overhead of structured interaction. Our system pays a tax for the step-by-step protocol: more calls, more formatting tokens, more opportunities for the Evaluator to mis-score a good step. The question is whether this tax buys you something under constrained budgets.
 
 ### Token-Constrained Setting
 

@@ -1,7 +1,7 @@
 ---
 title: "Does Showing Your Work Help LLMs Learn Tools? A Continual Learning Experiment"
 date: 2026-05-10
-tags: [nlp, llm, continual-learning, tool-use, qlora, fine-tuning,agents]
+tags: [nlp, llm, continual-learning, tool-use, qlora, fine-tuning, agents]
 ---
 
 # Does Showing Your Work Help LLMs Learn Tools?
@@ -31,22 +31,22 @@ Everything else was held constant — same base model, same QLoRA hyperparameter
 
 The clearest result came from the full held-out generation evaluation after training through all four blocks:
 
-| Condition | Exact Full-Call Accuracy | API-Name Accuracy |
-|-----------|--------------------------|-------------------|
-| A: Stripped context | 39.2% | 66.6% |
-| B: Trajectory context | **56.9%** | **74.3%** |
+| Condition             | Exact Full-Call Accuracy | API-Name Accuracy |
+| --------------------- | ------------------------ | ----------------- |
+| A: Stripped context   | 39.2%                    | 66.6%             |
+| B: Trajectory context | **56.9%**                | **74.3%**         |
 
 That's a 17.7 percentage point gap on exact full-call accuracy. Condition B also scored higher on every individual domain block, not just on average.
 
 The error breakdown tells the more interesting story. At the final stage, Condition A made **102 wrong-API errors** — cases where the model picked the entirely wrong tool. Condition B made only **12**. Keeping the trajectory context dramatically improved tool selection.
 
-There's a catch though. Condition B also produced more malformed or unparseable calls (101 vs. 45 for A). Having access to the full action-observation history helped the model identify *what* to call, but longer prompts made it harder to produce a perfectly formatted call. Our parser is strict — a call with the right API name and nearly-correct parameters still counts as failure if the string doesn't exactly match.
+There's a catch though. Condition B also produced more malformed or unparseable calls (101 vs. 45 for A). Having access to the full action-observation history helped the model identify _what_ to call, but longer prompts made it harder to produce a perfectly formatted call. Our parser is strict — a call with the right API name and nearly-correct parameters still counts as failure if the string doesn't exactly match.
 
 On the continual learning side, the sampled evaluation during training showed that B had higher forward transfer (33.3 vs. 22.9) and higher final average accuracy (53.9 vs. 38.3), but also more negative backward transfer (-13.5 vs. -10.4). Neither condition escaped forgetting — this is a known problem with sequential fine-tuning without replay — but B generally ended up in a better place.
 
 ## Why Does Trajectory Context Help?
 
-The intuition is that an action-observation sequence gives the model more signal about *what the task actually requires*. When you see "the previous call returned X, and now I need to do Y," you have a richer picture of the workflow than if you only see the final request for Y. This is especially useful for picking the right tool, because the prior context constrains which APIs are plausible next steps.
+The intuition is that an action-observation sequence gives the model more signal about _what the task actually requires_. When you see "the previous call returned X, and now I need to do Y," you have a richer picture of the workflow than if you only see the final request for Y. This is especially useful for picking the right tool, because the prior context constrains which APIs are plausible next steps.
 
 This connects to process supervision work in reasoning (Lightman et al., "Let's Verify Step by Step"), which showed that step-level supervision can outperform final-answer supervision for math problems. Our setup is different — API traces are external interaction records, not human reasoning traces — but the underlying hypothesis is similar: intermediate steps carry information that final outputs lose.
 
@@ -54,7 +54,7 @@ This connects to process supervision work in reasoning (Lightman et al., "Let's 
 
 Condition B uses 25.1% more training tokens (2.32M vs. 1.86M) because trajectory prompts are longer. More data can help even if the extra content doesn't causally matter. We only ran one seed, so there are no confidence intervals. And API-Bank traces are structured and partly synthetic, which makes them a cleaner testbed than real-world tool-use data but also limits how much we can generalize.
 
-So the honest summary is: trajectory context is associated with better performance in this setup, but we can't fully isolate whether it's the *content* of the trajectory or simply the *additional tokens* that explain the gap.
+So the honest summary is: trajectory context is associated with better performance in this setup, but we can't fully isolate whether it's the _content_ of the trajectory or simply the _additional tokens_ that explain the gap.
 
 ## What's Next
 
@@ -66,4 +66,4 @@ For now, the experiment supports a hypothesis worth taking seriously: **when tra
 
 ---
 
-*This project was done with Vishnu Vardhan Reddy B and Soumik Bhatta for CS 590NN at UMass Amherst. Vishnu built the data preprocessing and evaluation pipeline, I handled the training notebook and continual-learning metrics, and Soumik did the error analysis and figures.*
+_This project was done with Vishnu Vardhan Reddy B and Soumik Bhatta for CS 590NN at UMass Amherst. Vishnu built the data preprocessing and evaluation pipeline, I handled the training notebook and continual-learning metrics, and Soumik did the error analysis and figures._
