@@ -62,7 +62,7 @@ The most important follow-up is token-matched training — pad or truncate Condi
 
 Beyond that: longer task streams, semantic parameter scoring (so a nearly-correct call isn't a total failure), and eventually testing whether replay or retrieval methods interact differently with the two supervision formats.
 
-For now, the experiment supports a hypothesis worth taking seriously: **when training LLMs to use tools, showing the model what happened before — not just what needs to happen next — appears to help it learn which tool to reach for.** That's not nothing, even with the caveats.
+For now, the experiment supports a hypothesis to take seriously: **when training LLMs to use tools, showing the model what happened before — not just what needs to happen next — appears to help it learn which tool to reach for.** That's not nothing, even with the caveats.
 
 ---
 

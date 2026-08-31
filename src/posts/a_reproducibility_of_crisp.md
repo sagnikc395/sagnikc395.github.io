@@ -16,7 +16,7 @@ tags:
 
 ---
 
-## 1. What CRISP claims, and why it is worth checking
+## 1. What CRISP claims, and why I checked it
 
 The paper is [CRISP: Persistent Concept Unlearning via Sparse Autoencoders](https://arxiv.org/abs/2508.13650) (ACL 2026). Its headline row: Gemma-2-2B on WMDP Bio, 55.26 percent down to 29.67 percent, with MMLU essentially untouched at 46.33.
 
@@ -50,7 +50,7 @@ Note also that the two layer sets differ. Features are _read_ at layers 4, 6, 8,
 
 **The score.** Six metrics, aggregated as the harmonic mean of five rescaled axes: `Overall = HM(100−U, R, M, 50F, 50C)`, covering unlearn accuracy (lower better), in-domain retain accuracy, general MMLU, and a 0–2 fluency and concept rating from an LLM judge. A harmonic mean deliberately, so that a method scoring zero on any single axis scores near zero overall and you cannot win the benchmark by lobotomising the model.
 
-That design has teeth, and the teeth cut both ways. An aggregate that collapses when any one term approaches zero is dominated by its weakest measurement, which makes it fragile to a bad measurement as much as to a bad method. In the paper's own table, ELM's fluency of 0.25, rescaled to 12.5, is most of what drags its overall down to 33.93, so the headline "5 to 34 point" gap over baselines may be substantially a metric-design artifact worth isolating. I flagged that in my planning notes before running anything. Section 6 is the story of those teeth closing on me.
+That design has teeth, and the teeth cut both ways. An aggregate that collapses when any one term approaches zero is dominated by its weakest measurement, which makes it fragile to a bad measurement as much as to a bad method. In the paper's own table, ELM's fluency of 0.25, rescaled to 12.5, is most of what drags its overall down to 33.93, so the headline "5 to 34 point" gap over baselines may be substantially a metric-design artifact. I flagged that in my planning notes before running anything. Section 6 is the story of those teeth closing on me.
 
 ## 3. What I ran
 
@@ -128,7 +128,7 @@ Two candidates remain, and the reason I cannot separate them is a three-line log
 
 I picked 200 steps at batch size 2, which shows the model 400 target documents out of the 5,000 that get loaded, in 100 seconds of training on an A100. A flat unlearning loss is exactly what undertraining looks like. And there _is_ a number in the authors' released code, in the Harry Potter demo notebook: 625 batches at batch size 4, or 2,500 documents. **That is more than six times the training I gave it.** It is the only step count the authors publish anywhere, it is for a different corpus, and I did not find it until after the run. But on the single quantity the paper leaves free, I was off by a factor of six against the authors' own example, in the direction that produces exactly the symptom I saw.
 
-One observation cuts against this story, and it is worth stating against my own preferred explanation. Cyber's forget corpus is about a thousand documents rather than bio's five thousand, and the config takes all of them, so the same 400 documents are forty percent of everything there is rather than eight percent. The loss is just as flat:
+One observation cuts against this story, and I state it against my own preferred explanation. Cyber's forget corpus is about a thousand documents rather than bio's five thousand, and the config takes all of them, so the same 400 documents are forty percent of everything there is rather than eight percent. The loss is just as flat:
 
 ![four-panel training curve for cyber CRISP](/assets/images/crisp-training_gemma2-2b_cyber_crisp.png)
 
@@ -268,7 +268,7 @@ Testing is 43 tests in about two seconds with no gated downloads. The equations 
 
 ## Appendix B: the infrastructure detour
 
-More of the calendar went here than I would like, and it is worth recording because it is the part reproduction writeups usually omit.
+More of the calendar went here than I would like, and I record it because it is the part reproduction writeups usually omit.
 
 **An MLX backend, built and then deleted.** I wrote an `mlx-lm` evaluation backend to run MCQ scoring and generation on the M4's GPU. It worked. It could never train, because CRISP differentiates through per-layer residual activations and `mlx-lm` exposes neither forward hooks nor that autograd surface, so once training had to leave the laptop the backend was a second, quantised, inference-only code path that nothing reported from. Deleting it left one inference path again.
 

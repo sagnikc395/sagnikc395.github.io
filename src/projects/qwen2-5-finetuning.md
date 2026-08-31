@@ -29,7 +29,7 @@ references:
     author: Hugging Face Transformers
 ---
 
-## why i built this
+## Why I built this
 
 Fine-tuning a language model can look deceptively simple in a notebook. Load a model, create a trainer, call `train()`, and wait for a loss value. That is enough to get something running, but it hides most of the decisions that make the process work.
 
@@ -37,7 +37,7 @@ I built this project to unpack that pipeline one piece at a time. The goal was n
 
 The result is a 20-step supervised fine-tuning pipeline built around Qwen2.5-0.5B-Instruct, Unsloth, Hugging Face, TRL, and bitsandbytes. It is intentionally lightweight enough to run in Colab.
 
-## starting with a quantized model
+## Starting with a quantized model
 
 The base model is `Qwen2.5-0.5B-Instruct`, loaded in 4-bit precision through Unsloth. Quantization reduces the memory needed to hold the model, which makes this kind of experiment practical on limited hardware.
 
@@ -45,13 +45,13 @@ I added a check that walks through the model and looks for bitsandbytes `Linear4
 
 These checks made the setup feel less like magic. Before training anything, I could verify what had been loaded and whether the tokenizer was ready for batching.
 
-## adapting attention with LoRA
+## Adapting attention with LoRA
 
 Updating every weight in a language model would be wasteful for such a small experiment. Instead, I attach LoRA adapters to the query, key, value, and output projections in the attention layers: `q_proj`, `k_proj`, `v_proj`, and `o_proj`.
 
 LoRA keeps the quantized base model frozen and learns a much smaller set of low-rank matrices. In this project, the adapters use rank 8 and an alpha of 16. I count the trainable parameters after attaching them and compare that number with the total parameter count. Seeing that fraction makes the main benefit of LoRA concrete: only a small portion of the model needs to be updated.
 
-## preparing the training data
+## Preparing the training data
 
 To keep the mechanics visible, the project uses a tiny hand-written instruction dataset. Each example has an instruction and a response, which I convert into a consistent text format:
 
@@ -67,7 +67,7 @@ The formatted strings are placed in a Hugging Face `Dataset`. I also tokenize an
 
 This dataset is deliberately too small to produce a broadly useful model. Its purpose is to make the path through the training stack easy to inspect and debug.
 
-## running supervised fine-tuning
+## Running supervised fine-tuning
 
 Training is handled by TRL's `SFTTrainer`. The configuration uses a batch size of one, a learning rate of `2e-4`, an 8-bit AdamW optimizer, and five optimization steps. It selects BF16 when the available GPU supports it and otherwise uses FP16.
 
@@ -75,7 +75,7 @@ I also disable checkpoint saving and multiprocessing for this short run. Those c
 
 The trainer returns the final loss as a regular Python float. More importantly, the code keeps model loading, adapter setup, dataset construction, trainer creation, and training in separate functions. That separation makes it easier to replace one part without rewriting the rest of the pipeline.
 
-## generating with the tuned model
+## Generating with the tuned model
 
 After training, the model is switched into Unsloth's inference mode. A user instruction is formatted with Qwen's chat template, tokenized, and passed to greedy generation.
 
@@ -83,7 +83,7 @@ One implementation detail I wanted to get right was decoding only the new tokens
 
 The scaffold finishes with a few basic checks. It confirms that the model has parameters, that LoRA introduced a nonzero but small trainable subset, that the loss is valid, and that generation produced a nonempty string.
 
-## what i learned
+## What I learned
 
 The useful part of this project was not the five training steps. It was turning a familiar recipe into components I could reason about.
 
@@ -91,9 +91,9 @@ Quantization and LoRA solve different problems. Quantization makes the frozen ba
 
 Most of all, I came away with a better mental model of parameter-efficient fine-tuning. It is not one library call. It is a chain of small choices, and each choice can be checked.
 
-## limitations and next steps
+## Limitations and next steps
 
-This is a learning-oriented pipeline with three examples and a five-step training run. It does not include an evaluation set, multiple seeds, checkpoint comparison, or a meaningful measurement of generalization. The generated response only proves that the full path works.
+This is a learning-oriented pipeline with three examples and a five-step training run. It has no evaluation set, multiple seeds, checkpoint comparison, or a meaningful measurement of generalization. The generated response only proves that the full path works.
 
 A natural next version would use a real instruction dataset, separate training and validation splits, and compare the tuned model against the untouched base model. I would also track validation loss and task-level accuracy, then test different LoRA ranks and target modules. That would turn the implementation exercise into an actual fine-tuning experiment.
 
