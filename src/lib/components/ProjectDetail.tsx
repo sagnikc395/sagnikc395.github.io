@@ -2,7 +2,7 @@ import React from "react";
 import Markdown from "./Markdown";
 import type { Project } from "../types";
 import References from "./References";
-import { formatTime, isURL, getImageUrl } from "../utils";
+import { formatTime, getImageUrl } from "../utils";
 
 interface ProjectDetailProps {
   data: Project;
@@ -17,59 +17,40 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({
 }) => {
   return (
     <>
-      {/* project header */}
-      <h3 className="text-stone-100 text-xl md:text-2xl font-semibold mb-4 flex flex-wrap items-center break-words">
-        {data.title && <span className="mr-2">{data.title}</span>}
-        {data.date && (
-          <small className="text-stone-400 text-base font-normal">
-            {formatTime("%d %B %Y", data.date)}
-          </small>
-        )}
-      </h3>
-
-      {/* project body */}
-      <div className="grid md:grid-cols-3 gap-6 items-start">
-        {/* main image — Svelte-level LCP: lazy offscreen, decode async */}
-        {data.image && (
-          <div className="md:col-span-1">
-            <a rel="external" href={getImageUrl(data.image)}>
-              <img
-                src={getImageUrl(data.image)}
-                alt={`${data.title} preview image`}
-                loading="lazy"
-                decoding="async"
-                width={640}
-                height={360}
-                className="rounded-lg shadow-sm max-h-64 object-cover w-full"
-              />
-            </a>
-          </div>
-        )}
-
-        {/* description */}
-        <div className="md:col-span-2 prose prose-stone prose-invert prose-headings:font-semibold prose-a:text-blue-600 hover:prose-a:text-blue-800 max-w-none">
-          <Markdown source={data.content} />
-        </div>
-      </div>
-
-      {/* subimages — lazy + async decode for offscreen */}
-      {data.subimages && (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-          {data.subimages.map((image, index) => (
-            <a key={index} rel="external" href={getImageUrl(image)}>
-              <img
-                src={getImageUrl(image)}
-                alt={`${data.title} subimage`}
-                loading="lazy"
-                decoding="async"
-                width={400}
-                height={300}
-                className="rounded-lg shadow-sm object-cover w-full max-h-48"
-              />
-            </a>
-          ))}
-        </div>
+      <h2>{data.title}</h2>
+      {data.date && (
+        <p className="entry-meta small">{formatTime("%d %B %Y", data.date)}</p>
       )}
+
+      {data.image && (
+        <p>
+          <a rel="external" href={getImageUrl(data.image, imagePrefix, images)}>
+            <img
+              src={getImageUrl(data.image, imagePrefix, images)}
+              alt={`${data.title} preview`}
+              loading="lazy"
+              decoding="async"
+              width={640}
+              height={360}
+            />
+          </a>
+        </p>
+      )}
+
+      <Markdown source={data.content} />
+
+      {data.subimages?.map((image, index) => (
+        <p key={index}>
+          <a rel="external" href={getImageUrl(image, imagePrefix, images)}>
+            <img
+              src={getImageUrl(image, imagePrefix, images)}
+              alt={`${data.title} figure ${index + 1}`}
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
+        </p>
+      ))}
 
       <References references={data.references} />
     </>

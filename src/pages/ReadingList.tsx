@@ -32,17 +32,25 @@ const ReadingList: React.FC = () => {
     [items],
   );
   const [selectedYear, setSelectedYear] = useState(years[0] ?? "");
-  const [doneMap, setDoneMap] = useState<Record<string, boolean>>(() =>
-    loadDoneMap(),
-  );
+  // Read localStorage after mount, not during the first render: the prerendered
+  // HTML can only reflect the file's own checkmarks, so the client has to agree
+  // on that for one render before layering the reader's own state on top.
+  const [doneMap, setDoneMap] = useState<Record<string, boolean>>({});
+  const [restored, setRestored] = useState(false);
 
   useEffect(() => {
+    setDoneMap(loadDoneMap());
+    setRestored(true);
+  }, []);
+
+  useEffect(() => {
+    if (!restored) return;
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(doneMap));
     } catch {
       // ignore quota errors
     }
-  }, [doneMap]);
+  }, [doneMap, restored]);
 
   const isDone = (item: ReadingItem) => {
     const k = itemKey(item);
@@ -85,24 +93,25 @@ const ReadingList: React.FC = () => {
         description="What I am reading lately"
       />
 
-      <section className="layout-md">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-bold mb-3 text-stone-100">
-              Reading List
-            </h1>
-            <p className="text-sm md:text-lg text-stone-400">
-              <em>what I am reading lately</em>
-            </p>
-          </div>
+      <section className="wrap">
+        <h2>Reading list</h2>
+        <p className="muted">
+          What I am reading lately.
+          {totalForYear > 0 && (
+            <>
+              {" "}
+              {doneForYear} of {totalForYear} read in {selectedYear}.
+            </>
+          )}
+        </p>
 
-          {years.length > 1 && (
-            <label className="text-sm text-stone-500">
-              Year
+        {years.length > 1 && (
+          <p>
+            <label>
+              Year{" "}
               <select
                 value={selectedYear}
                 onChange={(event) => setSelectedYear(event.target.value)}
-                className="ml-3 rounded border border-stone-700 bg-stone-900 px-3 py-2 text-stone-200"
               >
                 {years.map((year) => (
                   <option key={year} value={year}>
@@ -111,78 +120,57 @@ const ReadingList: React.FC = () => {
                 ))}
               </select>
             </label>
-          )}
-        </div>
-
-        {totalForYear > 0 && (
-          <p className="mt-4 text-sm text-stone-500">
-            {doneForYear} / {totalForYear} read
-            {doneForYear > 0 && doneForYear < totalForYear
-              ? ` · ${totalForYear - doneForYear} to read`
-              : doneForYear === totalForYear
-                ? " · all done!"
-                : ""}
           </p>
         )}
 
-        <hr className="my-8 border-stone-800" />
-
         {months.length === 0 ? (
-          <p className="text-stone-500">No reading items yet.</p>
+          <p className="muted">No reading items yet.</p>
         ) : (
-          <div className="space-y-4">
-            {months.map((month, index) => (
-              <details
-                key={month.key}
-                open={index === 0}
-                className="border-b border-stone-800 pb-4"
-              >
-                <summary className="cursor-pointer select-none py-2 text-lg font-semibold text-stone-100 marker:text-stone-500">
-                  {month.label}
-                  <span className="ml-2 text-sm font-normal text-stone-500">
-                    {month.items.length}
-                  </span>
-                </summary>
+          months.map((month, index) => (
+            <details
+              key={month.key}
+              open={index === 0}
+              className="reading-month"
+            >
+              <summary>
+                {month.label}{" "}
+                <span className="entry-meta small">({month.items.length})</span>
+              </summary>
 
-                <ol className="mt-3 space-y-4">
-                  {month.items.map((item) => {
-                    const done = isDone(item);
-                    return (
-                      <li
-                        key={`${item.date}-${item.url}`}
-                        className={`flex gap-3 ${done ? "opacity-60" : ""}`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={done}
-                          onChange={() => toggleDone(item)}
-                          aria-label={`Mark "${item.title}" as ${done ? "to read" : "read"}`}
-                          className="mt-1 h-4 w-4 shrink-0 accent-stone-300"
-                        />
-                        <div className="min-w-0 flex-1">
-                          <a
-                            href={item.url}
-                            rel="external"
-                            className={`link ${done ? "text-stone-400 line-through decoration-stone-600" : "text-stone-100"}`}
-                          >
-                            {item.title}
-                          </a>
-                          <div className="mt-1 text-sm text-stone-500">
-                            {formatTime("%d %B %Y", item.date)}
-                          </div>
-                          {item.note && (
-                            <p className="mt-2 leading-7 text-stone-400">
-                              {item.note}
-                            </p>
-                          )}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ol>
-              </details>
-            ))}
-          </div>
+              <ul className="entries">
+                {month.items.map((item) => {
+                  const done = isDone(item);
+                  return (
+                    <li
+                      key={`${item.date}-${item.url}`}
+                      className={`reading-item${done ? " is-done" : ""}`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={done}
+                        onChange={() => toggleDone(item)}
+                        aria-label={`Mark "${item.title}" as ${done ? "to read" : "read"}`}
+                      />
+                      <div>
+                        <a
+                          className="entry-link"
+                          href={item.url}
+                          rel="external"
+                        >
+                          {item.title}
+                        </a>
+                        <br />
+                        <span className="entry-meta small">
+                          {formatTime("%d %B %Y", item.date)}
+                        </span>
+                        {item.note && <p className="entry-note">{item.note}</p>}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </details>
+          ))
         )}
       </section>
     </>

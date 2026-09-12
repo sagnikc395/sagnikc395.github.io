@@ -1,6 +1,32 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import Seo from "../lib/components/Seo";
 import { cancelIdleRun, runWhenIdle } from "../lib/idle";
+import { formatTime } from "../lib/utils";
+
+const postModules = import.meta.glob("../posts/*.md", {
+  eager: true,
+  query: "?meta",
+}) as Record<string, any>;
+
+const projectModules = import.meta.glob("../projects/*.md", {
+  eager: true,
+  query: "?meta",
+}) as Record<string, any>;
+
+function entriesFrom(modules: Record<string, any>, limit: number) {
+  return Object.entries(modules)
+    .map(([path, mod]) => ({
+      slug: path.split("/").pop()?.replace(".md", ""),
+      ...(mod.default || mod),
+    }))
+    .filter((entry) => !entry.draft)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, limit);
+}
+
+const recentPosts = entriesFrom(postModules, 5);
+const recentProjects = entriesFrom(projectModules, 4);
 
 const Home: React.FC = () => {
   useEffect(() => {
@@ -16,10 +42,7 @@ const Home: React.FC = () => {
 
     return () => {
       cancelIdleRun(handle);
-      const existingScript = document.getElementById("umaring_js");
-      if (existingScript) {
-        existingScript.remove();
-      }
+      document.getElementById("umaring_js")?.remove();
     };
   }, []);
 
@@ -30,90 +53,117 @@ const Home: React.FC = () => {
         description="CS grad student focused on mechanistic interpretability and building AI agents."
       />
 
-      <p
-        className="layout-md text-stone-500 text-xl md:text-lg leading-tight font-light mb-16 p-2 max-[420px]:-mt-10"
-        id="sagnik-is"
-      >
-        <span className="neutral">is a </span>
-        cs grad student<span className="neutral">, mech interp nerd </span>
-        <br />
-        and agent builder
-        <br />
-      </p>
+      <section className="wrap">
+        <div className="intro">
+          <picture>
+            <source
+              srcSet="/assets/images/profile2-260.webp"
+              type="image/webp"
+            />
+            <img
+              className="intro-photo"
+              alt="Sagnik Chatterjee"
+              src="/assets/images/profile2-260.jpg"
+              width="130"
+              height="173"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+            />
+          </picture>
 
-      <div className="layout-md text-lg md:text-xl space-y-14 max-w-4xl mx-auto">
-        {/* hero */}
-        <div className="flex flex-col md:flex-row items-center md:items-start space-y-10 md:space-y-0 md:space-x-10">
-          {/* Profile Image */}
-          <div
-            className="w-full md:w-1/3 flex justify-center items-center md:justify-start"
-            style={{ alignSelf: "stretch" }}
-          >
-            <picture>
-              <source
-                srcSet="/assets/images/profile2-512.webp"
-                type="image/webp"
-              />
-              <img
-                alt="sagnik chilling in his natural place"
-                src="/assets/images/profile2.jpeg"
-                width="256"
-                height="341"
-                loading="eager"
-                decoding="async"
-                fetchPriority="high"
-                className="rounded-xl w-64 object-cover"
-              />
-            </picture>
-          </div>
-
-          {/* Text Content */}
-          <div className="w-full md:w-2/3 space-y-5">
-            <p className="text-xl font-semibold">Hi, I'm Sagnik 👋</p>
-
-            <p className="text-lg md:text-xl">
-              I work on <b>mechanistic interpretability</b> and <b>AI agents</b>
-              , with a focus on understanding{" "}
-              <b>what's actually happening inside neural networks</b> and
-              building systems that can <b>reason, plan, and act</b> in the
-              world. I'm interested in reverse-engineering model internals,
-              including circuits, features, and attention patterns, and using
-              those insights to build more reliable and steerable AI systems.
-            </p>
-
-            <p>
-              My work sits at the intersection of{" "}
-              <b>
-                interpretability research, agent architectures, and language
-                model behavior
-              </b>
-              . I'm particularly drawn to questions about how capabilities
-              emerge in transformers, including{" "}
-              <b>superposition, polysemanticity, and in-context learning</b>,
-              and how a clearer mechanistic picture can inform the design of
-              better <b>tool-using and reasoning agents</b>. More broadly, I
-              care about making AI systems we can actually understand and trust.
-            </p>
-          </div>
-        </div>
-
-        <nav className="umaring" aria-label="UMass Amherst web ring">
-          <p className="umaring-label">
-            <span aria-hidden="true" className="umaring-dot" />
-            UMass web ring
+          <p>
+            CS graduate student
+            <br />
+            Manning College of Information and Computer Sciences
+            <br />
+            University of Massachusetts Amherst
           </p>
 
-          <div className="umaring-links">
-            <a id="umaring_prev" className="umaring-link umaring-link-prev">
-              Previous site
-            </a>
-            <span className="umaring-divider" aria-hidden="true" />
-            <a id="umaring_next" className="umaring-link umaring-link-next">
-              Next site
-            </a>
-          </div>
-        </nav>
-      </div>
+          <p>
+            Email:{" "}
+            <a href="mailto:sagnikchatte@umass.edu">sagnikchatte@umass.edu</a>
+          </p>
+        </div>
+
+        <h2>Research interests</h2>
+
+        <p>
+          Mechanistic interpretability and AI agents. I work on
+          reverse-engineering model internals — circuits, features, and
+          attention patterns — and on using what that reveals to build systems
+          that reason, plan, and act more reliably. I am particularly drawn to
+          how capabilities emerge in transformers (superposition,
+          polysemanticity, in-context learning), and to what a clearer
+          mechanistic picture implies for the design of tool-using agents.
+        </p>
+
+        <h2>Writing</h2>
+
+        <ul className="entries">
+          {recentPosts.map((post) => (
+            <li key={post.slug}>
+              <Link to={`/blog/${post.slug}`}>{post.title}</Link>
+              <br />
+              <span className="entry-meta small">
+                {formatTime("%d %B %Y", post.date)}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <p>
+          <Link to="/blog">All posts</Link>
+        </p>
+
+        <h2>Projects</h2>
+
+        <ul className="entries">
+          {recentProjects.map((project) => (
+            <li key={project.slug}>
+              <Link to={`/project/${project.slug}`}>{project.title}</Link>
+              {project.date && (
+                <span className="entry-meta">
+                  {" "}
+                  — {formatTime("%Y", project.date)}
+                </span>
+              )}
+              {project.lead && <p className="entry-note">{project.lead}</p>}
+            </li>
+          ))}
+        </ul>
+
+        <p>
+          <Link to="/projects">All projects</Link>
+        </p>
+
+        <h2>Elsewhere</h2>
+
+        <p>
+          <a rel="external" href="https://github.com/sagnikc395">
+            GitHub
+          </a>
+          {" | "}
+          <a
+            rel="external"
+            href="https://www.linkedin.com/in/sagnikchatterjee3/"
+          >
+            LinkedIn
+          </a>
+          {" | "}
+          <Link to="/reading-list">Reading list</Link>
+          {" | "}
+          <a rel="external" href="/assets/pdf/SagnikChatterjee-Resume.pdf">
+            Resume
+          </a>
+        </p>
+
+        <p className="small muted">
+          UMass web ring: <a id="umaring_prev">previous</a>
+          {" | "}
+          <a id="umaring_next">next</a>
+        </p>
+      </section>
     </>
   );
 };

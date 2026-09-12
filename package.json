@@ -5,16 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.ts",
     "check:reading-list": "node scripts/check-reading-list.ts",
-    "preview": "vite preview",
+    "preview": "node scripts/serve.ts",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint ."
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.5",
     "@eslint/js": "^9.18.0",
-    "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^26.4.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -22,6 +21,7 @@
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "globals": "^16.0.0",
+    "jiti": "^2.7.0",
     "prettier": "^3.4.2",
     "shiki": "^3.21.0",
     "typescript": "^5.0.0",
@@ -31,14 +31,12 @@
   "dependencies": {
     "@rollup/plugin-yaml": "^4.1.2",
     "@rollup/pluginutils": "^5.1.4",
-    "@tailwindcss/vite": "^4.1.7",
     "@types/js-yaml": "^4.0.9",
     "js-yaml": "^4.1.0",
     "marked": "^15.0.12",
     "marked-smartypants": "^1.1.9",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-router-dom": "^7.13.1",
-    "tailwindcss": "^4.1.7"
+    "react-router-dom": "^7.13.1"
   }
 }

@@ -28,4 +28,3 @@ export type Post = {
   draft?: boolean;
   references?: Reference[];
 };
-

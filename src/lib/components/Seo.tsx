@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { FC } from "react";
+import { setHead } from "../head";
 
 interface SeoProps {
   title: string;
@@ -51,6 +52,11 @@ const Seo: FC<SeoProps> = ({
   meta,
   publishedTime,
 }) => {
+  // Prerendering has no document; record for the build step instead.
+  if (import.meta.env.SSR) {
+    setHead(title, description);
+  }
+
   useEffect(() => {
     document.head
       .querySelectorAll<HTMLMetaElement>('meta[data-seo-custom="true"]')

@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: "npm"
 
       - name: Install dependencies
@@ -27,9 +27,6 @@ jobs:
 
       - name: Build project
         run: npm run build
-
-      - name: Copy index.html to 404.html for SPA routing
-        run: cp ./dist/index.html ./dist/404.html
 
       - name: Upload build output
         uses: actions/upload-pages-artifact@v3

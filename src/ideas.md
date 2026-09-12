@@ -7,6 +7,7 @@ with hybrid retrieval (BM25 + vector search), cross-encoder re-ranking, citation
 and a CI-gated evaluation pipeline.
 
 - refs:
+
   - LangChain's Official RAG Tutorial - A step-by-step guide to building retrieval chains: <https://docs.langchain.com/oss/python/langchain/rag>
 
   - Cohere: Rerank Guide - Explains how cross-encoders work and why they improve retrieval precision: <https://www.google.com/search?q=https://docs.cohere.com/docs/rerank-guide>
@@ -20,6 +21,7 @@ Compare 3 models on the same hardware. Document the quality-vs-speed tradeoffs.
 Privacy, latency and cost constraints are real-show that we understand them.
 
 - refs:
+
   - Ollama Official GitHub & Quickstart - The easiest way to get Mistral or Llama running on your machine: <https://github.com/ollama/ollama>
 
   - FastAPI Official Tutorial - Essential for wrapping your local model into a usable API: <https://fastapi.tiangolo.com/tutorial/>
@@ -35,6 +37,7 @@ Build regression gating into CI.
 70%of production AI work that nobody puts in the portfolio.
 
 - refs:
+
   - AI Evals : <https://www.youtube.com/watch?v=TL527yTpxlk>
 
   - LangSmith Walkthrough - LangChain's native observability tool; great for understanding prompt versioning and tracing: <https://docs.smith.langchain.com/>
@@ -49,8 +52,8 @@ Add preference tuning with DPO.
 Show before-and-after metrics with actual numbers.
 
 - refs:
-  - SFT data:
-        - HuggingFaceH4/ultrachat_200k – High-quality multi-turn chat, filtered from ShareGPT-style logs; widely used in open-source instruction models and supported out of the box by Oumi SFT tooling: <https://huggingface.co/datasets/HuggingFaceH4/ultrachat_200k>
+
+  - SFT data: - HuggingFaceH4/ultrachat_200k – High-quality multi-turn chat, filtered from ShareGPT-style logs; widely used in open-source instruction models and supported out of the box by Oumi SFT tooling: <https://huggingface.co/datasets/HuggingFaceH4/ultrachat_200k>
 
         - Nemotron-Instruction-Following-Chat-v1 -  Large, high-quality, commercially-usable instruction-following and chat dataset from NVIDIA, combining verifier-filtered assistant conversations and structured-output examples for post-training LLMs
 
@@ -58,7 +61,7 @@ Show before-and-after metrics with actual numbers.
 
         - GSM8K – A dataset of 8.5k high-quality, linguistically diverse grade-school math word problems designed to test multi-step reasoning in language models: <https://huggingface.co/datasets/openai/gsm8k>
 
-    - Good Preference dataset  – argilla/distilabel-intel-orca-dpo-pairs is a curated preference dataset (prompt, chosen, rejected) derived from Intel/orca_dpo_pairs, cleaned and enriched for better DPO-based chat alignment of open-source LLMs: <https://huggingface.co/datasets/argilla/distilabel-intel-orca-dpo-pairs>
+    - Good Preference dataset – argilla/distilabel-intel-orca-dpo-pairs is a curated preference dataset (prompt, chosen, rejected) derived from Intel/orca_dpo_pairs, cleaned and enriched for better DPO-based chat alignment of open-source LLMs: <https://huggingface.co/datasets/argilla/distilabel-intel-orca-dpo-pairs>
 
     Coding Dataset:
 
@@ -73,7 +76,9 @@ Add graceful degradation and timeout handling.
 Show we understand real-time systems.
 
 - refs:
+
   - Orchestration Framework:
+
     - Pipecat AI - An incredible open-source framework specifically built for creating real-time voice and multimodal AI agents. It handles the WebSockets and latency tracking: <https://github.com/pipecat-ai/pipecat>
 
   - Speech-to-Text (ASR) & Text-to-Speech (TTS):

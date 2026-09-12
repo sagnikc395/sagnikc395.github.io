@@ -1,14 +1,13 @@
 import react from "@vitejs/plugin-react";
-import { defineConfig, type Plugin } from "vite";
-import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
 import { dataToEsm } from "@rollup/pluginutils";
 import pluginYaml from "@rollup/plugin-yaml";
 import { load } from "js-yaml";
 import { createHighlighter } from "shiki";
 import { Marked } from "marked";
 import { markedSmartypants } from "marked-smartypants";
-import fs from "node:fs/promises";
-import path from "node:path";
+import { readFileSync, existsSync } from "node:fs";
+import { join as joinPath } from "node:path";
 
 /** Strips Markdown syntax off a line, leaving readable plain text. */
 function stripInline(line: string): string {
@@ -55,6 +54,76 @@ function excerptOf(content: string, maxWords = 55): string {
   if (words.length === 0) return "";
   const truncated = words.length > maxWords;
   return words.slice(0, maxWords).join(" ") + (truncated ? "…" : "");
+}
+
+/** Reads intrinsic pixel dimensions straight from a PNG or JPEG header. */
+function imageSize(file: string): { width: number; height: number } | null {
+  let buf: Buffer;
+  try {
+    buf = readFileSync(file);
+  } catch {
+    return null;
+  }
+
+  // PNG: IHDR width/height are two big-endian uint32s at offset 16.
+  if (buf.length > 24 && buf.readUInt32BE(0) === 0x89504e47) {
+    return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
+  }
+
+  // JPEG: walk the marker segments looking for a start-of-frame.
+  if (buf.length > 4 && buf.readUInt16BE(0) === 0xffd8) {
+    let offset = 2;
+    while (offset + 9 < buf.length) {
+      if (buf[offset] !== 0xff) {
+        offset += 1;
+        continue;
+      }
+      const marker = buf[offset + 1];
+      // SOF0-SOF15, skipping the non-frame markers in that range.
+      if (
+        marker >= 0xc0 &&
+        marker <= 0xcf &&
+        marker !== 0xc4 &&
+        marker !== 0xc8 &&
+        marker !== 0xcc
+      ) {
+        return {
+          height: buf.readUInt16BE(offset + 5),
+          width: buf.readUInt16BE(offset + 7),
+        };
+      }
+      offset += 2 + buf.readUInt16BE(offset + 2);
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Renders a Markdown image as a <picture> with a WebP source when a sibling
+ * .webp exists, and always with explicit width/height so the page reserves
+ * space before the bytes arrive (no layout shift).
+ */
+function renderImage(href: string, title: string | null, alt: string): string {
+  const url = encodeURI(href);
+  const titleAttr = title ? ` title="${title}"` : "";
+
+  // Only local, absolute asset paths can be measured; leave remote URLs alone.
+  if (!href.startsWith("/")) {
+    return `<img src="${url}" alt="${alt}"${titleAttr} loading="lazy" decoding="async">`;
+  }
+
+  const file = joinPath("static", href);
+  const size = imageSize(file);
+  const dims = size ? ` width="${size.width}" height="${size.height}"` : "";
+
+  const webp = href.replace(/\.(png|jpe?g)$/i, ".webp");
+  const hasWebp = webp !== href && existsSync(joinPath("static", webp));
+
+  const img = `<img src="${url}" alt="${alt}"${titleAttr}${dims} loading="lazy" decoding="async">`;
+  if (!hasWebp) return img;
+
+  return `<picture><source srcset="${encodeURI(webp)}" type="image/webp">${img}</picture>`;
 }
 
 /** A custom Markdown plugin for Vite, with TOML/YAML frontmatter support and Shiki highlighting. */
@@ -130,6 +199,15 @@ function markdown() {
               const text = this.parser.parseInline(tokens);
               return `<a rel="external" href="${url}" class="link"${titleStr}>${text}</a>`;
             },
+            image({ href, title, text }) {
+              return renderImage(href, title, text);
+            },
+            heading({ tokens, depth }) {
+              const text = this.parser.parseInline(tokens);
+              // The page renders the frontmatter title, so a body <h1> is a duplicate.
+              if (depth === 1) return "";
+              return `<h${depth}>${text}</h${depth}>`;
+            },
           },
         });
 
@@ -139,197 +217,6 @@ function markdown() {
           code: dataToEsm({ ...frontmatter, content: html }),
           map: null,
         };
-      }
-    },
-  };
-}
-
-function prerender(): Plugin {
-  return {
-    name: "prerender",
-    async closeBundle() {
-      const outDir = path.resolve("dist");
-      let template: string;
-      try {
-        template = await fs.readFile(path.join(outDir, "index.html"), "utf8");
-      } catch {
-        return;
-      }
-
-      const escapeHtml = (s: string) =>
-        s
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;");
-
-      const formatDate = (d: string) => {
-        try {
-          return new Intl.DateTimeFormat("en-GB", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-            timeZone: "UTC",
-          }).format(new Date(d));
-        } catch {
-          return d;
-        }
-      };
-
-      let highlighter: Awaited<ReturnType<typeof createHighlighter>> | null =
-        null;
-      const getHighlighter = async () => {
-        if (!highlighter) {
-          highlighter = await createHighlighter({
-            themes: ["vitesse-light", "vitesse-dark"],
-            langs: [
-              "javascript",
-              "typescript",
-              "css",
-              "html",
-              "bash",
-              "json",
-              "markdown",
-              "svelte",
-              "python",
-              "yaml",
-              "diff",
-              "go",
-            ],
-          });
-        }
-        return highlighter;
-      };
-
-      const renderMarkdown = async (md: string): Promise<string> => {
-        const hl = await getHighlighter();
-        const marked = new Marked(markedSmartypants(), {
-          gfm: true,
-          renderer: {
-            code({ text, lang }) {
-              return hl.codeToHtml(text, {
-                lang: lang || "text",
-                themes: { light: "vitesse-light", dark: "vitesse-dark" },
-              });
-            },
-            link({ href, title, tokens }) {
-              const url = encodeURI(href || "#");
-              const titleStr = title ? ` title="${title}"` : "";
-              const text = this.parser.parseInline(tokens);
-              return `<a rel="external" href="${url}" class="link"${titleStr}>${text}</a>`;
-            },
-          },
-        });
-        return (await marked.parse(md)) as string;
-      };
-
-      const writeRoute = async (
-        route: string,
-        opts?: { title?: string; html?: string },
-      ) => {
-        const dir = path.join(outDir, route);
-        await fs.mkdir(dir, { recursive: true });
-        let html = template;
-        if (opts?.title) {
-          html = html.replace(
-            /<title>.*?<\/title>/,
-            `<title>${escapeHtml(opts.title)}</title>`,
-          );
-        }
-        if (opts?.html) {
-          html = html.replace(
-            '<div id="root"></div>',
-            `<div id="root">${opts.html}</div>`,
-          );
-        }
-        await fs.writeFile(path.join(dir, "index.html"), html);
-      };
-
-      // static routes (SPA fallback) – copy template so GitHub Pages returns 200 instead of 404
-      const staticRoutes = ["blog", "projects", "reading-list"];
-      for (const r of staticRoutes) {
-        await writeRoute(r);
-      }
-
-      // blog posts – prerender with real content so wget/curl gets HTML without JS
-      try {
-        const posts = await fs.readdir("src/posts");
-        for (const file of posts) {
-          if (!file.endsWith(".md")) continue;
-          if (file.startsWith(".")) continue;
-          const slug = file.replace(/\.md$/, "");
-          const raw = await fs.readFile(path.join("src/posts", file), "utf8");
-          let frontmatter: Record<string, unknown> = {};
-          let content = raw;
-          if (raw.startsWith("---")) {
-            const end = raw.indexOf("---", 3);
-            if (end !== -1) {
-              frontmatter =
-                (load(raw.substring(3, end).trim()) as Record<
-                  string,
-                  unknown
-                >) ?? {};
-              content = raw.substring(end + 3).trim();
-            }
-          }
-          if (frontmatter["draft"]) continue;
-          const title = (frontmatter["title"] as string) ?? slug;
-          const date = (frontmatter["date"] as string) ?? "";
-          const htmlContent = await renderMarkdown(content);
-          const refs = frontmatter["references"] as
-            | { title: string; url: string; author?: string }[]
-            | undefined;
-          const refsHtml = refs?.length
-            ? `<section class="mt-10"><h2 class="text-xl font-semibold">References</h2><ul class="mt-4 space-y-2">${refs
-                .map(
-                  (r) =>
-                    `<li><a class="link" href="${escapeHtml(r.url)}" rel="external">${escapeHtml(r.title)}</a>${r.author ? ` — ${escapeHtml(r.author)}` : ""}</li>`,
-                )
-                .join("")}</ul></section>`
-            : "";
-          const prerendered = `<article class="layout-md py-10"><header class="mb-8"><h1 class="text-3xl font-bold mb-2 text-stone-100">${escapeHtml(title)}</h1>${date ? `<div class="text-stone-400">${escapeHtml(formatDate(date))}</div>` : ""}</header><div class="prose prose-stone prose-invert max-w-none">${htmlContent}</div>${refsHtml}</article>`;
-          await writeRoute(path.join("blog", slug), {
-            title: `${title} — Sagnik Chatterjee`,
-            html: prerendered,
-          });
-        }
-      } catch {
-        // ignore if src/posts missing
-      }
-
-      // projects – same treatment
-      try {
-        const projects = await fs.readdir("src/projects");
-        for (const file of projects) {
-          if (!file.endsWith(".md")) continue;
-          const slug = file.replace(/\.md$/, "");
-          const raw = await fs.readFile(
-            path.join("src/projects", file),
-            "utf8",
-          );
-          let frontmatter: Record<string, unknown> = {};
-          let content = raw;
-          if (raw.startsWith("---")) {
-            const end = raw.indexOf("---", 3);
-            if (end !== -1) {
-              frontmatter =
-                (load(raw.substring(3, end).trim()) as Record<
-                  string,
-                  unknown
-                >) ?? {};
-              content = raw.substring(end + 3).trim();
-            }
-          }
-          const title = (frontmatter["title"] as string) ?? slug;
-          const htmlContent = await renderMarkdown(content);
-          const prerendered = `<article class="layout-md py-10"><h1 class="text-3xl font-bold mb-2 text-stone-100">${escapeHtml(title)}</h1><div class="prose prose-stone prose-invert max-w-none mt-8">${htmlContent}</div></article>`;
-          await writeRoute(path.join("project", slug), {
-            title: `${title} — Sagnik Chatterjee`,
-            html: prerendered,
-          });
-        }
-      } catch {
-        // ignore
       }
     },
   };
@@ -361,6 +248,10 @@ export default defineConfig({
     },
   },
   esbuild: { legalComments: "none", drop: ["console", "debugger"] },
+  ssr: {
+    // Bundle everything into the server build; it is thrown away after prerendering.
+    noExternal: true,
+  },
   optimizeDeps: { include: ["react", "react-dom", "react-router-dom"] },
-  plugins: [tailwindcss(), react(), pluginYaml(), markdown(), prerender()],
+  plugins: [react(), pluginYaml(), markdown()],
 });

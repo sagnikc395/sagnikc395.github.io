@@ -1,67 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Seo from "../lib/components/Seo";
 import Markdown from "../lib/components/Markdown";
 import Utterances from "../lib/components/Utterances";
 import References from "../lib/components/References";
+import { loadContent, peekContent } from "../lib/content";
+import type { Post } from "../lib/types";
 import { formatTime } from "../lib/utils";
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const [post, setPost] = useState<any>(null);
+  const [, rerender] = useReducer((n: number) => n + 1, 0);
+
+  // Already in the cache on the prerendered/hydrated route, so this first render
+  // matches the server. Only client-side navigation hits the async path below.
+  const post = slug ? peekContent<Post>("post", slug) : null;
 
   useEffect(() => {
-    const loadPost = async () => {
-      try {
-        const posts = import.meta.glob("../posts/*.md");
-        const path = `../posts/${slug}.md`;
-        if (posts[path]) {
-          const data: any = await posts[path]();
-          const postData = data.default || data;
-          if (postData.draft) {
-            navigate("/404");
-            return;
-          }
-          setPost(postData);
-        } else {
-          navigate("/404");
-        }
-      } catch (e) {
-        console.error(e);
-        navigate("/404");
-      }
+    if (!slug || post !== undefined) return;
+    let active = true;
+    void loadContent<Post>("post", slug).then(() => {
+      if (active) rerender();
+    });
+    return () => {
+      active = false;
     };
-    loadPost();
-  }, [slug, navigate]);
+  }, [slug, post]);
 
-  if (!post) return null;
+  useEffect(() => {
+    if (post === null || post?.draft) navigate("/404", { replace: true });
+  }, [post, navigate]);
+
+  if (!post || post.draft) return null;
 
   return (
     <>
       <Seo title={post.title} description={`Blog post: ${post.title}`} />
 
-      <article className="layout-md py-10">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 text-stone-100">
-            {post.title}
-          </h1>
-          <div className="text-stone-400">
-            {formatTime("%d %B %Y", post.date)}
-          </div>
-        </header>
+      <article className="wrap">
+        <h2>{post.title}</h2>
+        <p className="entry-meta small">{formatTime("%d %B %Y", post.date)}</p>
 
-        {post.image && (
-          <img
-            src={post.image}
-            alt={post.title}
-            className="w-full rounded-lg mb-8 shadow-md"
-          />
-        )}
+        {post.image && <img src={post.image} alt={post.title} />}
 
-        <div className="prose prose-stone prose-invert prose-headings:font-semibold prose-headings:text-stone-100 prose-p:text-stone-300 prose-a:text-blue-600 hover:prose-a:text-blue-800 max-w-none">
-          <Markdown source={post.content} />
-        </div>
+        <Markdown source={post.content} />
 
         <References references={post.references} />
 

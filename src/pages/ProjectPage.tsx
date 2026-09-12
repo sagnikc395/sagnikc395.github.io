@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import Seo from "../lib/components/Seo";
 import ProjectDetail from "../lib/components/ProjectDetail";
 import Utterances from "../lib/components/Utterances";
+import { loadContent, peekContent } from "../lib/content";
+import type { Project } from "../lib/types";
 
 const images = import.meta.glob("../projects/*.{png,jpg,svg}", {
   eager: true,
-}) as any;
+}) as Record<string, { default: string }>;
 
 const ProjectPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const [project, setProject] = useState<any>(null);
+  const [, rerender] = useReducer((n: number) => n + 1, 0);
+
+  const project = slug ? peekContent<Project>("project", slug) : null;
 
   useEffect(() => {
-    const loadProject = async () => {
-      try {
-        const projects = import.meta.glob("../projects/*.md");
-        const path = `../projects/${slug}.md`;
-        if (projects[path]) {
-          const data: any = await projects[path]();
-          setProject(data.default || data);
-        } else {
-          navigate("/404");
-        }
-      } catch (e) {
-        console.error(e);
-        navigate("/404");
-      }
+    if (!slug || project !== undefined) return;
+    let active = true;
+    void loadContent<Project>("project", slug).then(() => {
+      if (active) rerender();
+    });
+    return () => {
+      active = false;
     };
-    loadProject();
-  }, [slug, navigate]);
+  }, [slug, project]);
+
+  useEffect(() => {
+    if (project === null) navigate("/404", { replace: true });
+  }, [project, navigate]);
 
   if (!project) return null;
 
@@ -41,13 +41,11 @@ const ProjectPage: React.FC = () => {
         description={project.title}
       />
 
-      <section className="layout-md py-10">
-        <Link
-          to="/projects"
-          className="text-stone-400 hover:text-stone-100 mb-8 inline-block"
-        >
-          &larr; Back to projects
-        </Link>
+      <section className="wrap">
+        <p>
+          <Link to="/projects">&larr; Back to projects</Link>
+        </p>
+
         <ProjectDetail
           data={project}
           images={images}
