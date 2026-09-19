@@ -56,14 +56,10 @@ const Home: React.FC = () => {
       <section className="wrap">
         <div className="intro">
           <picture>
-            <source
-              srcSet="/assets/images/profile2-260.webp"
-              type="image/webp"
-            />
             <img
               className="intro-photo"
               alt="Sagnik Chatterjee"
-              src="/assets/images/profile2-260.jpg"
+              src="/assets/images/sagnik2.jpeg"
               width="130"
               height="173"
               loading="eager"
