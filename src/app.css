@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------
-   Minimal reset. Only what this site actually relies on — the rest
+   Minimal reset. Only what this site actually relies on; the rest
    of the element defaults are set explicitly further down.
    --------------------------------------------------------------- */
 *,
@@ -41,18 +41,20 @@ svg {
 
 /* ---------------------------------------------------------------
    Tokens. Light is the real design; dark is a courtesy for readers
-   whose OS asks for it. Every color has its definition here first.
+   whose OS asks for it, or who pick it from the header toggle. Every
+   color has its definition here first.
    --------------------------------------------------------------- */
 :root {
-  --bg: #ffffff;
-  --fg: #000000;
-  --muted: #555555;
-  --faint: #767676;
-  --rule: #dddddd;
-  --link: #0000cc;
-  --link-visited: #551a8b;
-  --mark: #fff2a8;
-  --code-bg: #f4f4f4;
+  /* Flexoki (kepano/flexoki): paper ground, base tones for text and rules,
+     blue-600 for links, yellow-100 for highlights. */
+  --bg: #fffcf0; /* paper */
+  --fg: #100f0f; /* black */
+  --muted: #6f6e69; /* base-600 */
+  --faint: #878580; /* base-500 */
+  --rule: #dad8ce; /* base-150 */
+  --link: #205ea6; /* blue-600 */
+  --mark: #f6e2a0; /* yellow-100 */
+  --code-bg: #f2f0e5; /* base-50 */
 
   --measure: 44rem;
   --gutter: clamp(1rem, 4vw, 2rem);
@@ -60,20 +62,35 @@ svg {
   color-scheme: light;
 }
 
+/* Dark. The same tokens are written twice on purpose: once for readers whose
+   OS asks for it and who have not overridden it, once for an explicit choice
+   from the header toggle, which has to win in both directions. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #121212;
-    --fg: #e6e6e6;
-    --muted: #a8a8a8;
-    --faint: #8c8c8c;
-    --rule: #2e2e2e;
-    --link: #7fa9ff;
-    --link-visited: #b79cf0;
-    --mark: #4a4300;
-    --code-bg: #1e1e1e;
+  :root:not([data-theme="light"]) {
+    --bg: #100f0f; /* black */
+    --fg: #cecdc3; /* base-200 */
+    --muted: #878580; /* base-500 */
+    --faint: #6f6e69; /* base-600 */
+    --rule: #343331; /* base-850 */
+    --link: #4385be; /* blue-400 */
+    --mark: #3a2d04; /* yellow-900 */
+    --code-bg: #1c1b1a; /* base-950 */
 
     color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --bg: #100f0f; /* black */
+  --fg: #cecdc3; /* base-200 */
+  --muted: #878580; /* base-500 */
+  --faint: #6f6e69; /* base-600 */
+  --rule: #343331; /* base-850 */
+  --link: #4385be; /* blue-400 */
+  --mark: #3a2d04; /* yellow-900 */
+  --code-bg: #1c1b1a; /* base-950 */
+
+  color-scheme: dark;
 }
 
 /* ---------------------------------------------------------------
@@ -151,10 +168,6 @@ a {
   text-underline-offset: 2px;
 }
 
-a:visited {
-  color: var(--link-visited);
-}
-
 hr {
   border: 0;
   border-top: 1px solid var(--rule);
@@ -194,7 +207,7 @@ hr {
 }
 
 /* ---------------------------------------------------------------
-   Header / nav — one plain row of pipe-separated links
+   Header / nav: one plain row of pipe-separated links
    --------------------------------------------------------------- */
 .site-header {
   margin-bottom: 1.6rem;
@@ -225,6 +238,52 @@ hr {
 .site-nav .sep {
   color: var(--rule);
   user-select: none;
+}
+
+/* Sits as one more item in the nav row: the face of the current mode,
+   with the three choices hanging under it. */
+.theme-picker {
+  position: relative;
+  display: inline-block;
+}
+
+.theme-toggle {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.theme-menu {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+}
+
+.theme-menu button {
+  background: none;
+  border: 0;
+  padding: 0.3rem 0.7rem;
+  font: inherit;
+  color: var(--fg);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.theme-menu button:hover {
+  background: var(--code-bg);
+}
+
+.theme-menu button[aria-checked="true"] {
+  font-weight: 700;
 }
 
 /* The intro block: photo floats beside the text on wide screens,
@@ -305,11 +364,6 @@ hr {
 
 .reading-item.is-done .entry-link {
   text-decoration-line: underline line-through;
-}
-
-.reading-item input[type="checkbox"] {
-  margin-top: 0.3rem;
-  flex-shrink: 0;
 }
 
 select {
@@ -395,6 +449,7 @@ select {
 }
 
 .md-output pre.shiki {
+  background: var(--code-bg) !important;
   padding: 0.8rem 1rem;
   overflow-x: auto;
   margin: 1.2rem 0;
@@ -410,16 +465,24 @@ select {
 
 /* Shiki writes the light theme into each span's inline style and exposes the
    dark one as custom properties. Light therefore needs no rule at all, and the
-   dark swap needs !important to outrank those inline colors. */
+   dark swap needs !important to outrank those inline colors. The block's own
+   background comes from --code-bg in both modes, not from the theme. */
 @media (prefers-color-scheme: dark) {
-  .shiki,
-  .shiki span {
+  :root:not([data-theme="light"]) .shiki,
+  :root:not([data-theme="light"]) .shiki span {
     color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
     font-style: var(--shiki-dark-font-style) !important;
     font-weight: var(--shiki-dark-font-weight) !important;
     text-decoration: var(--shiki-dark-text-decoration) !important;
   }
+}
+
+:root[data-theme="dark"] .shiki,
+:root[data-theme="dark"] .shiki span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
 }
 
 /* Offscreen prose skips rendering until it scrolls near the viewport. */
@@ -440,4 +503,84 @@ select {
 
 .site-footer p {
   margin: 0.25rem 0;
+}
+
+/* ---------------------------------------------------------------
+   Link previews: the card that opens when you hover, focus or tap a
+   link in an article. Floating beside the link on a mouse, pinned to
+   the bottom of the screen on a touch device.
+   --------------------------------------------------------------- */
+.link-popup {
+  position: fixed;
+  z-index: 20;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  padding: 0.6rem 0.8rem 0.7rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 12%);
+  overscroll-behavior: contain;
+}
+
+.link-popup-title {
+  font-weight: 700;
+  display: block;
+}
+
+.link-popup-meta {
+  margin: 0.15rem 0 0;
+}
+
+.link-popup-body {
+  margin: 0.45rem 0 0;
+  /* Long abstracts get a scrollbar rather than a card taller than the page. */
+  max-height: 11rem;
+  overflow-y: auto;
+}
+
+.link-popup-url {
+  margin: 0.4rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.link-popup-close {
+  margin-top: 0.6rem;
+  background: none;
+  border: 1px solid var(--rule);
+  padding: 0.2rem 0.7rem;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+/* Touch screens: a bar across the bottom instead of a floating card. */
+.link-popup--pinned {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  max-width: none;
+  max-height: 60vh;
+  overflow-y: auto;
+  border-width: 1px 0 0;
+  padding: 0.8rem var(--gutter) 1rem;
+  box-shadow: 0 -1px 8px rgb(0 0 0 / 14%);
+}
+
+/* Links that have a preview waiting are marked the way a footnote is: same
+   color, dotted rather than solid rule. */
+.md-output a[data-preview],
+.references a[data-preview] {
+  text-decoration-style: dotted;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .link-popup {
+    animation: link-popup-in 90ms ease-out;
+  }
+
+  @keyframes link-popup-in {
+    from {
+      opacity: 0;
+    }
+  }
 }

@@ -1,30 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import Seo from "../lib/components/Seo";
 import { formatTime } from "../lib/utils";
 import {
   groupReadingMonths,
   parseReadingList,
-  type ReadingItem,
   type ReadingMonth,
 } from "../lib/readingList";
 import readingListSource from "../../reading/READING_LIST.md?raw";
 
-const STORAGE_KEY = "reading-list:done";
-
-function itemKey(item: Pick<ReadingItem, "date" | "url">): string {
-  return `${item.date}::${item.url}`;
-}
-
-function loadDoneMap(): Record<string, boolean> {
-  if (typeof window === "undefined") return {};
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as Record<string, boolean>) : {};
-  } catch {
-    return {};
-  }
-}
-
+// The list is read-only: an item is "read" only when it is marked [x] in
+// reading/READING_LIST.md. There is no per-visitor state to save.
 const ReadingList: React.FC = () => {
   const items = useMemo(() => parseReadingList(readingListSource), []);
   const years = useMemo(
@@ -32,40 +17,7 @@ const ReadingList: React.FC = () => {
     [items],
   );
   const [selectedYear, setSelectedYear] = useState(years[0] ?? "");
-  // Read localStorage after mount, not during the first render: the prerendered
-  // HTML can only reflect the file's own checkmarks, so the client has to agree
-  // on that for one render before layering the reader's own state on top.
-  const [doneMap, setDoneMap] = useState<Record<string, boolean>>({});
-  const [restored, setRestored] = useState(false);
 
-  useEffect(() => {
-    setDoneMap(loadDoneMap());
-    setRestored(true);
-  }, []);
-
-  useEffect(() => {
-    if (!restored) return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(doneMap));
-    } catch {
-      // ignore quota errors
-    }
-  }, [doneMap, restored]);
-
-  const isDone = (item: ReadingItem) => {
-    const k = itemKey(item);
-    return k in doneMap ? doneMap[k] : item.done;
-  };
-
-  const toggleDone = (item: ReadingItem) => {
-    const k = itemKey(item);
-    setDoneMap((prev) => ({
-      ...prev,
-      [k]: !(k in prev ? prev[k] : item.done),
-    }));
-  };
-
-  // items filtered by year, with effective done considered for grouping? grouping is by date only
   const filteredItems = useMemo(
     () => items.filter((item) => item.date.startsWith(selectedYear)),
     [items, selectedYear],
@@ -77,14 +29,7 @@ const ReadingList: React.FC = () => {
   );
 
   const totalForYear = filteredItems.length;
-  const doneForYear = useMemo(
-    () =>
-      filteredItems.filter((item) => {
-        const k = itemKey(item);
-        return k in doneMap ? doneMap[k] : item.done;
-      }).length,
-    [filteredItems, doneMap],
-  );
+  const doneForYear = filteredItems.filter((item) => item.done).length;
 
   return (
     <>
@@ -138,36 +83,23 @@ const ReadingList: React.FC = () => {
               </summary>
 
               <ul className="entries">
-                {month.items.map((item) => {
-                  const done = isDone(item);
-                  return (
-                    <li
-                      key={`${item.date}-${item.url}`}
-                      className={`reading-item${done ? " is-done" : ""}`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={done}
-                        onChange={() => toggleDone(item)}
-                        aria-label={`Mark "${item.title}" as ${done ? "to read" : "read"}`}
-                      />
-                      <div>
-                        <a
-                          className="entry-link"
-                          href={item.url}
-                          rel="external"
-                        >
-                          {item.title}
-                        </a>
-                        <br />
-                        <span className="entry-meta small">
-                          {formatTime("%d %B %Y", item.date)}
-                        </span>
-                        {item.note && <p className="entry-note">{item.note}</p>}
-                      </div>
-                    </li>
-                  );
-                })}
+                {month.items.map((item) => (
+                  <li
+                    key={`${item.date}-${item.url}`}
+                    className={`reading-item${item.done ? " is-done" : ""}`}
+                  >
+                    <div>
+                      <a className="entry-link" href={item.url} rel="external">
+                        {item.title}
+                      </a>
+                      <br />
+                      <span className="entry-meta small">
+                        {formatTime("%d %B %Y", item.date)}
+                      </span>
+                      {item.note && <p className="entry-note">{item.note}</p>}
+                    </div>
+                  </li>
+                ))}
               </ul>
             </details>
           ))

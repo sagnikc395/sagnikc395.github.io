@@ -3,9 +3,12 @@ import { hydrateRoot, createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { preloadRoute } from "./lib/content";
+import { initTheme } from "./lib/theme";
 import "./app.css";
 
 const container = document.getElementById("root")!;
+
+initTheme();
 
 const tree = (
   <React.StrictMode>

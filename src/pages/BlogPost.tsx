@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Seo from "../lib/components/Seo";
 import Markdown from "../lib/components/Markdown";
@@ -8,10 +8,15 @@ import { loadContent, peekContent } from "../lib/content";
 import type { Post } from "../lib/types";
 import { formatTime } from "../lib/utils";
 
+// The link previews carry the annotation table with them, so they load as their
+// own chunk once the article is on screen rather than in the main bundle.
+const LinkPopups = React.lazy(() => import("../lib/components/LinkPopups"));
+
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [, rerender] = useReducer((n: number) => n + 1, 0);
+  const article = useRef<HTMLElement>(null);
 
   // Already in the cache on the prerendered/hydrated route, so this first render
   // matches the server. Only client-side navigation hits the async path below.
@@ -38,7 +43,7 @@ const BlogPost: React.FC = () => {
     <>
       <Seo title={post.title} description={`Blog post: ${post.title}`} />
 
-      <article className="wrap">
+      <article className="wrap" ref={article}>
         <h2>{post.title}</h2>
         <p className="entry-meta small">{formatTime("%d %B %Y", post.date)}</p>
 
@@ -49,6 +54,10 @@ const BlogPost: React.FC = () => {
         <References references={post.references} />
 
         <Utterances />
+
+        <React.Suspense fallback={null}>
+          <LinkPopups containerRef={article} />
+        </React.Suspense>
       </article>
     </>
   );

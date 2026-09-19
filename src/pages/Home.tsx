@@ -90,8 +90,8 @@ const Home: React.FC = () => {
 
         <p>
           Mechanistic interpretability and AI agents. I work on
-          reverse-engineering model internals — circuits, features, and
-          attention patterns — and on using what that reveals to build systems
+          reverse-engineering model internals (circuits, features, and
+          attention patterns) and on using what that reveals to build systems
           that reason, plan, and act more reliably. I am particularly drawn to
           how capabilities emerge in transformers (superposition,
           polysemanticity, in-context learning), and to what a clearer
@@ -125,7 +125,7 @@ const Home: React.FC = () => {
               {project.date && (
                 <span className="entry-meta">
                   {" "}
-                  — {formatTime("%Y", project.date)}
+                  · {formatTime("%Y", project.date)}
                 </span>
               )}
               {project.lead && <p className="entry-note">{project.lead}</p>}
@@ -135,27 +135,6 @@ const Home: React.FC = () => {
 
         <p>
           <Link to="/projects">All projects</Link>
-        </p>
-
-        <h2>Elsewhere</h2>
-
-        <p>
-          <a rel="external" href="https://github.com/sagnikc395">
-            GitHub
-          </a>
-          {" | "}
-          <a
-            rel="external"
-            href="https://www.linkedin.com/in/sagnikchatterjee3/"
-          >
-            LinkedIn
-          </a>
-          {" | "}
-          <Link to="/reading-list">Reading list</Link>
-          {" | "}
-          <a rel="external" href="/assets/pdf/SagnikChatterjee-Resume.pdf">
-            Resume
-          </a>
         </p>
 
         <p className="small muted">

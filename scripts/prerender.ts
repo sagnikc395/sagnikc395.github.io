@@ -11,6 +11,19 @@ const outDir = "dist";
 const site = "https://sagnikc395.github.io";
 const ssrEntry = path.resolve("dist-ssr/entry-server.js");
 
+/**
+ * String.replace expands $&, $1, $` and friends inside a *string* replacement,
+ * so post bodies containing those sequences would splice themselves into the
+ * page. A function replacement disables that expansion entirely.
+ */
+function replaceOnce(
+  haystack: string,
+  needle: string | RegExp,
+  value: string,
+): string {
+  return haystack.replace(needle, () => value);
+}
+
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -30,7 +43,7 @@ const cssLink = template.match(
 );
 if (cssLink) {
   const css = await fs.readFile(path.join(outDir, cssLink[1]), "utf8");
-  template = template.replace(cssLink[0], `<style>${css}</style>`);
+  template = replaceOnce(template, cssLink[0], `<style>${css}</style>`);
   await fs.rm(path.join(outDir, cssLink[1]), { force: true });
 }
 const urls: string[] = await routes();
@@ -38,25 +51,29 @@ const urls: string[] = await routes();
 for (const url of urls) {
   const { html, title, description } = await render(url);
 
-  let page = template.replace(
+  let page = replaceOnce(
+    template,
     '<div id="root"></div>',
     `<div id="root">${html}</div>`,
   );
 
   if (title) {
-    page = page.replace(
+    page = replaceOnce(
+      page,
       /<title>[\s\S]*?<\/title>/,
       `<title>${escapeHtml(title)}</title>`,
     );
   }
   if (description) {
-    page = page.replace(
+    page = replaceOnce(
+      page,
       /<meta\s+name="description"[\s\S]*?\/>/,
       `<meta name="description" content="${escapeHtml(description)}" />`,
     );
   }
 
-  page = page.replace(
+  page = replaceOnce(
+    page,
     "</head>",
     `  <link rel="canonical" href="${site}${url === "/" ? "/" : `${url}/`}" />\n  </head>`,
   );

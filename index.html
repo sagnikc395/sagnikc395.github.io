@@ -6,19 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Sagnik Chatterjee — CS grad student focused on mechanistic interpretability and building AI agents."
+      content="Sagnik Chatterjee, CS grad student focused on mechanistic interpretability and building AI agents."
     />
     <meta name="color-scheme" content="light dark" />
     <meta
       name="theme-color"
       media="(prefers-color-scheme: light)"
-      content="#ffffff"
+      content="#fffcf0"
     />
     <meta
       name="theme-color"
       media="(prefers-color-scheme: dark)"
-      content="#121212"
+      content="#100f0f"
     />
+    <!-- Applies a saved theme choice before the first paint. The rest of the
+         theme code lives in src/lib/theme.ts. -->
+    <script>
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+        }
+      } catch (e) {}
+    </script>
     <!-- The only above-the-fold image. Third-party widgets (umaring, utterances)
          load on idle and deliberately get no preconnect. -->
     <link

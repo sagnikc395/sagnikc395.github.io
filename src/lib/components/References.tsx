@@ -19,7 +19,7 @@ const References: React.FC<ReferencesProps> = ({ references }) => {
   if (!references || references.length === 0) return null;
 
   return (
-    <section>
+    <section className="references">
       <h2>References</h2>
       <ol>
         {references.map((ref, index) => {
@@ -34,7 +34,7 @@ const References: React.FC<ReferencesProps> = ({ references }) => {
               ) : (
                 <span>{label}</span>
               )}
-              {author && <span className="entry-meta"> — {author}</span>}
+              {author && <span className="entry-meta"> · {author}</span>}
             </li>
           );
         })}

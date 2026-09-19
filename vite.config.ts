@@ -9,6 +9,16 @@ import { markedSmartypants } from "marked-smartypants";
 import { readFileSync, existsSync } from "node:fs";
 import { join as joinPath } from "node:path";
 
+/** Flexoki's VS Code themes (kepano/flexoki), loaded into Shiki so code blocks
+    use the same palette as the rest of the site. */
+const flexokiTheme = (variant: "light" | "dark") =>
+  JSON.parse(
+    readFileSync(
+      new URL(`./src/themes/flexoki-${variant}.json`, import.meta.url),
+      "utf8",
+    ),
+  );
+
 /** Strips Markdown syntax off a line, leaving readable plain text. */
 function stripInline(line: string): string {
   return line
@@ -126,6 +136,15 @@ function renderImage(href: string, title: string | null, alt: string): string {
   return `<picture><source srcset="${encodeURI(webp)}" type="image/webp">${img}</picture>`;
 }
 
+/** Turns heading text into an anchor id: "Why SAEs?" -> "why-saes". */
+function slugify(html: string): string {
+  return stripInline(html)
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
 /** A custom Markdown plugin for Vite, with TOML/YAML frontmatter support and Shiki highlighting. */
 function markdown() {
   let highlighterPromise: ReturnType<typeof createHighlighter> | null = null;
@@ -162,7 +181,7 @@ function markdown() {
 
         if (!highlighterPromise) {
           highlighterPromise = createHighlighter({
-            themes: ["vitesse-light", "vitesse-dark"],
+            themes: [flexokiTheme("light"), flexokiTheme("dark")],
             langs: [
               "javascript",
               "typescript",
@@ -188,8 +207,8 @@ function markdown() {
               return highlighter.codeToHtml(text, {
                 lang: lang || "text",
                 themes: {
-                  light: "vitesse-light",
-                  dark: "vitesse-dark",
+                  light: "flexoki-light",
+                  dark: "flexoki-dark",
                 },
               });
             },
@@ -197,7 +216,10 @@ function markdown() {
               const url = encodeURI(href || "#");
               const titleStr = title ? ` title="${title}"` : "";
               const text = this.parser.parseInline(tokens);
-              return `<a rel="external" href="${url}" class="link"${titleStr}>${text}</a>`;
+              // Only off-site links are "external"; the link previews read this
+              // to tell a paper apart from another page here.
+              const rel = /^https?:\/\//i.test(url) ? ' rel="external"' : "";
+              return `<a${rel} href="${url}" class="link"${titleStr}>${text}</a>`;
             },
             image({ href, title, text }) {
               return renderImage(href, title, text);
@@ -206,7 +228,9 @@ function markdown() {
               const text = this.parser.parseInline(tokens);
               // The page renders the frontmatter title, so a body <h1> is a duplicate.
               if (depth === 1) return "";
-              return `<h${depth}>${text}</h${depth}>`;
+              // The id makes a section linkable, and gives "#section" links
+              // something for the preview card to quote.
+              return `<h${depth} id="${slugify(text)}">${text}</h${depth}>`;
             },
           },
         });

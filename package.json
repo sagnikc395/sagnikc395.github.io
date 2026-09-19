@@ -7,6 +7,7 @@
     "dev": "vite dev",
     "build": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.ts",
     "check:reading-list": "node scripts/check-reading-list.ts",
+    "annotations": "node scripts/fetch-annotations.ts",
     "preview": "node scripts/serve.ts",
     "format": "prettier --write .",
     "lint": "prettier --check . && eslint ."

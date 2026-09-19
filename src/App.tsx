@@ -10,7 +10,7 @@ import BlogPost from "./pages/BlogPost";
 import ReadingList from "./pages/ReadingList";
 
 // The page components are a few KB in total, so they ride in the main bundle.
-// The heavy part — rendered Markdown — stays code-split via src/lib/content.ts.
+// The heavy part, rendered Markdown, stays code-split via src/lib/content.ts.
 const App: React.FC = () => {
   return (
     <>
@@ -27,7 +27,7 @@ const App: React.FC = () => {
             path="*"
             element={
               <div className="wrap">
-                <h2>404 — page not found</h2>
+                <h2>404: page not found</h2>
               </div>
             }
           />

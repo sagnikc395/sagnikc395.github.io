@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
 
 const links = [
   { name: "Projects", href: "/projects" },
@@ -50,6 +51,10 @@ const Header: React.FC = () => {
             </a>
           </React.Fragment>
         ))}
+        <span className="sep" aria-hidden="true">
+          |
+        </span>
+        <ThemeToggle />
       </nav>
     </header>
   );

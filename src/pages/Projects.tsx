@@ -42,7 +42,7 @@ const Projects: React.FC = () => {
                 {project.date && (
                   <span className="entry-meta">
                     {" "}
-                    — {formatTime("%Y", project.date)}
+                    · {formatTime("%Y", project.date)}
                   </span>
                 )}
                 {project.lead && <p className="entry-note">{project.lead}</p>}
