@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Seo from "../lib/components/Seo";
 import { cancelIdleRun, runWhenIdle } from "../lib/idle";
+import { AFFILIATION, RESEARCH_INTERESTS } from "../lib/site";
 import { formatTime } from "../lib/utils";
 
 const postModules = import.meta.glob("../posts/*.md", {
@@ -69,11 +70,12 @@ const Home: React.FC = () => {
           </picture>
 
           <p>
-            CS graduate student
-            <br />
-            Manning College of Information and Computer Sciences
-            <br />
-            University of Massachusetts Amherst
+            {AFFILIATION.map((line, index) => (
+              <React.Fragment key={line}>
+                {index > 0 && <br />}
+                {line}
+              </React.Fragment>
+            ))}
           </p>
 
           <p>
@@ -84,15 +86,7 @@ const Home: React.FC = () => {
 
         <h2>Research interests</h2>
 
-        <p>
-          Mechanistic interpretability and AI agents. I work on
-          reverse-engineering model internals (circuits, features, and
-          attention patterns) and on using what that reveals to build systems
-          that reason, plan, and act more reliably. I am particularly drawn to
-          how capabilities emerge in transformers (superposition,
-          polysemanticity, in-context learning), and to what a clearer
-          mechanistic picture implies for the design of tool-using agents.
-        </p>
+        <p>{RESEARCH_INTERESTS}</p>
 
         <h2>Writing</h2>
 

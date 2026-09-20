@@ -66,6 +66,35 @@ function excerptOf(content: string, maxWords = 55): string {
   return words.slice(0, maxWords).join(" ") + (truncated ? "…" : "");
 }
 
+/** Flattens a Markdown body to plain prose, for the ⌘K search index. */
+function plainText(content: string): string {
+  const parts: string[] = [];
+  let inCodeFence = false;
+
+  for (const rawLine of content.split("\n")) {
+    const line = rawLine.trim();
+
+    if (line.startsWith("```")) {
+      inCodeFence = !inCodeFence;
+      continue;
+    }
+    // Code is noise in a prose index; headings and list items are not.
+    if (inCodeFence) continue;
+    if (!line || /^(-{3,}|\*{3,}|\|[-\s|:]+\|)$/.test(line)) continue;
+
+    const text = stripInline(
+      line
+        .replace(/^#{1,6}\s+/, "")
+        .replace(/^>\s?/, "")
+        .replace(/^([-*+]|\d+\.)\s+/, "")
+        .replace(/\|/g, " "),
+    );
+    if (text) parts.push(text);
+  }
+
+  return parts.join(" ");
+}
+
 /** Reads intrinsic pixel dimensions straight from a PNG or JPEG header. */
 function imageSize(file: string): { width: number; height: number } | null {
   let buf: Buffer;
@@ -156,10 +185,12 @@ function markdown() {
       const [filePath, query = ""] = id.split("?", 2);
 
       if (/\.md$/.test(filePath)) {
-        // Let Vite's built-in raw loader return markdown source for data files.
-        if (new URLSearchParams(query).has("raw")) return null;
+        const params = new URLSearchParams(query);
 
-        const metadataOnly = new URLSearchParams(query).has("meta");
+        // Let Vite's built-in raw loader return markdown source for data files.
+        if (params.has("raw")) return null;
+
+        const metadataOnly = params.has("meta");
         let frontmatter = {};
         let content = src;
 
@@ -177,6 +208,12 @@ function markdown() {
             code: dataToEsm({ excerpt: excerptOf(content), ...frontmatter }),
             map: null,
           };
+        }
+
+        // The search palette wants the whole body as prose, and nothing else;
+        // it loads these chunks only once someone opens it.
+        if (params.has("search")) {
+          return { code: dataToEsm({ text: plainText(content) }), map: null };
         }
 
         if (!highlighterPromise) {

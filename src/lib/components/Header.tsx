@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import SearchPalette from "./SearchPalette";
 import ThemeToggle from "./ThemeToggle";
 
 const links = [
@@ -9,7 +10,6 @@ const links = [
 ];
 
 const external = [
-  { name: "GitHub", href: "https://github.com/sagnikc395" },
   { name: "Resume", href: "/assets/pdf/SagnikChatterjee-Resume.pdf" },
 ];
 
@@ -51,6 +51,10 @@ const Header: React.FC = () => {
             </a>
           </React.Fragment>
         ))}
+        <span className="sep" aria-hidden="true">
+          |
+        </span>
+        <SearchPalette />
         <span className="sep" aria-hidden="true">
           |
         </span>
