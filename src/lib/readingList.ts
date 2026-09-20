@@ -37,12 +37,12 @@ export function parseReadingList(source: string): ReadingItem[] {
     .split("\n")
     .map((line) => {
       const item = line.match(
-        /^\s*[-*]\s+(?:\[([ xX])\]\s+)?(\d{4}-\d{2}-\d{2})\s+(.+)$/,
+        /^\s*[-*]\s+(?:\[([ xX])\]\s+|\((completed|done|read)\)\s+)?(\d{4}-\d{2}-\d{2})\s+(.+)$/i,
       );
       if (!item) return null;
 
-      const [, check, date, body] = item;
-      const done = check ? check.toLowerCase() === "x" : false;
+      const [, check, word, date, body] = item;
+      const done = check ? check.toLowerCase() === "x" : Boolean(word);
       if (!validDate(date)) return null;
 
       const markdownLink = body.match(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/);
@@ -82,4 +82,14 @@ export function groupReadingMonths(items: ReadingItem[]): ReadingMonth[] {
       });
       return months;
     }, []);
+}
+
+export function splitReadingByStatus(items: ReadingItem[]): {
+  reading: ReadingItem[];
+  completed: ReadingItem[];
+} {
+  return {
+    reading: items.filter((item) => !item.done),
+    completed: items.filter((item) => item.done),
+  };
 }

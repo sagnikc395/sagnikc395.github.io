@@ -4,12 +4,60 @@ import { formatTime } from "../lib/utils";
 import {
   groupReadingMonths,
   parseReadingList,
+  splitReadingByStatus,
+  type ReadingItem,
   type ReadingMonth,
 } from "../lib/readingList";
 import readingListSource from "../../reading/READING_LIST.md?raw";
 
-// The list is read-only: an item is "read" only when it is marked [x] in
-// reading/READING_LIST.md. There is no per-visitor state to save.
+function MonthList({
+  months,
+  openFirst,
+}: {
+  months: ReadingMonth[];
+  openFirst: boolean;
+}) {
+  return (
+    <>
+      {months.map((month, index) => (
+        <details
+          key={month.key}
+          open={openFirst && index === 0}
+          className="reading-month"
+        >
+          <summary>
+            {month.label}{" "}
+            <span className="entry-meta small">({month.items.length})</span>
+          </summary>
+
+          <ul className="entries">
+            {month.items.map((item: ReadingItem) => (
+              <li
+                key={`${item.date}-${item.url}`}
+                className={`reading-item${item.done ? " is-done" : ""}`}
+              >
+                <div>
+                  <a className="entry-link" href={item.url} rel="external">
+                    {item.title}
+                  </a>
+                  <br />
+                  <span className="entry-meta small">
+                    {formatTime("%d %B %Y", item.date)}
+                  </span>
+                  {item.note && <p className="entry-note">{item.note}</p>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ))}
+    </>
+  );
+}
+
+// The list is read-only: an item moves to "Completed" only when it is marked
+// [x] (or "(Completed)") in reading/READING_LIST.md. There is no per-visitor
+// state to save.
 const ReadingList: React.FC = () => {
   const items = useMemo(() => parseReadingList(readingListSource), []);
   const years = useMemo(
@@ -23,13 +71,19 @@ const ReadingList: React.FC = () => {
     [items, selectedYear],
   );
 
-  const months = useMemo<ReadingMonth[]>(
-    () => groupReadingMonths(filteredItems),
+  const { reading, completed } = useMemo(
+    () => splitReadingByStatus(filteredItems),
     [filteredItems],
   );
 
+  const readingMonths = useMemo(() => groupReadingMonths(reading), [reading]);
+  const completedMonths = useMemo(
+    () => groupReadingMonths(completed),
+    [completed],
+  );
+
   const totalForYear = filteredItems.length;
-  const doneForYear = filteredItems.filter((item) => item.done).length;
+  const doneForYear = completed.length;
 
   return (
     <>
@@ -68,41 +122,24 @@ const ReadingList: React.FC = () => {
           </p>
         )}
 
-        {months.length === 0 ? (
+        {totalForYear === 0 ? (
           <p className="muted">No reading items yet.</p>
         ) : (
-          months.map((month, index) => (
-            <details
-              key={month.key}
-              open={index === 0}
-              className="reading-month"
-            >
-              <summary>
-                {month.label}{" "}
-                <span className="entry-meta small">({month.items.length})</span>
-              </summary>
+          <>
+            <h3 className="reading-section">To be read</h3>
+            {readingMonths.length === 0 ? (
+              <p className="muted">Nothing queued.</p>
+            ) : (
+              <MonthList months={readingMonths} openFirst />
+            )}
 
-              <ul className="entries">
-                {month.items.map((item) => (
-                  <li
-                    key={`${item.date}-${item.url}`}
-                    className={`reading-item${item.done ? " is-done" : ""}`}
-                  >
-                    <div>
-                      <a className="entry-link" href={item.url} rel="external">
-                        {item.title}
-                      </a>
-                      <br />
-                      <span className="entry-meta small">
-                        {formatTime("%d %B %Y", item.date)}
-                      </span>
-                      {item.note && <p className="entry-note">{item.note}</p>}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </details>
-          ))
+            <h3 className="reading-section">Completed</h3>
+            {completedMonths.length === 0 ? (
+              <p className="muted">Nothing finished yet.</p>
+            ) : (
+              <MonthList months={completedMonths} openFirst={false} />
+            )}
+          </>
         )}
       </section>
     </>

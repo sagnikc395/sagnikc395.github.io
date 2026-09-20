@@ -350,6 +350,12 @@ hr {
 /* ---------------------------------------------------------------
    Reading list
    --------------------------------------------------------------- */
+.reading-section {
+  border-bottom: 1px solid var(--rule);
+  margin: 1.8rem 0 0.2rem;
+  padding-bottom: 0.2rem;
+}
+
 .reading-month > summary {
   cursor: pointer;
   font-weight: 700;

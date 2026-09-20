@@ -3,6 +3,7 @@ import fs from "node:fs";
 import {
   groupReadingMonths,
   parseReadingList,
+  splitReadingByStatus,
 } from "../src/lib/readingList.ts";
 
 const items = parseReadingList(`
@@ -36,6 +37,31 @@ assert.equal(checklist.find((i) => i.date === "2026-08-24")?.done, false);
 assert.equal(checklist.find((i) => i.date === "2026-08-23")?.done, false);
 assert.equal(checklist.find((i) => i.date === "2026-08-22")?.done, true);
 assert.equal(checklist.find((i) => i.date === "2026-08-21")?.done, true);
+
+// "(Completed)" marker is an alias for [x]
+const worded = parseReadingList(`
+- (Completed) 2026-08-30 [Worded](https://example.com/worded)
+- (completed) 2026-08-29 [Lowercase](https://example.com/lower)
+- (Done) 2026-08-28 [Done word](https://example.com/done-word)
+- 2026-08-27 [Plain](https://example.com/plain)
+`);
+assert.equal(worded.length, 4, "worded markers still parse as items");
+assert.equal(worded.find((i) => i.date === "2026-08-30")?.done, true);
+assert.equal(worded.find((i) => i.date === "2026-08-29")?.done, true);
+assert.equal(worded.find((i) => i.date === "2026-08-28")?.done, true);
+assert.equal(worded.find((i) => i.date === "2026-08-27")?.done, false);
+assert.equal(worded.find((i) => i.date === "2026-08-30")?.title, "Worded");
+
+// completed items split out into their own section
+const split = splitReadingByStatus(checklist);
+assert.deepEqual(
+  split.completed.map((i) => i.date),
+  ["2026-08-25", "2026-08-22", "2026-08-21"],
+);
+assert.deepEqual(
+  split.reading.map((i) => i.date),
+  ["2026-08-24", "2026-08-23"],
+);
 
 // file moved to reading/READING_LIST.md
 const readingPath = new URL("../reading/READING_LIST.md", import.meta.url);
