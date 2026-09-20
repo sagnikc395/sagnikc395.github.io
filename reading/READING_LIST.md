@@ -13,6 +13,17 @@
 - 2026-10-06 [Generative Adverserial Imitation Learning - 690S](https://arxiv.org/abs/1606.03476)
 - 2026-10-14 [Extrapolating Beyong Suboptimal Demonstrations via Inverse Reinforcement Learning from Observations - 690S](https://arxiv.org/pdf/1904.06387)
 - 2026-10-19 [Models of Human Preference for learning reward functions - 690S](https://arxiv.org/pdf/2206.02231)
+- 2026-10-21 [Direct Preference Optimization: Your Language Model is Secretely a Reward Model - 690S](https://arxiv.org/pdf/2305.18290)
+- 2026-10-26 [Safe Imitation Learning via Fast Bayesian Reward Inference from Preferences - 690S](https://arxiv.org/pdf/2002.09089)
+- 2026-10-28 [Eureka: Human Level Reward Design via Coding Large Language Models - 690S](https://arxiv.org/pdf/2310.12931)
+- 2026-11-04 [Cooperative Inverse Reinforcement Learning - 690S](https://arxiv.org/pdf/1606.03137)
+- 2026-11-09 [Unsolved Problems in ML Safety - 690S](https://arxiv.org/pdf/2109.13916)
+- 2026-11-11 [OpenAI- HuggingFace Incident - 690S](https://cdn.openai.com/pdf/67869394-cb91-4c12-888c-5cbd85c7814c/OpenAI-Hugging-Face%20Incident-Technical-Report.pdf)
+- 2026-11-16 [Measuring Progress on Scalable Oversight for Large Language Models - 690S](https://arxiv.org/pdf/2211.03540)
+- 2026-11-18 [Mechanistic Interpretability for AI Safety : A Review - 690S](https://arxiv.org/pdf/2404.14082)
+- 2026-11-31 [Red Teaming Language Models with Language Models - 690S](https://arxiv.org/pdf/2202.03286)
+- 2026-12-02 [Universal and Transferable Adverserial Attacks on Aligned Language Models - 690S](https://arxiv.org/pdf/2307.15043)
+- 2026-12-07 [Emergent Misalignment: Narrow Finetuning can Produce broadly misaligned LLMs - 690S](https://arxiv.org/pdf/2502.17424)
 
 
 --- 
@@ -23,8 +34,28 @@
 - 2026-09-20 [Language Models May Verbatim Complete Text They Were Not Explictly Trained On - 684](https://arxiv.org/abs/2503.17514)
 - 2026-09-20 [Membership Inference Attacks Cannot Prove that a Model Was Trained On Your Data - 684](https://arxiv.org/abs/2409.19798)
 - 2026-09-20 [Imitation Attacks and Defenses for Black-Box Machine Translation System - 684](https://arxiv.org/abs/2004.15015)
-
-
+- 2026-09-22 [Communication-Efficient Learning of Deep Networks from Decentralized Data- 684](https://arxiv.org/abs/1602.05629)
+- 2026-09-22 [Advances and Open Problems in Federated Learning -684](https://arxiv.org/abs/1912.04977)
+- 2026-09-27 [Deep Learning with Differential Privacy - 684](https://arxiv.org/abs/1607.00133)
+- 2026-09-27 [Scaling Laws for Differentially Private Language Models - 684](https://arxiv.org/abs/2501.18914)
+- 2026-09-29 [Differentially Private Synthetic Data via Foundation Model APIs 1: Images - 684](https://arxiv.org/abs/2305.15560)
+- 2026-09-29 [Learning Differentially Private Recurrent Language Models - 684](https://arxiv.org/abs/1710.06963)
+- 2026-10-04 [Beyond Memorization: Violating Privacy Via Inference with Large Language Models - 684](https://arxiv.org/abs/2310.07298)
+- 2026-10-04 [Can Large Language Models Really Recognize Your Name? - 684](https://arxiv.org/abs/2505.14549)
+- 2026-10-06 [Can LLMS Keep a Secret ? Testing Privacy Implications of Language Models via Contextual Integrity Theory - 684](https://arxiv.org/abs/2310.17884)
+- 2026-10-06 [AirGapAgent: Protecting Privacy-Conscious Conversational Agents - 684](https://arxiv.org/abs/2405.05175)
+- 2026-10-25 [Universal and Transferable Adversarial Attacks on Aligned Language Models - 684](https://arxiv.org/abs/2307.15043)
+- 2026-10-25 [Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection - 684](https://arxiv.org/abs/2302.12173)
+- 2026-11-01 [Are Aligned Neural Networks Adverserially Aligned? -684](https://arxiv.org/abs/2306.15447)
+- 2026-11-01 [Self-Interpreting Adversarial Images - 684](https://arxiv.org/abs/2407.08970)
+- 2026-11-03 [How to Backdoor Federated Learning - 684](https://arxiv.org/abs/1807.00459)
+- 2026-11-08 [SoK: Watermarking for AI-Generated Content - 684](https://arxiv.org/abs/2411.18479)
+- 2026-11-15 [Emergent Misalignment: Narrow Finetuning can produce broadly misaligned LLMs - 684](https://arxiv.org/abs/2502.17424v2)
+- 2026-11-17 [Defeating Prompt Injections by Design - 684](https://arxiv.org/abs/2503.18813)
+- 2026-11-17 [Contextual Agent Security - A Policy for Every Purpose - 684](https://arxiv.org/abs/2501.17070)
+- 2026-11-22 [OverThink: SlowDown Attacks on Reasoning LLMS - 684](https://arxiv.org/abs/2502.02542)
+- 2026-11-23 [Spinning Language Models - Risks of Propoganda-As-A-Service and Countermeasures - 684](https://arxiv.org/abs/2112.05224)
+- 2026-11-29 [Differential Privacy Has Disparate Impact on Model Accuracy - 684](https://arxiv.org/abs/1905.12101)
 
 
 --- 
