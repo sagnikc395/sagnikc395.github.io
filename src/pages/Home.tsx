@@ -127,7 +127,7 @@ const Home: React.FC = () => {
           <Link to="/projects">All projects</Link>
         </p>
 
-        <p className="small muted">
+        <p>
           UMass web ring: <a id="umaring_prev">previous</a>
           {" | "}
           <a id="umaring_next">next</a>

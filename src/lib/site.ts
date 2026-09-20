@@ -1,7 +1,7 @@
 /** Prose that both the home page and the search index need to agree on. */
 
 export const AFFILIATION = [
-  "CS graduate student",
+  "MSCS UMass Amherst",
   "Manning College of Information and Computer Sciences",
   "University of Massachusetts Amherst",
 ];

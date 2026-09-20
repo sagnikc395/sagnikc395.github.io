@@ -13,6 +13,10 @@ const Footer: React.FC = () => {
         <a rel="external" href="https://www.linkedin.com/in/sagnikchatterjee3/">
           LinkedIn
         </a>
+        {" · "}
+        <a rel="external" href="https://scholar.google.com/citations?user=B6nGdVsAAAAJ&hl=en">
+          Google Scholar
+        </a>
       </p>
       <p className="muted">Last updated: September 2026.</p>
     </footer>
