@@ -8,6 +8,8 @@ import ProjectPage from "./pages/ProjectPage";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import ReadingList from "./pages/ReadingList";
+import Notes from "./pages/Notes";
+import NotePage from "./pages/NotePage";
 
 // The page components are a few KB in total, so they ride in the main bundle.
 // The heavy part, rendered Markdown, stays code-split via src/lib/content.ts.
@@ -23,6 +25,8 @@ const App: React.FC = () => {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/reading-list" element={<ReadingList />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/notes/:slug" element={<NotePage />} />
           <Route
             path="*"
             element={

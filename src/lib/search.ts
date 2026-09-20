@@ -11,9 +11,11 @@
 
 import readingListSource from "../../reading/READING_LIST.md?raw";
 import { parseReadingList } from "./readingList";
+import { notes as noteEntries } from "./notes";
 import { AFFILIATION, RESEARCH_INTERESTS } from "./site";
+import { isoDate } from "./utils";
 
-export type SearchKind = "post" | "project" | "reading" | "page";
+export type SearchKind = "post" | "project" | "note" | "reading" | "page";
 
 export interface SearchDoc {
   id: string;
@@ -50,6 +52,7 @@ const projectMeta = import.meta.glob("../projects/*.md", {
 }) as Record<string, MetaModule>;
 
 const postBodies = import.meta.glob("../posts/*.md", { query: "?search" });
+const noteBodies = import.meta.glob("../notes/*.md", { query: "?search" });
 const projectBodies = import.meta.glob("../projects/*.md", {
   query: "?search",
 });
@@ -107,6 +110,13 @@ const pages: SearchDoc[] = [
     summary: "Papers and articles I am reading lately.",
   }),
   doc({
+    id: "page:/notes",
+    kind: "page",
+    title: "Notes",
+    href: "/notes",
+    summary: "My notes on the papers in the reading list.",
+  }),
+  doc({
     id: "page:resume",
     kind: "page",
     title: "Resume",
@@ -158,6 +168,20 @@ const projects: SearchDoc[] = Object.entries(projectMeta)
   )
   .sort(byDateDesc);
 
+const notes: SearchDoc[] = noteEntries
+  .map((note) =>
+    doc({
+      id: `note:${note.slug}`,
+      kind: "note",
+      title: note.title,
+      href: `/notes/${note.slug}`,
+      date: note.date ? isoDate(note.date) : undefined,
+      meta: [note.venue, ...(note.tags ?? [])].filter(Boolean).join(", "),
+      summary: note.excerpt || "",
+    }),
+  )
+  .sort(byDateDesc);
+
 const reading: SearchDoc[] = parseReadingList(readingListSource).map((item) =>
   doc({
     id: `reading:${item.date}:${item.url}`,
@@ -171,18 +195,20 @@ const reading: SearchDoc[] = parseReadingList(readingListSource).map((item) =>
   }),
 );
 
-/** Everything searchable, minus the post and project prose. */
+/** Everything searchable, minus the post, project and note prose. */
 export const baseIndex: SearchDoc[] = [
   ...pages,
   ...posts,
   ...projects,
+  ...notes,
   ...reading,
 ];
 
 /** What the palette lists before anything is typed. */
 export const defaultDocs: SearchDoc[] = [
-  ...pages.slice(0, 4),
+  ...pages.slice(0, 5),
   ...posts.slice(0, 4),
+  ...notes.slice(0, 3),
   ...projects.slice(0, 2),
 ];
 
@@ -198,7 +224,7 @@ export function loadSearchIndex(): Promise<SearchDoc[]> {
     const bodies = new Map<string, string>();
 
     const read =
-      (kind: "post" | "project") =>
+      (kind: "post" | "project" | "note") =>
       async ([path, load]: [string, () => Promise<unknown>]) => {
         const mod = (await load()) as {
           default?: { text?: string };
@@ -211,6 +237,7 @@ export function loadSearchIndex(): Promise<SearchDoc[]> {
     await Promise.all([
       ...Object.entries(postBodies).map(read("post")),
       ...Object.entries(projectBodies).map(read("project")),
+      ...Object.entries(noteBodies).map(read("note")),
     ]);
 
     return baseIndex.map((entry) => {

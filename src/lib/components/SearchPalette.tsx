@@ -15,6 +15,7 @@ import { formatTime } from "../utils";
 const KIND_LABEL: Record<SearchKind, string> = {
   post: "Writing",
   project: "Project",
+  note: "Note",
   reading: "Reading",
   page: "Page",
 };
@@ -175,7 +176,7 @@ const SearchPalette: React.FC = () => {
               ref={input}
               type="text"
               className="search-input"
-              placeholder="Search posts, projects and reading list…"
+              placeholder="Search posts, projects, notes and reading list…"
               value={query}
               role="combobox"
               aria-expanded={true}

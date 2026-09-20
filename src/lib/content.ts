@@ -6,16 +6,18 @@
  * and the first render of a content page matches on both sides.
  */
 
-export type Kind = "post" | "project";
+export type Kind = "post" | "project" | "note";
 
 const loaders: Record<Kind, Record<string, () => Promise<unknown>>> = {
   post: import.meta.glob("../posts/*.md"),
   project: import.meta.glob("../projects/*.md"),
+  note: import.meta.glob("../notes/*.md"),
 };
 
 const dirs: Record<Kind, string> = {
   post: "../posts/",
   project: "../projects/",
+  note: "../notes/",
 };
 
 // undefined = not resolved yet, null = no such slug.
@@ -64,6 +66,9 @@ export function routeContent(
 
   const project = pathname.match(/^\/project\/([^/]+)\/?$/);
   if (project) return { kind: "project", slug: decodeURIComponent(project[1]) };
+
+  const note = pathname.match(/^\/notes\/([^/]+)\/?$/);
+  if (note) return { kind: "note", slug: decodeURIComponent(note[1]) };
 
   return null;
 }

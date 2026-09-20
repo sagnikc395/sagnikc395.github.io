@@ -7,6 +7,7 @@ const links = [
   { name: "Projects", href: "/projects" },
   { name: "Blog", href: "/blog" },
   { name: "Reading", href: "/reading-list" },
+  { name: "Notes", href: "/notes" },
 ];
 
 const external = [

@@ -28,3 +28,21 @@ export type Post = {
   draft?: boolean;
   references?: Reference[];
 };
+
+/** A write-up of one reference from the reading list. */
+export type Note = {
+  title: string;
+  date: string;
+  content: string;
+  /** The reference this note is about; links the note to its reading-list row. */
+  paper?: string;
+  authors?: string;
+  /** Where the paper came from: a course, a reading group, a link dump. */
+  venue?: string;
+  tags?: string[];
+  draft?: boolean;
+  references?: Reference[];
+};
+
+/** Everything in a Note except the rendered body, plus the generated excerpt. */
+export type NoteMeta = Omit<Note, "content"> & { excerpt?: string };

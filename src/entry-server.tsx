@@ -4,7 +4,7 @@ import App from "./App";
 import { head } from "./lib/head";
 import { preloadRoute, slugsOf } from "./lib/content";
 import { peekContent } from "./lib/content";
-import type { Post } from "./lib/types";
+import type { Note, Post } from "./lib/types";
 import "./app.css";
 
 export interface Rendered {
@@ -27,7 +27,7 @@ export async function render(url: string): Promise<Rendered> {
 
 /** Every URL the build should emit as a real HTML file. */
 export async function routes(): Promise<string[]> {
-  const list = ["/", "/blog", "/projects", "/reading-list", "/404"];
+  const list = ["/", "/blog", "/projects", "/reading-list", "/notes", "/404"];
 
   for (const slug of slugsOf("post")) {
     const url = `/blog/${slug}`;
@@ -38,6 +38,13 @@ export async function routes(): Promise<string[]> {
 
   for (const slug of slugsOf("project")) {
     list.push(`/project/${slug}`);
+  }
+
+  for (const slug of slugsOf("note")) {
+    const url = `/notes/${slug}`;
+    await preloadRoute(url);
+    if (peekContent<Note>("note", slug)?.draft) continue;
+    list.push(url);
   }
 
   return list;

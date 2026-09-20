@@ -32,6 +32,27 @@ function hostname(url: string): string | null {
   }
 }
 
+/**
+ * A stable key for "the same reference", so a note filed against
+ * arxiv.org/abs/2305.18290 still matches a reading-list line that points at
+ * arxiv.org/pdf/2305.18290v3. Falls back to the bare host + path.
+ */
+export function paperKey(url: string): string {
+  const arxiv = url.match(
+    /arxiv\.org\/(?:abs|pdf)\/((?:\d{4}\.\d{4,5})|(?:[a-z-]+(?:\.[A-Z]{2})?\/\d{7}))/i,
+  );
+  if (arxiv) return `arxiv:${arxiv[1].toLowerCase()}`;
+
+  return url
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "")
+    .replace(/[?#].*$/, "")
+    .replace(/\.pdf$/, "")
+    .replace(/\/+$/, "");
+}
+
 export function parseReadingList(source: string): ReadingItem[] {
   return source
     .split("\n")

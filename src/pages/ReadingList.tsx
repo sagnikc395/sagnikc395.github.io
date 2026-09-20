@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import Seo from "../lib/components/Seo";
 import { formatTime } from "../lib/utils";
 import {
@@ -8,6 +9,7 @@ import {
   type ReadingItem,
   type ReadingMonth,
 } from "../lib/readingList";
+import { noteFor } from "../lib/notes";
 import readingListSource from "../../reading/READING_LIST.md?raw";
 
 function MonthList({
@@ -31,23 +33,33 @@ function MonthList({
           </summary>
 
           <ul className="entries">
-            {month.items.map((item: ReadingItem) => (
-              <li
-                key={`${item.date}-${item.url}`}
-                className={`reading-item${item.done ? " is-done" : ""}`}
-              >
-                <div>
-                  <a className="entry-link" href={item.url} rel="external">
-                    {item.title}
-                  </a>
-                  <br />
-                  <span className="entry-meta small">
-                    {formatTime("%d %B %Y", item.date)}
-                  </span>
-                  {item.note && <p className="entry-note">{item.note}</p>}
-                </div>
-              </li>
-            ))}
+            {month.items.map((item: ReadingItem) => {
+              // A reference I have written up links straight to that note.
+              const written = noteFor(item.url);
+              return (
+                <li
+                  key={`${item.date}-${item.url}`}
+                  className={`reading-item${item.done ? " is-done" : ""}`}
+                >
+                  <div>
+                    <a className="entry-link" href={item.url} rel="external">
+                      {item.title}
+                    </a>
+                    <br />
+                    <span className="entry-meta small">
+                      {formatTime("%d %B %Y", item.date)}
+                      {written && (
+                        <>
+                          {" · "}
+                          <Link to={`/notes/${written.slug}`}>notes</Link>
+                        </>
+                      )}
+                    </span>
+                    {item.note && <p className="entry-note">{item.note}</p>}
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </details>
       ))}
