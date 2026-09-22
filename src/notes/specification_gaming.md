@@ -1,0 +1,66 @@
+---
+title: "Specification Gaming: The Flip Side of AI ingenuity"
+tags:
+  - rl
+  - alignment
+author: Victoria Karkovna, Jonathan Uesato et all
+url: https://deepmind.google/blog/specification-gaming-the-flip-side-of-ai-ingenuity/
+date: 9/21/26
+---
+- Specification Gaming 
+	- behaviour that satisfies the literal specification of an objective without achieving the intended outcome.
+	- Eg: Kind Midas and his golden touch 
+	- basically while trying to learn the objective and gaming to find the reaward, it will find loopholes and exploit the task specification.
+- RL algorithm agent can find a shortcut to getting lots of reard without completing the task as intended by the human designer.
+- Lego Stacking Task:
+	- desired outcome was for a red block to end up on top of a blue block.
+	- agent was rewarded for the height of the bottom face of the red block when it is not touching the block.
+	- instead of performing the relatively difficult maneuver of picking up the red block and placing it on top of the blue one, the agent will simply flip over the red block to collect the reward.
+	- achieved by the stated objective (high bottom face of the red block) at the expense of what the designer actually cares about (stacking it on top of the blue one)
+- 2 different ways for specification gaming:
+	- Within the scope of RL algorithms 
+		- Goal is to build agents that learn to acheive the given objective.
+		- Eg: using Atari games as a benchmark for training RL algorithms, the goal is to evaluate whether our algorithms can solve difficult tasks.
+		- Whether or not the agent solves the task by exploiting a loophole is unimportant in this context.
+		- Sometimes , specification gaming is a good sign -> agent has found a novel way to achieve the specified objective.
+		- This behaviour demonstrate the ingenuity and power of algorithms to find ways to do exactly what we tell them to do.
+	- specification gaming becoming problematic
+		- in the broader scope of building aligned agents that achieve the intended outcomes in the world
+		- as involving the agent exploiting a loophole in the specification at the expense of the intended outcome.
+		- these behaviours are caused by misspecification of the intended task, rather than any flaw in the RL algorithm.
+		- another necessary component of building aligned agents is reward design.
+- Designing task specifications (reward functions, env) that accurately reflect the intent of the human designer tends to be a difficult task.
+	- a very good RL algo might be able to find an intricate solution which is quite different from the intended solution, even if the poorer algorithm would not be able to find this solution and thus yield solutions that are closer to the intended outcome.
+	- correctness of the task specification can determine whether the ingenuity of the agent is or is not in line with the intended outcome.
+	- if the spec is right, the agent's creativity produces a desirable novel solution.
+		- Eg: Move37 in Go that took human experts by surprise yet which was pivotal.
+	- if the spec is wrong, can produce undesirable gaming behaviour, like flipping the block.
+	- these types of solutions lie on a spectrum, and we dont even have an objective way to distinguish between them.
+- Possible Causes of Specification Gaming:]
+	- poorly designed reward shaping.
+		- reward shaping makes it easier to learn some objectives by giving the agent some rewards on the way to solving a task, instead of only rewarding the final outcome.
+		- however, shaping rewards can change the optimal policy if they are not potential-based.
+	- designing such specifications are itself challenging in their own right 
+		- a comprehensive spec of the desired outcome would also include that the top face of the red block has to be above the botton face and that the bottom face is aligned with the top face of the blue block.
+		- easy to miss one of these criteria when specifying the outcome, thus making the specification too broad nad potentially easier to satisfy with a degenerate solution.
+- RLHF:
+	- better solution than creating a specification that covers every possible corner case.
+	- often easier to evaluate whether an outcome has been acheieved than to specify it explictly.
+	- can also encounter specification gaming issues if the reward model does not learn the true reward function that reflects the designer's preferences.
+	- One possible source of inaccuracy:
+		- human feedback used to train the reward model.
+		- eg: an agent performing an grasping task learned to fool the human evaluator by hovering between the camera and the object.
+- Simulator Bugs:
+	- another class of specification gaming examples
+	- eg: simulated robot that was supposed to learn to walk figured out how to hook its legs together and slide along the ground.
+
+- Creeats the inherent question - Is it possible to design agent architectures that correct for such false assumptions instead of gaming them ?
+	- task specification cannot be affected by the agent's actions.
+	- true for an agent running in a sandboxed simulator but not for a agent acting in the real world.
+	- any task specification has a physical manifestations : a reward function stored on a computer, or preferences stored in the head of a human.
+	- agent deployed in the real world can potentially manipulate these representations of the objective , creating an reward tampering problem.
+	- eg: advanced AI system could hijack the computer on which it runs, manually setting its reward signal to a high value.
+- 3 challenges to overcome in solving specification gaming:
+	- how do we faithfully capture the human concept of a given task in a reward function ? 
+	- how do we avoid making mistakes in our implicit assumptions about the domain, or design agents that correct mistaken assumptions instead of gaming them ? 
+	- how do we aovid reward tampering ? 
