@@ -1,5 +1,20 @@
 # Reading List
 
+---
+- 2026-09-22 [Mechanistic Interpretability for AI Safety: A Review.](https://arxiv.org/abs/2404.14082)
+- 2026-09-22 [A Mathematical Framework for Transformer Circuits.](https://transformer-circuits.pub/2021/framework/index.html)
+- 2026-09-22 [Interpretability in the Wild: A Circuit for Indirect Object Identification in GPT-2 Small.](https://arxiv.org/abs/2211.00593)
+- 2026-09-22 [Towards Best Practices of Activation Patching in Language Models: Metrics and Methods.](https://arxiv.org/abs/2309.16042)
+- 2026-09-22 [Toy Models of Superposition.](https://arxiv.org/abs/2209.10652)
+- 2026-09-22 [Sparse Autoencoders Find Highly Interpretable Features in Language Models](https://arxiv.org/abs/2309.08600)
+- 2026-09-22 [Position: Causality is Key for Interpretability Claims to Generalise](https://arxiv.org/pdf/2602.16698)
+- 2026-09-22 [The Linear Representation Hypothesis and the Geometry of Large Language Models.](https://arxiv.org/abs/2311.03658)
+- 2026-09-22 [Sparse Feature Circuits: Discovering and Editing Interpretable Causal Graphs in Language Models.](https://arxiv.org/abs/2403.19647)
+- 2026-09-22 [Refusal in Language Models Is Mediated by a Single Direction.](https://arxiv.org/abs/2406.11717)
+- 2026-09-22 [Open Problems in Mechanistic Interpretability.](https://arxiv.org/abs/2501.16496)
+
+
+
 
 --- 
 - (Completed) 2026-09-08 [Behaviour Cloning - 690S](https://arxiv.org/pdf/1805.01954)
