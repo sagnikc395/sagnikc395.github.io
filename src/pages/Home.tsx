@@ -30,13 +30,15 @@ const recentPosts = entriesFrom(postModules, 5);
 const recentProjects = entriesFrom(projectModules, 4);
 
 const Home: React.FC = () => {
+  // The script fills #umaring with innerHTML once it loads, so the div stays
+  // childless on React's side and React leaves what the script wrote alone.
   useEffect(() => {
     const handle = runWhenIdle(() => {
       if (document.getElementById("umaring_js")) return;
 
       const script = document.createElement("script");
       script.id = "umaring_js";
-      script.src = "https://umaring.mkr.cx/ring.js?id=sagnikc395&mode=link";
+      script.src = "https://umaring.github.io/sagnikc395.js";
       script.async = true;
       document.body.appendChild(script);
     });
@@ -127,11 +129,7 @@ const Home: React.FC = () => {
           <Link to="/projects">All projects</Link>
         </p>
 
-        <p>
-          UMass web ring: <a id="umaring_prev">previous</a>
-          {" | "}
-          <a id="umaring_next">next</a>
-        </p>
+        <div id="umaring"></div>
       </section>
     </>
   );
